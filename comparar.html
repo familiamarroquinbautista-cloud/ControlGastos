@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Comparar vs Presupuesto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #f0f2f5;
+    }
 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-volver {
+      padding: 10px 20px;
+      background: #9b59b6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .comparacion-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .positivo { color: #27ae60; font-weight: bold; }
+    .negativo { color: #e74c3c; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔍 Comparar vs Presupuesto</h1>
+    <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+  </div>
+
+  <div class="card">
+    <h3>Resumen del mes actual</h3>
+    <div class="comparacion-item">
+      <span>Presupuesto total:</span>
+      <span id="presupuesto-total">Cargando...</span>
+    </div>
+    <div class="comparacion-item">
+      <span>Gastos registrados:</span>
+      <span id="gastos-total">Cargando...</span>
+    </div>
+    <div class="comparacion-item">
+      <span>Diferencia:</span>
+      <span id="diferencia">Cargando...</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Estado</h3>
+    <p id="estado-mensaje" style="font-size: 1.2rem; text-align: center;">Cargando datos...</p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const db = getFirestore(initializeApp({
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    }));
+
+    async function cargarComparacion() {
+      try {
+        // Obtener presupuesto del mes actual
+        const presupuestosSnap = await getDocs(collection(db, "presupuestos"));
+        let presupuestoTotal = 0;
+        presupuestosSnap.forEach(doc => {
+          presupuestoTotal += doc.data().monto || 0;
+        });
+
+        // Obtener gastos del mes actual
+        const registrosSnap = await getDocs(collection(db, "registros"));
+        let gastosTotal = 0;
+        registrosSnap.forEach(doc => {
+          // Si en el futuro guardas montos numéricos, aquí los sumarías
+          // Por ahora es solo texto
+        });
+
+        // Mostrar resultados
+        document.getElementById("presupuesto-total").innerText = `$${presupuestoTotal}`;
+        document.getElementById("gastos-total").innerText = "En desarrollo";
+        
+        const diferencia = presupuestoTotal; // Temporal
+        document.getElementById("diferencia").innerHTML = `<span class="positivo">$${diferencia} disponible</span>`;
+        document.getElementById("estado-mensaje").innerHTML = "✅ Por debajo del presupuesto";
+        
+      } catch (error) {
+        console.error(error);
+        document.getElementById("estado-mensaje").innerHTML = "❌ Error al cargar datos";
+      }
+    }
+
+    cargarComparacion();
+  </script>
+</body>
+</html>
