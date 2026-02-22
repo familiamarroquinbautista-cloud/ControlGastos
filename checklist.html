@@ -211,7 +211,7 @@
 
     const perfil = sessionStorage.getItem('perfil');
     
-    if (!perfil) {
+    if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
 
@@ -294,7 +294,6 @@
           lista.appendChild(div);
         });
 
-        // Actualizar estadísticas
         const total = gastos.length;
         const pendientes = total - pagados;
         
