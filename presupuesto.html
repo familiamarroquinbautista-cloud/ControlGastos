@@ -131,11 +131,23 @@
     .aviso {
       background: #fff3cd;
       color: #856404;
-      padding: 10px;
+      padding: 15px;
       border-radius: 8px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       text-align: center;
       font-weight: bold;
+      font-size: 1.1rem;
+      border: 2px solid #ffc107;
+    }
+
+    .importante {
+      background: #cce5ff;
+      color: #004085;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 15px;
+      text-align: center;
+      border: 1px solid #b8daff;
     }
   </style>
 </head>
@@ -150,10 +162,10 @@
 
   <div class="card">
     <div class="aviso">
-      ⚠️ El presupuesto es ÚNICO para Maria y Andres
+      ⚠️ PRESUPUESTO GENERAL - Compartido por Maria y Andres
     </div>
 
-    <h2>Configurar presupuesto mensual por categorías</h2>
+    <h2>Configurar presupuesto mensual</h2>
     
     <div class="categoria">
       <h3>🛒 Mercado</h3>
@@ -192,6 +204,10 @@
       <span id="totalPresupuesto">$0</span>
     </div>
 
+    <div class="importante">
+      💡 Este presupuesto aplica para Maria y Andres. Ambos pueden modificarlo.
+    </div>
+
     <div id="mensaje" class="mensaje"></div>
   </div>
 
@@ -221,7 +237,6 @@
 
     document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
 
-    // Presupuesto es único - se guarda con usuario 'GENERAL'
     window.guardarPresupuesto = async (categoria, subcategoria, inputId) => {
       const monto = parseFloat(document.getElementById(inputId).value);
       
@@ -232,7 +247,7 @@
 
       try {
         await addDoc(collection(db, "presupuestos"), {
-          usuario: 'GENERAL',  // 👈 Presupuesto único
+          usuario: 'GENERAL',
           categoria: categoria,
           subcategoria: subcategoria,
           monto: monto,
@@ -241,7 +256,7 @@
           año: new Date().getFullYear()
         });
         
-        mostrarMensaje(`✅ Presupuesto guardado: ${categoria} - ${subcategoria} $${monto}`, "exito");
+        mostrarMensaje(`✅ Presupuesto GENERAL actualizado: ${categoria} - ${subcategoria} $${monto}`, "exito");
         document.getElementById(inputId).value = '';
         cargarHistorial();
         calcularTotalPresupuesto();
@@ -265,7 +280,7 @@
         
         const q = query(
           collection(db, "presupuestos"), 
-          where("usuario", "==", 'GENERAL'),  // 👈 Solo presupuesto GENERAL
+          where("usuario", "==", 'GENERAL'),
           where("mes", "==", mesActual),
           where("año", "==", añoActual),
           orderBy("fecha", "desc")
@@ -304,7 +319,7 @@
         
         const q = query(
           collection(db, "presupuestos"), 
-          where("usuario", "==", 'GENERAL'),  // 👈 Solo presupuesto GENERAL
+          where("usuario", "==", 'GENERAL'),
           where("mes", "==", mesActual),
           where("año", "==", añoActual)
         );
