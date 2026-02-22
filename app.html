@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Control de Gastos</title>
+  <title>Registro de Gastos</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -120,27 +120,92 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
-    h1 {
+    h1, h2, h3 {
       color: #333;
       margin-top: 0;
     }
 
-    input {
-      padding: 12px;
-      width: 70%;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
+    .categoria {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 10px;
     }
 
-    button {
-      padding: 12px 24px;
-      background: #2c3e50;
+    .categoria h3 {
+      margin-top: 0;
+      color: #2c3e50;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 5px;
+    }
+
+    .subcategoria {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .subcategoria label {
+      width: 80px;
+      font-weight: bold;
+    }
+
+    .subcategoria input {
+      flex: 1;
+      min-width: 150px;
+      padding: 8px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .subcategoria input[type="number"] {
+      width: 100px;
+      flex: 0 1 auto;
+    }
+
+    .btn-registro {
+      background: #27ae60;
       color: white;
       border: none;
+      padding: 8px 15px;
       border-radius: 8px;
-      font-size: 16px;
       cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-registro:hover {
+      background: #219a52;
+    }
+
+    .registros-recientes {
+      margin-top: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .registro-item {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .registro-item .categoria-badge {
+      background: #4a90e2;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .mensaje {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -168,15 +233,61 @@
   </div>
 
   <div class="seccion-registro">
-    <h1>📝 Registro simple</h1>
-    <input id="nombre" placeholder="Escribe un dato">
-    <button onclick="guardarDato()">Guardar</button>
-    <p id="mensaje"></p>
+    <h2>📝 Registrar Gasto</h2>
+    
+    <!-- Categoría Mercado -->
+    <div class="categoria">
+      <h3>🛒 Mercado</h3>
+      
+      <!-- Carnes -->
+      <div class="subcategoria">
+        <label>Carnes:</label>
+        <input type="text" id="mercado_carnes_desc" placeholder="Ej: Pollo, Res, Cerdo">
+        <input type="number" id="mercado_carnes_monto" placeholder="Monto $" min="0" step="100">
+        <button class="btn-registro" onclick="registrarGasto('Mercado', 'Carnes', 'mercado_carnes_desc', 'mercado_carnes_monto')">+ Registrar</button>
+      </div>
+      
+      <!-- Verduras -->
+      <div class="subcategoria">
+        <label>Verduras:</label>
+        <input type="text" id="mercado_verduras_desc" placeholder="Ej: Tomate, Lechuga">
+        <input type="number" id="mercado_verduras_monto" placeholder="Monto $" min="0" step="100">
+        <button class="btn-registro" onclick="registrarGasto('Mercado', 'Verduras', 'mercado_verduras_desc', 'mercado_verduras_monto')">+ Registrar</button>
+      </div>
+    </div>
+
+    <!-- Categoría Servicios -->
+    <div class="categoria">
+      <h3>💡 Servicios</h3>
+      
+      <!-- Luz -->
+      <div class="subcategoria">
+        <label>Luz:</label>
+        <input type="text" id="servicios_luz_desc" placeholder="Ej: Factura luz" value="Factura luz">
+        <input type="number" id="servicios_luz_monto" placeholder="Monto $" min="0" step="100">
+        <button class="btn-registro" onclick="registrarGasto('Servicios', 'Luz', 'servicios_luz_desc', 'servicios_luz_monto')">+ Registrar</button>
+      </div>
+      
+      <!-- Gas -->
+      <div class="subcategoria">
+        <label>Gas:</label>
+        <input type="text" id="servicios_gas_desc" placeholder="Ej: Factura gas" value="Factura gas">
+        <input type="number" id="servicios_gas_monto" placeholder="Monto $" min="0" step="100">
+        <button class="btn-registro" onclick="registrarGasto('Servicios', 'Gas', 'servicios_gas_desc', 'servicios_gas_monto')">+ Registrar</button>
+      </div>
+    </div>
+
+    <div id="mensaje" class="mensaje"></div>
+
+    <h3>📋 Últimos registros</h3>
+    <div class="registros-recientes" id="registrosRecientes">
+      Cargando...
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const db = getFirestore(initializeApp({
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -193,6 +304,7 @@
       window.location.href = "index.html";
     }
 
+    // Mostrar perfil
     const avatar = document.getElementById('avatar');
     const nombrePerfil = document.getElementById('nombrePerfil');
     
@@ -206,31 +318,96 @@
       avatar.innerText = '👨';
     }
 
-    window.guardarDato = async () => {
-      const nombre = document.getElementById("nombre").value;
+    // Función para registrar gasto
+    window.registrarGasto = async (categoria, subcategoria, descId, montoId) => {
+      const descripcion = document.getElementById(descId).value.trim();
+      const monto = parseFloat(document.getElementById(montoId).value);
       
-      if (!nombre) {
-        mensaje.innerText = "❌ Escribe algo";
+      if (!descripcion) {
+        mostrarMensaje("❌ Escribe una descripción", "error");
+        return;
+      }
+      
+      if (isNaN(monto) || monto <= 0) {
+        mostrarMensaje("❌ Ingresa un monto válido", "error");
         return;
       }
 
       try {
-        await addDoc(collection(db, "registros"), { 
-          nombre: nombre,
+        await addDoc(collection(db, "gastos"), { 
           usuario: perfil,
-          fecha: new Date() 
+          categoria: categoria,
+          subcategoria: subcategoria,
+          descripcion: descripcion,
+          monto: monto,
+          fecha: new Date(),
+          mes: new Date().getMonth() + 1,
+          año: new Date().getFullYear()
         });
         
-        mensaje.innerText = `✅ ${perfil} guardó: ${nombre}`;
+        mostrarMensaje(`✅ ${perfil} registró $${monto} en ${categoria} - ${subcategoria}`, "exito");
+        
+        // Limpiar campos
+        document.getElementById(descId).value = categoria === 'Mercado' ? '' : `Factura ${subcategoria.toLowerCase()}`;
+        document.getElementById(montoId).value = '';
+        
+        cargarRegistrosRecientes();
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje("❌ Error al guardar", "error");
+      }
+    };
+
+    function mostrarMensaje(texto, tipo) {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.innerText = texto;
+      if (tipo === 'exito') {
         mensaje.style.background = "#d4edda";
         mensaje.style.color = "#155724";
-        document.getElementById("nombre").value = "";
-      } catch (error) {
-        mensaje.innerText = "❌ Error";
+      } else {
         mensaje.style.background = "#f8d7da";
         mensaje.style.color = "#721c24";
       }
     }
+
+    async function cargarRegistrosRecientes() {
+      try {
+        const q = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          orderBy("fecha", "desc"),
+          limit(10)
+        );
+        
+        const querySnapshot = await getDocs(q);
+        const container = document.getElementById('registrosRecientes');
+        container.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+          container.innerHTML = '<p>No hay registros aún</p>';
+          return;
+        }
+
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
+          const div = document.createElement('div');
+          div.className = 'registro-item';
+          div.innerHTML = `
+            <span>
+              <span class="categoria-badge">${data.categoria}</span>
+              <strong>${data.subcategoria}:</strong> ${data.descripcion}
+            </span>
+            <span><strong>$${data.monto}</strong> ${fecha.toLocaleDateString()}</span>
+          `;
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    cargarRegistrosRecientes();
   </script>
 </body>
 </html>
