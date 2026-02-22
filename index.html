@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Bienvenido ⚡</title>
+  <title>Seleccionar Perfil</title>
   <style>
     body {
       margin: 0;
@@ -25,59 +25,72 @@
     p {
       font-size: 1.2rem;
       opacity: 0.9;
+      margin-bottom: 3rem;
     }
 
-    .cargando {
-      margin-top: 2rem;
-      width: 48px;
-      height: 48px;
-      border: 5px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
+    .perfiles {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    .btn-manual {
-      margin-top: 3rem;
-      padding: 12px 30px;
-      background: white;
-      color: #1b2a4e;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.1rem;
+    .btn-perfil {
+      padding: 25px 50px;
+      font-size: 2rem;
       font-weight: bold;
+      border: none;
+      border-radius: 20px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
 
-    .btn-manual:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    .btn-perfil:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .maria {
+      background: #ff9a9e;
+      color: #4a1e2a;
+      border-bottom: 8px solid #ff6b6b;
+    }
+
+    .andres {
+      background: #a8e6cf;
+      color: #1a4a3a;
+      border-bottom: 8px solid #6bcfb5;
+    }
+
+    .subtitulo {
+      margin-top: 2rem;
+      font-size: 1rem;
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
   <h1>💰 Control Gastos</h1>
-  <p>Cargando aplicación ...</p>
-  <div class="cargando"></div>
+  <p>¿Quién está usando la aplicación?</p>
   
-  <button class="btn-manual" onclick="irApp()">
-    Entrar ahora →
-  </button>
+  <div class="perfiles">
+    <button class="btn-perfil maria" onclick="seleccionarPerfil('Maria')">
+      👩 MARIA
+    </button>
+    
+    <button class="btn-perfil andres" onclick="seleccionarPerfil('Andres')">
+      👨 ANDRES
+    </button>
+  </div>
+  
+  <div class="subtitulo">
+    Selecciona tu perfil para continuar
+  </div>
 
   <script>
-    // Redirección automática después de 4 segundos
-    setTimeout(() => {
-      window.location.href = "app.html";
-    }, 4000);
-
-    // Función para el botón manual
-    window.irApp = function() {
+    function seleccionarPerfil(nombre) {
+      sessionStorage.setItem('perfil', nombre);
       window.location.href = "app.html";
     }
   </script>
