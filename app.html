@@ -235,11 +235,9 @@
   <div class="seccion-registro">
     <h2>📝 Registrar Gasto</h2>
     
-    <!-- Categoría Mercado -->
     <div class="categoria">
       <h3>🛒 Mercado</h3>
       
-      <!-- Carnes -->
       <div class="subcategoria">
         <label>Carnes:</label>
         <input type="text" id="mercado_carnes_desc" placeholder="Ej: Pollo, Res, Cerdo">
@@ -247,7 +245,6 @@
         <button class="btn-registro" onclick="registrarGasto('Mercado', 'Carnes', 'mercado_carnes_desc', 'mercado_carnes_monto')">+ Registrar</button>
       </div>
       
-      <!-- Verduras -->
       <div class="subcategoria">
         <label>Verduras:</label>
         <input type="text" id="mercado_verduras_desc" placeholder="Ej: Tomate, Lechuga">
@@ -256,11 +253,9 @@
       </div>
     </div>
 
-    <!-- Categoría Servicios -->
     <div class="categoria">
       <h3>💡 Servicios</h3>
       
-      <!-- Luz -->
       <div class="subcategoria">
         <label>Luz:</label>
         <input type="text" id="servicios_luz_desc" placeholder="Ej: Factura luz" value="Factura luz">
@@ -268,7 +263,6 @@
         <button class="btn-registro" onclick="registrarGasto('Servicios', 'Luz', 'servicios_luz_desc', 'servicios_luz_monto')">+ Registrar</button>
       </div>
       
-      <!-- Gas -->
       <div class="subcategoria">
         <label>Gas:</label>
         <input type="text" id="servicios_gas_desc" placeholder="Ej: Factura gas" value="Factura gas">
@@ -300,11 +294,10 @@
 
     const perfil = sessionStorage.getItem('perfil');
     
-    if (!perfil) {
+    if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
 
-    // Mostrar perfil
     const avatar = document.getElementById('avatar');
     const nombrePerfil = document.getElementById('nombrePerfil');
     
@@ -318,7 +311,6 @@
       avatar.innerText = '👨';
     }
 
-    // Función para registrar gasto
     window.registrarGasto = async (categoria, subcategoria, descId, montoId) => {
       const descripcion = document.getElementById(descId).value.trim();
       const monto = parseFloat(document.getElementById(montoId).value);
@@ -347,7 +339,6 @@
         
         mostrarMensaje(`✅ ${perfil} registró $${monto} en ${categoria} - ${subcategoria}`, "exito");
         
-        // Limpiar campos
         document.getElementById(descId).value = categoria === 'Mercado' ? '' : `Factura ${subcategoria.toLowerCase()}`;
         document.getElementById(montoId).value = '';
         
@@ -361,13 +352,8 @@
     function mostrarMensaje(texto, tipo) {
       const mensaje = document.getElementById('mensaje');
       mensaje.innerText = texto;
-      if (tipo === 'exito') {
-        mensaje.style.background = "#d4edda";
-        mensaje.style.color = "#155724";
-      } else {
-        mensaje.style.background = "#f8d7da";
-        mensaje.style.color = "#721c24";
-      }
+      mensaje.style.background = tipo === 'exito' ? "#d4edda" : "#f8d7da";
+      mensaje.style.color = tipo === 'exito' ? "#155724" : "#721c24";
     }
 
     async function cargarRegistrosRecientes() {
