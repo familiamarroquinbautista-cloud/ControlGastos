@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Control de Gastos</title>
   <style>
-    /* RESET y estilos generales */
     body {
       font-family: Arial, sans-serif;
       max-width: 600px;
@@ -13,40 +12,57 @@
       background: #f0f2f5;
     }
 
-    /* BOTÓN GIGANTE Y LLAMATIVO */
-    .boton-presupuesto {
+    /* Menú de módulos */
+    .menu-modulos {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .menu-modulos h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .boton-modulo {
       display: block;
       width: 100%;
-      padding: 25px;           /* 👈 ENORME */
-      margin: 20px 0 30px 0;   /* 👈 Mucho espacio alrededor */
-      background: #ff6b6b;      /* 👈 ROJO LLAMATIVO */
-      color: white;
+      padding: 15px;
+      margin: 10px 0;
       border: none;
-      border-radius: 15px;
-      font-size: 24px;          /* 👈 Texto GRANDE */
+      border-radius: 10px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 8px 0 #c92a2a, 0 10px 20px rgba(0,0,0,0.2);
-      transition: all 0.1s ease;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: left;
     }
 
-    .boton-presupuesto:hover {
-      transform: translateY(2px);
-      box-shadow: 0 6px 0 #c92a2a, 0 10px 20px rgba(0,0,0,0.2);
+    .boton-modulo:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    .boton-presupuesto:active {
-      transform: translateY(8px);
-      box-shadow: 0 0 0 #c92a2a, 0 10px 20px rgba(0,0,0,0.2);
+    .boton-presupuesto { background: #4a90e2; color: white; }
+    .boton-comparar { background: #9b59b6; color: white; }
+    .boton-gastos { background: #e67e22; color: white; }
+
+    /* Sección de registro simple */
+    .seccion-registro {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
-    /* Estilos para el resto */
     h1 {
       color: #333;
-      border-bottom: 3px solid #ff6b6b;
-      padding-bottom: 10px;
+      margin-top: 0;
     }
 
     input {
@@ -59,7 +75,7 @@
 
     button {
       padding: 12px 24px;
-      background: #4CAF50;
+      background: #2c3e50;
       color: white;
       border: none;
       border-radius: 8px;
@@ -68,24 +84,37 @@
     }
 
     #mensaje {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 20px;
+      margin-top: 15px;
       padding: 10px;
       border-radius: 8px;
     }
   </style>
 </head>
 <body>
-  <!-- ⚡ BOTÓN IMPOSIBLE DE IGNORAR -->
-  <button class="boton-presupuesto" onclick="window.location.href='presupuesto.html'">
-    🚀 IR AL MÓDULO DE PRESUPUESTO 🚀
-  </button>
+  <!-- MÓDULOS: tres botones principales -->
+  <div class="menu-modulos">
+    <h2>📌 Módulos disponibles</h2>
+    
+    <button class="boton-modulo boton-presupuesto" onclick="window.location.href='presupuesto.html'">
+      📊 1. Configurar Presupuesto
+    </button>
+    
+    <button class="boton-modulo boton-comparar" onclick="window.location.href='comparar.html'">
+      🔍 2. Comparar Registro vs Presupuesto
+    </button>
+    
+    <button class="boton-modulo boton-gastos" onclick="window.location.href='checklist.html'">
+      ✅ 3. Checklist de Gastos del Mes
+    </button>
+  </div>
 
-  <h1>📝 Registro simple</h1>
-  <input id="nombre" placeholder="Escribe un dato">
-  <button onclick="guardarDato()">Guardar</button>
-  <p id="mensaje"></p>
+  <!-- REGISTRO SIMPLE (existente) -->
+  <div class="seccion-registro">
+    <h1>📝 Registro simple</h1>
+    <input id="nombre" placeholder="Escribe un dato">
+    <button onclick="guardarDato()">Guardar</button>
+    <p id="mensaje"></p>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
