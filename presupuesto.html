@@ -127,6 +127,16 @@
       padding: 10px;
       border-radius: 8px;
     }
+
+    .aviso {
+      background: #fff3cd;
+      color: #856404;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -139,6 +149,10 @@
   </div>
 
   <div class="card">
+    <div class="aviso">
+      ⚠️ El presupuesto es ÚNICO para Maria y Andres
+    </div>
+
     <h2>Configurar presupuesto mensual por categorías</h2>
     
     <div class="categoria">
@@ -207,6 +221,7 @@
 
     document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
 
+    // Presupuesto es único - se guarda con usuario 'GENERAL'
     window.guardarPresupuesto = async (categoria, subcategoria, inputId) => {
       const monto = parseFloat(document.getElementById(inputId).value);
       
@@ -217,7 +232,7 @@
 
       try {
         await addDoc(collection(db, "presupuestos"), {
-          usuario: perfil,
+          usuario: 'GENERAL',  // 👈 Presupuesto único
           categoria: categoria,
           subcategoria: subcategoria,
           monto: monto,
@@ -250,7 +265,7 @@
         
         const q = query(
           collection(db, "presupuestos"), 
-          where("usuario", "==", perfil),
+          where("usuario", "==", 'GENERAL'),  // 👈 Solo presupuesto GENERAL
           where("mes", "==", mesActual),
           where("año", "==", añoActual),
           orderBy("fecha", "desc")
@@ -289,7 +304,7 @@
         
         const q = query(
           collection(db, "presupuestos"), 
-          where("usuario", "==", perfil),
+          where("usuario", "==", 'GENERAL'),  // 👈 Solo presupuesto GENERAL
           where("mes", "==", mesActual),
           where("año", "==", añoActual)
         );
