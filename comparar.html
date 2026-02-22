@@ -45,34 +45,114 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
-    .comparacion-item {
+    .resumen-general {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .resumen-general h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .resumen-general .total {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .categoria {
+      margin-bottom: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .categoria-header {
+      background: #f5f5f5;
+      padding: 12px 15px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border-bottom: 2px solid #9b59b6;
+    }
+
+    .subcategoria {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .subcategoria:last-child {
+      border-bottom: none;
+    }
+
+    .subcategoria-header {
       display: flex;
       justify-content: space-between;
-      padding: 15px;
-      border-bottom: 1px solid #eee;
-      font-size: 1.1rem;
+      font-weight: bold;
     }
 
-    .positivo { 
-      color: #27ae60; 
+    .valores {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    .presupuesto {
+      color: #4a90e2;
       font-weight: bold;
+    }
+
+    .gasto {
+      color: #e67e22;
+      font-weight: bold;
+    }
+
+    .diferencia {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .positivo {
       background: #d4edda;
-      padding: 5px 10px;
-      border-radius: 20px;
-    }
-    
-    .negativo { 
-      color: #e74c3c; 
-      font-weight: bold;
-      background: #f8d7da;
-      padding: 5px 10px;
-      border-radius: 20px;
+      color: #155724;
     }
 
-    .resumen {
+    .negativo {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .neutro {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+
+    .total-row {
+      background: #f8f9fa;
+      padding: 15px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      border-top: 2px solid #9b59b6;
+    }
+
+    .estado-mensaje {
       text-align: center;
-      font-size: 1.3rem;
-      padding: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 1.2rem;
     }
   </style>
 </head>
@@ -85,37 +165,29 @@
     </div>
   </div>
 
-  <div class="card">
-    <h3>Resumen del mes actual - <span id="fechaActual"></span></h3>
-    <div class="comparacion-item">
-      <span>💰 Presupuesto total:</span>
-      <span id="presupuesto-total">Cargando...</span>
-    </div>
-    <div class="comparacion-item">
-      <span>📝 Gastos registrados:</span>
-      <span id="gastos-total">Cargando...</span>
-    </div>
-    <div class="comparacion-item">
-      <span>⚖️ Diferencia:</span>
-      <span id="diferencia">Cargando...</span>
-    </div>
+  <div class="resumen-general">
+    <h2>Resumen del mes</h2>
+    <div class="total" id="totalGeneral">$0 vs $0</div>
+    <div id="diferenciaGeneral">⚖️ Cargando...</div>
   </div>
 
   <div class="card">
-    <h3>📊 Estado financiero</h3>
-    <div class="resumen" id="estado-mensaje">
+    <h3>📊 Comparación por categorías</h3>
+    <div id="comparacionContainer">
       Cargando datos...
     </div>
   </div>
 
   <div class="card">
-    <h3>📋 Últimos registros</h3>
-    <div id="ultimos-registros"></div>
+    <h3>📋 Recomendaciones</h3>
+    <div id="recomendaciones" class="estado-mensaje">
+      Cargando...
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const db = getFirestore(initializeApp({
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -133,91 +205,146 @@
     }
 
     document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
-    document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+
+    // Estructura de categorías y subcategorías
+    const categorias = {
+      'Mercado': ['Carnes', 'Verduras'],
+      'Servicios': ['Luz', 'Gas']
+    };
 
     async function cargarComparacion() {
       try {
-        // Obtener presupuesto del mes actual
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        const presupuestosSnap = await getDocs(collection(db, "presupuestos"));
-        let presupuestoTotal = 0;
+        // Obtener presupuestos del mes
+        const presupuestosQuery = query(
+          collection(db, "presupuestos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        const presupuestosSnap = await getDocs(presupuestosQuery);
+        
+        // Obtener gastos del mes
+        const gastosQuery = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        const gastosSnap = await getDocs(gastosQuery);
+
+        // Organizar datos
+        const presupuestos = {};
         presupuestosSnap.forEach(doc => {
           const data = doc.data();
-          if (data.usuario === perfil) {
-            presupuestoTotal += data.monto || 0;
-          }
+          const key = `${data.categoria}_${data.subcategoria}`;
+          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
         });
 
-        // Obtener registros del mes actual
-        const registrosSnap = await getDocs(collection(db, "registros"));
-        let gastosTotal = 0;
-        registrosSnap.forEach(doc => {
+        const gastos = {};
+        gastosSnap.forEach(doc => {
           const data = doc.data();
-          if (data.usuario === perfil) {
-            gastosTotal += 1; // Por ahora contamos registros, después será montos
+          const key = `${data.categoria}_${data.subcategoria}`;
+          gastos[key] = (gastos[key] || 0) + data.monto;
+        });
+
+        // Mostrar comparación
+        const container = document.getElementById('comparacionContainer');
+        container.innerHTML = '';
+
+        let totalPresupuesto = 0;
+        let totalGastos = 0;
+
+        for (const [categoria, subcategorias] of Object.entries(categorias)) {
+          const categoriaDiv = document.createElement('div');
+          categoriaDiv.className = 'categoria';
+          
+          let categoriaHeader = document.createElement('div');
+          categoriaHeader.className = 'categoria-header';
+          categoriaHeader.innerText = categoria === 'Mercado' ? '🛒 Mercado' : '💡 Servicios';
+          categoriaDiv.appendChild(categoriaHeader);
+
+          for (const subcategoria of subcategorias) {
+            const key = `${categoria}_${subcategoria}`;
+            const presupuesto = presupuestos[key] || 0;
+            const gasto = gastos[key] || 0;
+            const diferencia = presupuesto - gasto;
+
+            totalPresupuesto += presupuesto;
+            totalGastos += gasto;
+
+            const subDiv = document.createElement('div');
+            subDiv.className = 'subcategoria';
+            
+            let diferenciaClass = 'neutro';
+            let diferenciaText = 'Sin presupuesto';
+            
+            if (presupuesto > 0) {
+              if (diferencia >= 0) {
+                diferenciaClass = 'positivo';
+                diferenciaText = `💰 Ahorraste $${diferencia}`;
+              } else {
+                diferenciaClass = 'negativo';
+                diferenciaText = `⚠️ Excediste $${Math.abs(diferencia)}`;
+              }
+            }
+
+            subDiv.innerHTML = `
+              <div class="subcategoria-header">
+                <span>${subcategoria}</span>
+                <span class="diferencia ${diferenciaClass}">${diferenciaText}</span>
+              </div>
+              <div class="valores">
+                <span class="presupuesto">Presupuesto: $${presupuesto}</span>
+                <span class="gasto">Gastado: $${gasto}</span>
+              </div>
+            `;
+            
+            categoriaDiv.appendChild(subDiv);
           }
-        });
 
-        // Mostrar resultados
-        document.getElementById("presupuesto-total").innerHTML = `<strong>$${presupuestoTotal}</strong>`;
-        document.getElementById("gastos-total").innerHTML = `<strong>${gastosTotal} registros</strong>`;
+          container.appendChild(categoriaDiv);
+        }
+
+        // Totales generales
+        const totalDiv = document.createElement('div');
+        totalDiv.className = 'total-row';
+        totalDiv.innerHTML = `
+          <span>TOTALES:</span>
+          <span>Presupuesto: $${totalPresupuesto} | Gastado: $${totalGastos}</span>
+        `;
+        container.appendChild(totalDiv);
+
+        // Actualizar resumen general
+        document.getElementById('totalGeneral').innerHTML = `$${totalPresupuesto} vs $${totalGastos}`;
         
-        const diferencia = presupuestoTotal - gastosTotal;
-        const diferenciaElement = document.getElementById("diferencia");
+        const diferenciaGeneral = totalPresupuesto - totalGastos;
+        const diferenciaElement = document.getElementById('diferenciaGeneral');
         
-        if (diferencia >= 0) {
-          diferenciaElement.innerHTML = `<span class="positivo">+$${diferencia} disponible</span>`;
+        if (diferenciaGeneral >= 0) {
+          diferenciaElement.innerHTML = `<span class="positivo">✅ Disponible: $${diferenciaGeneral}</span>`;
         } else {
-          diferenciaElement.innerHTML = `<span class="negativo">-$${Math.abs(diferencia)} excedido</span>`;
+          diferenciaElement.innerHTML = `<span class="negativo">⚠️ Déficit: $${Math.abs(diferenciaGeneral)}</span>`;
         }
 
-        // Estado financiero
-        const estadoElement = document.getElementById("estado-mensaje");
-        if (gastosTotal === 0) {
-          estadoElement.innerHTML = "📌 No hay gastos registrados este mes";
-        } else if (presupuestoTotal === 0) {
-          estadoElement.innerHTML = "⚠️ No has configurado presupuesto";
-        } else if (diferencia >= 0) {
-          const porcentaje = (gastosTotal / presupuestoTotal * 100).toFixed(1);
-          estadoElement.innerHTML = `✅ Vas bien! Has usado el ${porcentaje}% de tu presupuesto`;
+        // Recomendaciones
+        const recomendaciones = document.getElementById('recomendaciones');
+        if (totalPresupuesto === 0) {
+          recomendaciones.innerHTML = '📌 No has configurado presupuesto este mes';
+        } else if (totalGastos === 0) {
+          recomendaciones.innerHTML = '📌 No has registrado gastos este mes';
+        } else if (diferenciaGeneral >= 0) {
+          const porcentaje = (totalGastos / totalPresupuesto * 100).toFixed(1);
+          recomendaciones.innerHTML = `✅ Vas bien! Has usado el ${porcentaje}% de tu presupuesto. Te quedan $${diferenciaGeneral} disponibles.`;
         } else {
-          estadoElement.innerHTML = `⚠️ Has excedido tu presupuesto en $${Math.abs(diferencia)}`;
+          recomendaciones.innerHTML = `⚠️ Has excedido tu presupuesto en $${Math.abs(diferenciaGeneral)}. Revisa tus gastos.`;
         }
-
-        // Últimos registros
-        const q = query(
-          collection(db, "registros"),
-          where("usuario", "==", perfil),
-          orderBy("fecha", "desc"),
-          limit(5)
-        );
-        
-        const registrosQuery = await getDocs(q);
-        const ultimosDiv = document.getElementById("ultimos-registros");
-        ultimosDiv.innerHTML = "";
-        
-        if (registrosQuery.empty) {
-          ultimosDiv.innerHTML = "<p>No hay registros aún</p>";
-          return;
-        }
-
-        registrosQuery.forEach(doc => {
-          const data = doc.data();
-          const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
-          const div = document.createElement("div");
-          div.className = "comparacion-item";
-          div.innerHTML = `
-            <span>${data.nombre || "Sin nombre"}</span>
-            <span>${fecha.toLocaleDateString()}</span>
-          `;
-          ultimosDiv.appendChild(div);
-        });
 
       } catch (error) {
         console.error(error);
-        document.getElementById("estado-mensaje").innerHTML = "❌ Error al cargar datos";
+        document.getElementById('comparacionContainer').innerHTML = 'Error al cargar datos';
       }
     }
 
