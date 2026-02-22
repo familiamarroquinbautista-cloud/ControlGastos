@@ -1,1 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Resumen General</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #f0f2f5;
+    }
 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .perfil-info {
+      background: #f1c40f;
+      color: #2c3e50;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .btn-volver {
+      padding: 10px 20px;
+      background: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .resumen-general {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 25px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .resumen-general h2 {
+      margin: 0 0 15px 0;
+      font-size: 1.5rem;
+      opacity: 0.95;
+    }
+
+    .totales {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .total-item {
+      text-align: center;
+    }
+
+    .total-item .label {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 5px;
+    }
+
+    .total-item .valor {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .total-item .subvalor {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .perfil-card {
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .perfil-header {
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+
+    .perfil-header.maria {
+      background: #ff9a9e;
+      color: #4a1e2a;
+    }
+
+    .perfil-header.andres {
+      background: #a8e6cf;
+      color: #1a4a3a;
+    }
+
+    .perfil-totales {
+      display: flex;
+      gap: 20px;
+      font-size: 1rem;
+    }
+
+    .perfil-content {
+      padding: 20px;
+    }
+
+    .categoria {
+      margin-bottom: 15px;
+    }
+
+    .categoria h4 {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    .subcategoria-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      margin: 5px 0;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .subcategoria-row .presupuesto {
+      color: #4a90e2;
+      font-weight: bold;
+    }
+
+    .subcategoria-row .gasto {
+      color: #e67e22;
+      font-weight: bold;
+    }
+
+    .subcategoria-row .diferencia {
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+
+    .positivo {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .negativo {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .neutro {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+
+    .no-datos {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      font-style: italic;
+    }
+
+    .fecha-actual {
+      text-align: center;
+      margin: 20px 0;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📊 Resumen General</h1>
+    <div>
+      <span class="perfil-info" id="perfilDisplay">👑 ADMIN</span>
+      <button class="btn-volver" onclick="window.location.href='index.html'">← Cambiar Perfil</button>
+    </div>
+  </div>
+
+  <div class="resumen-general">
+    <h2>💰 Resumen Global del Mes</h2>
+    <div class="totales">
+      <div class="total-item">
+        <div class="label">Presupuesto Total</div>
+        <div class="valor" id="totalPresupuestoGlobal">$0</div>
+      </div>
+      <div class="total-item">
+        <div class="label">Gastos Totales</div>
+        <div class="valor" id="totalGastosGlobal">$0</div>
+      </div>
+      <div class="total-item">
+        <div class="label">Diferencia</div>
+        <div class="valor" id="diferenciaGlobal">$0</div>
+        <div class="subvalor" id="porcentajeGlobal">0% usado</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fecha-actual" id="fechaActual"></div>
+
+  <div id="perfilesContainer">
+    Cargando datos...
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const db = getFirestore(initializeApp({
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    }));
+
+    const perfil = sessionStorage.getItem('perfil');
+    
+    if (!perfil || perfil !== 'Admin') {
+      window.location.href = "index.html";
+    }
+
+    const fecha = new Date();
+    document.getElementById('fechaActual').innerText = 
+      `Período: ${fecha.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`;
+
+    const perfiles = ['Maria', 'Andres'];
+    const categorias = {
+      'Mercado': ['Carnes', 'Verduras'],
+      'Servicios': ['Luz', 'Gas']
+    };
+
+    async function cargarResumenGlobal() {
+      try {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        let totalPresupuestoGlobal = 0;
+        let totalGastosGlobal = 0;
+        
+        const container = document.getElementById('perfilesContainer');
+        container.innerHTML = '';
+
+        for (const perfilActual of perfiles) {
+          const presupuestosQuery = query(
+            collection(db, "presupuestos"),
+            where("usuario", "==", perfilActual),
+            where("mes", "==", mesActual),
+            where("año", "==", añoActual)
+          );
+          const presupuestosSnap = await getDocs(presupuestosQuery);
+          
+          const gastosQuery = query(
+            collection(db, "gastos"),
+            where("usuario", "==", perfilActual),
+            where("mes", "==", mesActual),
+            where("año", "==", añoActual)
+          );
+          const gastosSnap = await getDocs(gastosQuery);
+
+          const presupuestos = {};
+          presupuestosSnap.forEach(doc => {
+            const data = doc.data();
+            const key = `${data.categoria}_${data.subcategoria}`;
+            presupuestos[key] = (presupuestos[key] || 0) + data.monto;
+          });
+
+          const gastos = {};
+          gastosSnap.forEach(doc => {
+            const data = doc.data();
+            const key = `${data.categoria}_${data.subcategoria}`;
+            gastos[key] = (gastos[key] || 0) + data.monto;
+          });
+
+          let totalPresupuestoPerfil = 0;
+          let totalGastosPerfil = 0;
+          
+          for (const [categoria, subcategorias] of Object.entries(categorias)) {
+            for (const subcategoria of subcategorias) {
+              const key = `${categoria}_${subcategoria}`;
+              totalPresupuestoPerfil += presupuestos[key] || 0;
+              totalGastosPerfil += gastos[key] || 0;
+            }
+          }
+
+          totalPresupuestoGlobal += totalPresupuestoPerfil;
+          totalGastosGlobal += totalGastosPerfil;
+
+          const perfilCard = document.createElement('div');
+          perfilCard.className = 'perfil-card';
+
+          const headerClass = perfilActual === 'Maria' ? 'maria' : 'andres';
+          perfilCard.innerHTML = `
+            <div class="perfil-header ${headerClass}">
+              <span>${perfilActual === 'Maria' ? '👩' : '👨'} ${perfilActual}</span>
+              <div class="perfil-totales">
+                <span>💰 $${totalPresupuestoPerfil}</span>
+                <span>💸 $${totalGastosPerfil}</span>
+                <span>⚖️ $${totalPresupuestoPerfil - totalGastosPerfil}</span>
+              </div>
+            </div>
+          `;
+
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'perfil-content';
+
+          for (const [categoria, subcategorias] of Object.entries(categorias)) {
+            const categoriaDiv = document.createElement('div');
+            categoriaDiv.className = 'categoria';
+            categoriaDiv.innerHTML = `<h4>${categoria === 'Mercado' ? '🛒 Mercado' : '💡 Servicios'}</h4>`;
+
+            for (const subcategoria of subcategorias) {
+              const key = `${categoria}_${subcategoria}`;
+              const presupuesto = presupuestos[key] || 0;
+              const gasto = gastos[key] || 0;
+              const diferencia = presupuesto - gasto;
+
+              let diferenciaClass = 'neutro';
+              let diferenciaText = 'Sin presupuesto';
+              
+              if (presupuesto > 0) {
+                if (diferencia >= 0) {
+                  diferenciaClass = 'positivo';
+                  diferenciaText = `+$${diferencia}`;
+                } else {
+                  diferenciaClass = 'negativo';
+                  diferenciaText = `-$${Math.abs(diferencia)}`;
+                }
+              }
+
+              const subDiv = document.createElement('div');
+              subDiv.className = 'subcategoria-row';
+              subDiv.innerHTML = `
+                <span><strong>${subcategoria}:</strong></span>
+                <span class="presupuesto">P: $${presupuesto}</span>
+                <span class="gasto">G: $${gasto}</span>
+                <span class="diferencia ${diferenciaClass}">${diferenciaText}</span>
+              `;
+              categoriaDiv.appendChild(subDiv);
+            }
+
+            contentDiv.appendChild(categoriaDiv);
+          }
+
+          perfilCard.appendChild(contentDiv);
+          container.appendChild(perfilCard);
+        }
+
+        document.getElementById('totalPresupuestoGlobal').innerText = `$${totalPresupuestoGlobal}`;
+        document.getElementById('totalGastosGlobal').innerText = `$${totalGastosGlobal}`;
+        
+        const diferenciaGlobal = totalPresupuestoGlobal - totalGastosGlobal;
+        document.getElementById('diferenciaGlobal').innerText = 
+          diferenciaGlobal >= 0 ? `+$${diferenciaGlobal}` : `-$${Math.abs(diferenciaGlobal)}`;
+        
+        const porcentaje = totalPresupuestoGlobal > 0 
+          ? ((totalGastosGlobal / totalPresupuestoGlobal) * 100).toFixed(1)
+          : 0;
+        document.getElementById('porcentajeGlobal').innerText = `${porcentaje}% usado`;
+
+      } catch (error) {
+        console.error(error);
+        document.getElementById('perfilesContainer').innerHTML = 
+          '<div class="no-datos">Error al cargar los datos</div>';
+      }
+    }
+
+    cargarResumenGlobal();
+  </script>
+</body>
+</html>
