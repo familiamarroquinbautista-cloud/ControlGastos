@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Presupuesto</title>
+  <title>Configurar Presupuesto</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -45,22 +45,74 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
-    input {
-      padding: 12px;
-      width: 70%;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
+    .categoria {
+      margin-bottom: 25px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 10px;
     }
 
-    button {
-      padding: 12px 24px;
+    .categoria h3 {
+      margin-top: 0;
+      color: #2c3e50;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 5px;
+    }
+
+    .subcategoria {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .subcategoria label {
+      width: 80px;
+      font-weight: bold;
+    }
+
+    .subcategoria input {
+      flex: 1;
+      min-width: 150px;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .subcategoria input[type="number"] {
+      width: 120px;
+      flex: 0 1 auto;
+    }
+
+    .btn-guardar {
       background: #4a90e2;
       color: white;
       border: none;
+      padding: 8px 15px;
       border-radius: 8px;
-      font-size: 16px;
       cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-guardar:hover {
+      background: #2a5a9e;
+    }
+
+    .total-presupuesto {
+      background: #e8f4f8;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .total-presupuesto span {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #27ae60;
     }
 
     .historial-item {
@@ -68,6 +120,12 @@
       border-bottom: 1px solid #eee;
       display: flex;
       justify-content: space-between;
+    }
+
+    .mensaje {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -81,14 +139,52 @@
   </div>
 
   <div class="card">
-    <h3>Configurar presupuesto mensual</h3>
-    <input type="number" id="presupuesto" placeholder="Monto total">
-    <button onclick="guardarPresupuesto()">Guardar presupuesto</button>
-    <p id="mensaje"></p>
+    <h2>Configurar presupuesto mensual por categorías</h2>
+    
+    <!-- Categoría Mercado -->
+    <div class="categoria">
+      <h3>🛒 Mercado</h3>
+      
+      <div class="subcategoria">
+        <label>Carnes:</label>
+        <input type="number" id="presupuesto_mercado_carnes" placeholder="Monto $" min="0" step="1000">
+        <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Carnes', 'presupuesto_mercado_carnes')">Guardar</button>
+      </div>
+      
+      <div class="subcategoria">
+        <label>Verduras:</label>
+        <input type="number" id="presupuesto_mercado_verduras" placeholder="Monto $" min="0" step="1000">
+        <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Verduras', 'presupuesto_mercado_verduras')">Guardar</button>
+      </div>
+    </div>
+
+    <!-- Categoría Servicios -->
+    <div class="categoria">
+      <h3>💡 Servicios</h3>
+      
+      <div class="subcategoria">
+        <label>Luz:</label>
+        <input type="number" id="presupuesto_servicios_luz" placeholder="Monto $" min="0" step="1000">
+        <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Luz', 'presupuesto_servicios_luz')">Guardar</button>
+      </div>
+      
+      <div class="subcategoria">
+        <label>Gas:</label>
+        <input type="number" id="presupuesto_servicios_gas" placeholder="Monto $" min="0" step="1000">
+        <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gas', 'presupuesto_servicios_gas')">Guardar</button>
+      </div>
+    </div>
+
+    <div class="total-presupuesto">
+      <div>Presupuesto total del mes:</div>
+      <span id="totalPresupuesto">$0</span>
+    </div>
+
+    <div id="mensaje" class="mensaje"></div>
   </div>
 
   <div class="card">
-    <h3>Historial de presupuestos</h3>
+    <h3>📋 Presupuestos guardados este mes</h3>
     <div id="historial"></div>
   </div>
 
@@ -113,45 +209,67 @@
 
     document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
 
-    window.guardarPresupuesto = async () => {
-      const monto = document.getElementById("presupuesto").value;
+    window.guardarPresupuesto = async (categoria, subcategoria, inputId) => {
+      const monto = parseFloat(document.getElementById(inputId).value);
       
-      if (!monto) {
-        document.getElementById("mensaje").innerText = "❌ Ingresa un monto";
+      if (isNaN(monto) || monto <= 0) {
+        mostrarMensaje("❌ Ingresa un monto válido", "error");
         return;
       }
 
       try {
         await addDoc(collection(db, "presupuestos"), {
           usuario: perfil,
-          monto: Number(monto),
+          categoria: categoria,
+          subcategoria: subcategoria,
+          monto: monto,
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear()
         });
-        document.getElementById("mensaje").innerText = `✅ ${perfil} guardó presupuesto de $${monto}`;
-        document.getElementById("presupuesto").value = "";
+        
+        mostrarMensaje(`✅ Presupuesto guardado: ${categoria} - ${subcategoria} $${monto}`, "exito");
+        document.getElementById(inputId).value = '';
         cargarHistorial();
+        calcularTotalPresupuesto();
       } catch (error) {
-        document.getElementById("mensaje").innerText = "❌ Error al guardar";
         console.error(error);
+        mostrarMensaje("❌ Error al guardar", "error");
       }
     };
 
+    function mostrarMensaje(texto, tipo) {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.innerText = texto;
+      if (tipo === 'exito') {
+        mensaje.style.background = "#d4edda";
+        mensaje.style.color = "#155724";
+      } else {
+        mensaje.style.background = "#f8d7da";
+        mensaje.style.color = "#721c24";
+      }
+    }
+
     async function cargarHistorial() {
       try {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
         const q = query(
           collection(db, "presupuestos"), 
           where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual),
           orderBy("fecha", "desc")
         );
+        
         const querySnapshot = await getDocs(q);
         
         const historial = document.getElementById("historial");
         historial.innerHTML = "";
         
         if (querySnapshot.empty) {
-          historial.innerHTML = "<p>No hay presupuestos guardados</p>";
+          historial.innerHTML = "<p>No hay presupuestos guardados este mes</p>";
           return;
         }
 
@@ -161,7 +279,7 @@
           const div = document.createElement("div");
           div.className = "historial-item";
           div.innerHTML = `
-            <span>$${data.monto}</span>
+            <span><strong>${data.categoria} - ${data.subcategoria}:</strong> $${data.monto}</span>
             <span>${fecha.toLocaleDateString()}</span>
           `;
           historial.appendChild(div);
@@ -171,7 +289,33 @@
       }
     }
 
+    async function calcularTotalPresupuesto() {
+      try {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        const q = query(
+          collection(db, "presupuestos"), 
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        
+        const querySnapshot = await getDocs(q);
+        let total = 0;
+        
+        querySnapshot.forEach(doc => {
+          total += doc.data().monto || 0;
+        });
+        
+        document.getElementById('totalPresupuesto').innerText = `$${total}`;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     cargarHistorial();
+    calcularTotalPresupuesto();
   </script>
 </body>
 </html>
