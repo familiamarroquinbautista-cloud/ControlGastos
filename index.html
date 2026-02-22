@@ -37,6 +37,25 @@
       animation: spin 1s ease-in-out infinite;
     }
 
+    .btn-manual {
+      margin-top: 3rem;
+      padding: 12px 30px;
+      background: white;
+      color: #1b2a4e;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-manual:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -46,11 +65,21 @@
   <h1>💰 Control Gastos</h1>
   <p>Cargando aplicación ...</p>
   <div class="cargando"></div>
+  
+  <button class="btn-manual" onclick="irApp()">
+    Entrar ahora →
+  </button>
 
   <script>
+    // Redirección automática después de 4 segundos
     setTimeout(() => {
       window.location.href = "app.html";
-    }, 2000);
+    }, 4000);
+
+    // Función para el botón manual
+    window.irApp = function() {
+      window.location.href = "app.html";
+    }
   </script>
 </body>
 </html>
