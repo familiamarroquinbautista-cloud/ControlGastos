@@ -1,9 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mi sitio</title>
+  <meta charset="UTF-8">
+  <title>Control de Gastos</title>
 </head>
 <body>
-  <h1>Sitio pruebas Control de gastos</h1>
+
+  <h1>Registro simple</h1>
+
+  <input type="text" id="nombre" placeholder="Escribe un dato">
+  <button onclick="guardarDato()">Guardar</button>
+
+  <p id="mensaje"></p>
+
+  <script type="module">
+
+    // Importar desde CDN (NO desde "firebase/app")
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } 
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // 🔹 TU CONFIGURACIÓN (la que me enviaste)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Función para guardar dato
+    window.guardarDato = async function() {
+      const nombre = document.getElementById("nombre").value;
+
+      try {
+        await addDoc(collection(db, "registros"), {
+          nombre: nombre,
+          fecha: new Date()
+        });
+
+        document.getElementById("mensaje").innerText = "Dato guardado correctamente";
+      } catch (error) {
+        console.error(error);
+        document.getElementById("mensaje").innerText = "Error al guardar";
+      }
+    }
+
+  </script>
+
 </body>
 </html>
