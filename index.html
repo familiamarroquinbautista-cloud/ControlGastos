@@ -2,35 +2,55 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Control de Gastos</title>
+  <title>Bienvenido ⚡</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(145deg, #2b3a67 0%, #1b2a4e 100%);
+      color: white;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .cargando {
+      margin-top: 2rem;
+      width: 48px;
+      height: 48px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <h1>Registro simple</h1>
-  <input id="nombre" placeholder="Escribe un dato">
-  <button onclick="guardarDato()">Guardar</button>
-  <p id="mensaje"></p>
+  <h1>💰 Control Gastos</h1>
+  <p>Cargando aplicación ...</p>
+  <div class="cargando"></div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const db = getFirestore(initializeApp({
-      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
-      authDomain: "controlgastosprueba.firebaseapp.com",
-      projectId: "controlgastosprueba",
-      storageBucket: "controlgastosprueba.firebasestorage.app",
-      messagingSenderId: "679682152121",
-      appId: "1:679682152121:web:d3981591d952df1333ed68"
-    }));
-
-    window.guardarDato = async () => {
-      try {
-        await addDoc(collection(db, "registros"), { nombre: nombre.value, fecha: new Date() });
-        mensaje.innerText = "✅ Guardado";
-      } catch (error) {
-        mensaje.innerText = "❌ Error";
-      }
-    }
+  <script>
+    setTimeout(() => {
+      window.location.href = "app.html";
+    }, 2000);
   </script>
 </body>
 </html>
