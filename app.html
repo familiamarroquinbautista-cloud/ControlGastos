@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Control de Gastos</title>
+</head>
+<body>
+  <h1>Registro simple</h1>
+  <input id="nombre" placeholder="Escribe un dato">
+  <button onclick="guardarDato()">Guardar</button>
+  <p id="mensaje"></p>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const db = getFirestore(initializeApp({
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    }));
+
+    window.guardarDato = async () => {
+      try {
+        await addDoc(collection(db, "registros"), { nombre: nombre.value, fecha: new Date() });
+        mensaje.innerText = "✅ Guardado";
+      } catch (error) {
+        mensaje.innerText = "❌ Error";
+      }
+    }
+  </script>
+</body>
+</html>
