@@ -5,46 +5,81 @@
   <title>Presupuesto</title>
   <style>
     body {
-      font-family: system-ui, sans-serif;
+      font-family: Arial, sans-serif;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 20px auto;
       padding: 20px;
+      background: #f0f2f5;
     }
-    .nav-buttons {
-      margin-bottom: 30px;
+
+    .header {
       display: flex;
-      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
-    .nav-btn {
-      padding: 8px 16px;
-      background: #2b3a67;
+
+    .perfil-info {
+      background: #4a90e2;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-weight: bold;
+    }
+
+    .btn-volver {
+      padding: 10px 20px;
+      background: #4a90e2;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      text-decoration: none;
+      font-size: 16px;
     }
+
     .card {
-      background: #f5f5f5;
+      background: white;
       padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    input, button {
-      padding: 8px;
-      margin: 5px 0;
+
+    input {
+      padding: 12px;
+      width: 70%;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .historial-item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
     }
   </style>
 </head>
 <body>
-  <div class="nav-buttons">
-    <button class="nav-btn" onclick="window.location.href='app.html'">
-      ↩️ Volver a Registro
-    </button>
+  <div class="header">
+    <h1>📊 Presupuesto</h1>
+    <div>
+      <span class="perfil-info" id="perfilDisplay">Cargando...</span>
+      <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+    </div>
   </div>
 
-  <h1>📋 Módulo de Presupuesto</h1>
-  
   <div class="card">
     <h3>Configurar presupuesto mensual</h3>
     <input type="number" id="presupuesto" placeholder="Monto total">
@@ -52,9 +87,14 @@
     <p id="mensaje"></p>
   </div>
 
+  <div class="card">
+    <h3>Historial de presupuestos</h3>
+    <div id="historial"></div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const db = getFirestore(initializeApp({
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -64,6 +104,14 @@
       messagingSenderId: "679682152121",
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     }));
+
+    const perfil = sessionStorage.getItem('perfil');
+    
+    if (!perfil) {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
 
     window.guardarPresupuesto = async () => {
       const monto = document.getElementById("presupuesto").value;
@@ -75,18 +123,55 @@
 
       try {
         await addDoc(collection(db, "presupuestos"), {
+          usuario: perfil,
           monto: Number(monto),
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear()
         });
-        document.getElementById("mensaje").innerText = "✅ Presupuesto guardado";
+        document.getElementById("mensaje").innerText = `✅ ${perfil} guardó presupuesto de $${monto}`;
         document.getElementById("presupuesto").value = "";
+        cargarHistorial();
       } catch (error) {
         document.getElementById("mensaje").innerText = "❌ Error al guardar";
         console.error(error);
       }
+    };
+
+    async function cargarHistorial() {
+      try {
+        const q = query(
+          collection(db, "presupuestos"), 
+          where("usuario", "==", perfil),
+          orderBy("fecha", "desc")
+        );
+        const querySnapshot = await getDocs(q);
+        
+        const historial = document.getElementById("historial");
+        historial.innerHTML = "";
+        
+        if (querySnapshot.empty) {
+          historial.innerHTML = "<p>No hay presupuestos guardados</p>";
+          return;
+        }
+
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const fecha = data.fecha.toDate ? data.fecha.toDate() : new Date();
+          const div = document.createElement("div");
+          div.className = "historial-item";
+          div.innerHTML = `
+            <span>$${data.monto}</span>
+            <span>${fecha.toLocaleDateString()}</span>
+          `;
+          historial.appendChild(div);
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
+
+    cargarHistorial();
   </script>
 </body>
 </html>
