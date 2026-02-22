@@ -63,6 +63,13 @@
       border-bottom: 8px solid #6bcfb5;
     }
 
+    .btn-perfil.admin {
+      background: #f1c40f;
+      color: #2c3e50;
+      border-bottom: 8px solid #d4ac0d;
+      font-size: 1.8rem;
+    }
+
     .subtitulo {
       margin-top: 2rem;
       font-size: 1rem;
@@ -82,6 +89,10 @@
     <button class="btn-perfil andres" onclick="seleccionarPerfil('Andres')">
       👨 ANDRES
     </button>
+
+    <button class="btn-perfil admin" onclick="seleccionarPerfil('Admin')">
+      👑 ADMIN
+    </button>
   </div>
   
   <div class="subtitulo">
@@ -91,7 +102,12 @@
   <script>
     function seleccionarPerfil(nombre) {
       sessionStorage.setItem('perfil', nombre);
-      window.location.href = "app.html";
+      
+      if (nombre === 'Admin') {
+        window.location.href = "resumen.html";
+      } else {
+        window.location.href = "app.html";
+      }
     }
   </script>
 </body>
