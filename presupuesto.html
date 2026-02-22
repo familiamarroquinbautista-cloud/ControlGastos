@@ -141,7 +141,6 @@
   <div class="card">
     <h2>Configurar presupuesto mensual por categorías</h2>
     
-    <!-- Categoría Mercado -->
     <div class="categoria">
       <h3>🛒 Mercado</h3>
       
@@ -158,7 +157,6 @@
       </div>
     </div>
 
-    <!-- Categoría Servicios -->
     <div class="categoria">
       <h3>💡 Servicios</h3>
       
@@ -203,7 +201,7 @@
 
     const perfil = sessionStorage.getItem('perfil');
     
-    if (!perfil) {
+    if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
 
@@ -241,13 +239,8 @@
     function mostrarMensaje(texto, tipo) {
       const mensaje = document.getElementById('mensaje');
       mensaje.innerText = texto;
-      if (tipo === 'exito') {
-        mensaje.style.background = "#d4edda";
-        mensaje.style.color = "#155724";
-      } else {
-        mensaje.style.background = "#f8d7da";
-        mensaje.style.color = "#721c24";
-      }
+      mensaje.style.background = tipo === 'exito' ? "#d4edda" : "#f8d7da";
+      mensaje.style.color = tipo === 'exito' ? "#155724" : "#721c24";
     }
 
     async function cargarHistorial() {
