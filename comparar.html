@@ -200,13 +200,12 @@
 
     const perfil = sessionStorage.getItem('perfil');
     
-    if (!perfil) {
+    if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
 
     document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
 
-    // Estructura de categorías y subcategorías
     const categorias = {
       'Mercado': ['Carnes', 'Verduras'],
       'Servicios': ['Luz', 'Gas']
@@ -217,7 +216,6 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener presupuestos del mes
         const presupuestosQuery = query(
           collection(db, "presupuestos"),
           where("usuario", "==", perfil),
@@ -226,7 +224,6 @@
         );
         const presupuestosSnap = await getDocs(presupuestosQuery);
         
-        // Obtener gastos del mes
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -235,7 +232,6 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
 
-        // Organizar datos
         const presupuestos = {};
         presupuestosSnap.forEach(doc => {
           const data = doc.data();
@@ -250,7 +246,6 @@
           gastos[key] = (gastos[key] || 0) + data.monto;
         });
 
-        // Mostrar comparación
         const container = document.getElementById('comparacionContainer');
         container.innerHTML = '';
 
@@ -308,7 +303,6 @@
           container.appendChild(categoriaDiv);
         }
 
-        // Totales generales
         const totalDiv = document.createElement('div');
         totalDiv.className = 'total-row';
         totalDiv.innerHTML = `
@@ -317,19 +311,19 @@
         `;
         container.appendChild(totalDiv);
 
-        // Actualizar resumen general
         document.getElementById('totalGeneral').innerHTML = `$${totalPresupuesto} vs $${totalGastos}`;
         
         const diferenciaGeneral = totalPresupuesto - totalGastos;
         const diferenciaElement = document.getElementById('diferenciaGeneral');
         
-        if (diferenciaGeneral >= 0) {
+        if (totalPresupuesto === 0) {
+          diferenciaElement.innerHTML = `<span class="neutro">📌 Configura un presupuesto</span>`;
+        } else if (diferenciaGeneral >= 0) {
           diferenciaElement.innerHTML = `<span class="positivo">✅ Disponible: $${diferenciaGeneral}</span>`;
         } else {
           diferenciaElement.innerHTML = `<span class="negativo">⚠️ Déficit: $${Math.abs(diferenciaGeneral)}</span>`;
         }
 
-        // Recomendaciones
         const recomendaciones = document.getElementById('recomendaciones');
         if (totalPresupuesto === 0) {
           recomendaciones.innerHTML = '📌 No has configurado presupuesto este mes';
