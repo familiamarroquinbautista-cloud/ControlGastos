@@ -19,6 +19,14 @@
       margin-bottom: 20px;
     }
 
+    .perfil-info {
+      background: #e67e22;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-weight: bold;
+    }
+
     .btn-volver {
       padding: 10px 20px;
       background: #e67e22;
@@ -37,16 +45,44 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
+    .progreso {
+      background: #eee;
+      height: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+    .barra-progreso {
+      height: 20px;
+      background: #27ae60;
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .contador {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
     .gasto-item {
       display: flex;
       align-items: center;
-      padding: 12px;
+      padding: 15px;
       border-bottom: 1px solid #eee;
+      background: white;
+      transition: background 0.2s;
+    }
+
+    .gasto-item:hover {
+      background: #f9f9f9;
     }
 
     .gasto-item input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       margin-right: 15px;
       cursor: pointer;
     }
@@ -55,11 +91,18 @@
       flex: 1;
       font-size: 16px;
       cursor: pointer;
+      font-weight: 500;
     }
 
     .gasto-item.pagado label {
       text-decoration: line-through;
       color: #888;
+    }
+
+    .fecha-gasto {
+      color: #999;
+      font-size: 0.85rem;
+      margin-left: 10px;
     }
 
     .agregar-gasto {
@@ -70,64 +113,92 @@
 
     .agregar-gasto input {
       flex: 1;
-      padding: 10px;
+      padding: 12px;
       border: 2px solid #ddd;
       border-radius: 8px;
       font-size: 16px;
     }
 
     .agregar-gasto button {
-      padding: 10px 20px;
+      padding: 12px 25px;
       background: #e67e22;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
     }
 
-    .progreso {
-      background: #eee;
-      height: 10px;
-      border-radius: 5px;
-      margin: 20px 0;
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
     }
 
-    .barra-progreso {
-      height: 10px;
-      background: #27ae60;
-      border-radius: 5px;
-      width: 0%;
-      transition: width 0.3s;
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-valor {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #e67e22;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>✅ Checklist del Mes</h1>
-    <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+    <h1>✅ Checklist</h1>
+    <div>
+      <span class="perfil-info" id="perfilDisplay">Cargando...</span>
+      <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+    </div>
   </div>
 
   <div class="card">
-    <h3>Progreso mensual</h3>
+    <h3>📊 Progreso mensual</h3>
     <div class="progreso">
       <div class="barra-progreso" id="barra-progreso"></div>
     </div>
-    <p id="contador">0/0 gastos cubiertos</p>
+    <div class="contador" id="contador">0/0 gastos pagados</div>
+    
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-valor" id="total-gastos">0</div>
+        <div class="stat-label">Total gastos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-valor" id="pagados-gastos">0</div>
+        <div class="stat-label">Pagados</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-valor" id="pendientes-gastos">0</div>
+        <div class="stat-label">Pendientes</div>
+      </div>
+    </div>
   </div>
 
   <div class="card">
-    <h3>Gastos del mes</h3>
+    <h3>📋 Lista de gastos del mes</h3>
     <div id="lista-gastos"></div>
     
     <div class="agregar-gasto">
       <input type="text" id="nuevo-gasto" placeholder="Nuevo gasto (ej: Agua, Luz, Internet)">
-      <button onclick="agregarGasto()">Agregar</button>
+      <button onclick="agregarGasto()">➕ Agregar</button>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const db = getFirestore(initializeApp({
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -138,12 +209,21 @@
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     }));
 
+    const perfil = sessionStorage.getItem('perfil');
+    
+    if (!perfil) {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
+
     window.agregarGasto = async () => {
-      const nombreGasto = document.getElementById("nuevo-gasto").value;
+      const nombreGasto = document.getElementById("nuevo-gasto").value.trim();
       if (!nombreGasto) return;
 
       try {
         await addDoc(collection(db, "checklist"), {
+          usuario: perfil,
           nombre: nombreGasto,
           pagado: false,
           fecha: new Date(),
@@ -154,23 +234,36 @@
         cargarGastos();
       } catch (error) {
         console.error(error);
+        alert("Error al agregar gasto");
       }
     };
 
-    window.toggleGasto = async (id, pagado) => {
+    window.toggleGasto = async (id, pagadoActual) => {
       try {
         await updateDoc(doc(db, "checklist", id), {
-          pagado: !pagado
+          pagado: !pagadoActual
         });
         cargarGastos();
       } catch (error) {
         console.error(error);
+        alert("Error al actualizar");
       }
     };
 
     async function cargarGastos() {
       try {
-        const querySnapshot = await getDocs(collection(db, "checklist"));
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        const q = query(
+          collection(db, "checklist"),
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual),
+          orderBy("fecha", "desc")
+        );
+        
+        const querySnapshot = await getDocs(q);
         const gastos = [];
         querySnapshot.forEach(doc => {
           gastos.push({ id: doc.id, ...doc.data() });
@@ -179,28 +272,44 @@
         const lista = document.getElementById("lista-gastos");
         lista.innerHTML = "";
 
+        if (gastos.length === 0) {
+          lista.innerHTML = '<p style="text-align: center; color: #666;">No hay gastos agregados este mes</p>';
+        }
+
         let pagados = 0;
         gastos.forEach(gasto => {
           if (gasto.pagado) pagados++;
           
           const div = document.createElement("div");
           div.className = `gasto-item ${gasto.pagado ? 'pagado' : ''}`;
+          
+          const fecha = gasto.fecha?.toDate ? gasto.fecha.toDate() : new Date();
+          const fechaStr = fecha.toLocaleDateString();
+          
           div.innerHTML = `
             <input type="checkbox" ${gasto.pagado ? 'checked' : ''} onchange="toggleGasto('${gasto.id}', ${gasto.pagado})">
             <label>${gasto.nombre}</label>
+            <span class="fecha-gasto">${fechaStr}</span>
           `;
           lista.appendChild(div);
         });
 
-        // Actualizar progreso
+        // Actualizar estadísticas
         const total = gastos.length;
-        document.getElementById("contador").innerText = `${pagados}/${total} gastos cubiertos`;
+        const pendientes = total - pagados;
+        
+        document.getElementById("total-gastos").innerText = total;
+        document.getElementById("pagados-gastos").innerText = pagados;
+        document.getElementById("pendientes-gastos").innerText = pendientes;
+        
+        document.getElementById("contador").innerText = `${pagados}/${total} gastos pagados`;
         
         const porcentaje = total > 0 ? (pagados / total) * 100 : 0;
         document.getElementById("barra-progreso").style.width = `${porcentaje}%`;
         
       } catch (error) {
         console.error(error);
+        document.getElementById("lista-gastos").innerHTML = '<p style="color: red;">Error al cargar gastos</p>';
       }
     }
 
