@@ -4,31 +4,61 @@
   <meta charset="UTF-8">
   <title>Control de Gastos</title>
   <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f7fa;  /* 👈 Fondo gris claro para contraste */
+    }
     .nav-buttons {
       margin-bottom: 20px;
       display: flex;
       gap: 10px;
+      background: white;     /* 👈 Fondo blanco para destacar */
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .nav-btn {
-      padding: 8px 16px;
+      padding: 10px 20px;    /* 👈 Un poco más grande */
       background: #2b3a67;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
+      font-size: 1rem;
+      font-weight: bold;      /* 👊 Texto en negrita */
     }
     .nav-btn:hover {
+      background: #1b2a4e;
+      transform: scale(1.02);
+    }
+    h1 {
+      color: #1b2a4e;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    button {
+      background: #2b3a67;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
       background: #1b2a4e;
     }
   </style>
 </head>
 <body>
-  <!-- ✅ BOTÓN PARA IR A PRESUPUESTO (visible) -->
+  <!-- ✅ BOTÓN AHORA VISIBLE con fondo y sombra -->
   <div class="nav-buttons">
     <button class="nav-btn" onclick="window.location.href='presupuesto.html'">
-      📊 Ir a Presupuesto
+      📊 Ir a Módulo Presupuesto
     </button>
   </div>
 
