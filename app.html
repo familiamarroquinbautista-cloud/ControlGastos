@@ -12,14 +12,60 @@
       background: #f0f2f5;
     }
 
-    /* Menú de módulos - AHORA VISIBLE */
+    .perfil-activo {
+      background: white;
+      padding: 15px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .avatar.maria {
+      background: #ff9a9e;
+      color: #4a1e2a;
+    }
+
+    .avatar.andres {
+      background: #a8e6cf;
+      color: #1a4a3a;
+    }
+
+    .info-perfil {
+      flex: 1;
+      font-weight: bold;
+    }
+
+    .cambiar-perfil {
+      padding: 8px 15px;
+      background: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
     .menu-modulos {
       background: white;
       padding: 25px;
       border-radius: 15px;
       margin-bottom: 30px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      border: 3px solid #2c3e50; /* Borde para destacar */
+      border: 3px solid #2c3e50;
     }
 
     .menu-modulos h2 {
@@ -67,7 +113,6 @@
       border-bottom: 5px solid #b45f15;
     }
 
-    /* Sección de registro simple */
     .seccion-registro {
       background: white;
       padding: 20px;
@@ -100,7 +145,12 @@
   </style>
 </head>
 <body>
-  <!-- MÓDULOS: tres botones principales - AHORA CON BORDE DESTACADO -->
+  <div class="perfil-activo" id="perfilContainer">
+    <div class="avatar" id="avatar">👤</div>
+    <div class="info-perfil" id="nombrePerfil">Cargando...</div>
+    <button class="cambiar-perfil" onclick="window.location.href='index.html'">🔄 Cambiar perfil</button>
+  </div>
+
   <div class="menu-modulos">
     <h2>📌 SELECCIONA UN MÓDULO</h2>
     
@@ -117,7 +167,6 @@
     </button>
   </div>
 
-  <!-- REGISTRO SIMPLE -->
   <div class="seccion-registro">
     <h1>📝 Registro simple</h1>
     <input id="nombre" placeholder="Escribe un dato">
@@ -138,12 +187,44 @@
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     }));
 
+    const perfil = sessionStorage.getItem('perfil');
+    
+    if (!perfil) {
+      window.location.href = "index.html";
+    }
+
+    const avatar = document.getElementById('avatar');
+    const nombrePerfil = document.getElementById('nombrePerfil');
+    
+    nombrePerfil.innerText = `Perfil: ${perfil}`;
+    
+    if (perfil === 'Maria') {
+      avatar.classList.add('maria');
+      avatar.innerText = '👩';
+    } else if (perfil === 'Andres') {
+      avatar.classList.add('andres');
+      avatar.innerText = '👨';
+    }
+
     window.guardarDato = async () => {
+      const nombre = document.getElementById("nombre").value;
+      
+      if (!nombre) {
+        mensaje.innerText = "❌ Escribe algo";
+        return;
+      }
+
       try {
-        await addDoc(collection(db, "registros"), { nombre: nombre.value, fecha: new Date() });
-        mensaje.innerText = "✅ Guardado";
+        await addDoc(collection(db, "registros"), { 
+          nombre: nombre,
+          usuario: perfil,
+          fecha: new Date() 
+        });
+        
+        mensaje.innerText = `✅ ${perfil} guardó: ${nombre}`;
         mensaje.style.background = "#d4edda";
         mensaje.style.color = "#155724";
+        document.getElementById("nombre").value = "";
       } catch (error) {
         mensaje.innerText = "❌ Error";
         mensaje.style.background = "#f8d7da";
