@@ -85,7 +85,6 @@
       opacity: 0.9;
     }
 
-    /* Tarjeta de resumen conjunto */
     .card-conjunto {
       background: white;
       border-radius: 15px;
@@ -170,7 +169,6 @@
       color: #383d41;
     }
 
-    /* Tarjetas individuales */
     .perfil-card {
       background: white;
       border-radius: 15px;
@@ -217,11 +215,6 @@
       border-radius: 8px;
     }
 
-    .subcategoria-row .presupuesto {
-      color: #4a90e2;
-      font-weight: bold;
-    }
-
     .subcategoria-row .gasto {
       color: #e67e22;
       font-weight: bold;
@@ -247,6 +240,16 @@
       border-left: 5px solid #f1c40f;
       padding-left: 15px;
     }
+
+    .aviso {
+      background: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -258,6 +261,10 @@
     </div>
   </div>
 
+  <div class="aviso">
+    ⚠️ Presupuesto ÚNICO para Maria y Andres | Gastos individuales
+  </div>
+
   <div class="resumen-general">
     <h2>💰 Resumen Global del Mes</h2>
     <div class="totales">
@@ -266,7 +273,7 @@
         <div class="valor" id="totalPresupuestoGlobal">$0</div>
       </div>
       <div class="total-item">
-        <div class="label">Gastos Totales</div>
+        <div class="label">Gastos Totales (M+A)</div>
         <div class="valor" id="totalGastosGlobal">$0</div>
       </div>
       <div class="total-item">
@@ -279,19 +286,19 @@
 
   <div class="fecha-actual" id="fechaActual"></div>
 
-  <!-- 📊 RESUMEN CONJUNTO (Maria + Andres) -->
-  <h2 class="section-title">📈 Resumen Conjunto (Maria + Andres)</h2>
+  <!-- 📊 PRESUPUESTO ÚNICO VS GASTOS COMBINADOS -->
+  <h2 class="section-title">📈 Presupuesto Único vs Gastos (Maria + Andres)</h2>
   <div class="card-conjunto">
     <div class="card-conjunto-header">
-      👥 TOTAL COMBINADO: Presupuesto vs Gastos
+      👥 PRESUPUESTO GENERAL vs GASTOS COMBINADOS
     </div>
     <div class="card-conjunto-content" id="resumenConjunto">
       Cargando datos conjuntos...
     </div>
   </div>
 
-  <!-- 👤 RESUMEN INDIVIDUAL -->
-  <h2 class="section-title">👤 Resumen Individual</h2>
+  <!-- 👤 GASTOS INDIVIDUALES -->
+  <h2 class="section-title">👤 Gastos Individuales</h2>
   <div id="perfilesContainer">
     Cargando datos individuales...
   </div>
@@ -325,42 +332,40 @@
       'Servicios': ['Luz', 'Gas']
     };
 
-    async function cargarResumenGlobal() {
+    async function cargarResumen() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        let totalPresupuestoGlobal = 0;
+        // Obtener PRESUPUESTO ÚNICO (usuario = 'GENERAL')
+        const presupuestoQuery = query(
+          collection(db, "presupuestos"),
+          where("usuario", "==", 'GENERAL'),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        const presupuestoSnap = await getDocs(presupuestoQuery);
+        
+        // Estructura para presupuesto único
+        const presupuestoUnico = {};
+        let totalPresupuesto = 0;
+        
+        presupuestoSnap.forEach(doc => {
+          const data = doc.data();
+          const key = `${data.categoria}_${data.subcategoria}`;
+          presupuestoUnico[key] = (presupuestoUnico[key] || 0) + data.monto;
+          totalPresupuesto += data.monto;
+        });
+
+        // Obtener GASTOS de Maria y Andres
+        const gastosPorPerfil = {
+          'Maria': {},
+          'Andres': {}
+        };
+        
         let totalGastosGlobal = 0;
         
-        // Datos para resumen conjunto
-        const datosConjuntos = {};
-        
-        // Inicializar estructura de datos conjuntos
-        for (const [categoria, subcategorias] of Object.entries(categorias)) {
-          datosConjuntos[categoria] = {};
-          for (const subcategoria of subcategorias) {
-            datosConjuntos[categoria][subcategoria] = {
-              presupuesto: 0,
-              gasto: 0
-            };
-          }
-        }
-        
-        const container = document.getElementById('perfilesContainer');
-        container.innerHTML = '';
-
         for (const perfilActual of perfiles) {
-          // Obtener presupuestos
-          const presupuestosQuery = query(
-            collection(db, "presupuestos"),
-            where("usuario", "==", perfilActual),
-            where("mes", "==", mesActual),
-            where("año", "==", añoActual)
-          );
-          const presupuestosSnap = await getDocs(presupuestosQuery);
-          
-          // Obtener gastos
           const gastosQuery = query(
             collection(db, "gastos"),
             where("usuario", "==", perfilActual),
@@ -368,100 +373,37 @@
             where("año", "==", añoActual)
           );
           const gastosSnap = await getDocs(gastosQuery);
-
-          // Organizar datos del perfil actual
-          const presupuestos = {};
-          presupuestosSnap.forEach(doc => {
-            const data = doc.data();
-            const key = `${data.categoria}_${data.subcategoria}`;
-            presupuestos[key] = (presupuestos[key] || 0) + data.monto;
-          });
-
-          const gastos = {};
+          
+          let totalGastosPerfil = 0;
+          
           gastosSnap.forEach(doc => {
             const data = doc.data();
             const key = `${data.categoria}_${data.subcategoria}`;
-            gastos[key] = (gastos[key] || 0) + data.monto;
+            gastosPorPerfil[perfilActual][key] = (gastosPorPerfil[perfilActual][key] || 0) + data.monto;
+            totalGastosPerfil += data.monto;
           });
-
-          // Calcular totales del perfil
-          let totalPresupuestoPerfil = 0;
-          let totalGastosPerfil = 0;
           
-          for (const [categoria, subcategorias] of Object.entries(categorias)) {
-            for (const subcategoria of subcategorias) {
-              const key = `${categoria}_${subcategoria}`;
-              const presupuestoVal = presupuestos[key] || 0;
-              const gastoVal = gastos[key] || 0;
-              
-              totalPresupuestoPerfil += presupuestoVal;
-              totalGastosPerfil += gastoVal;
-              
-              // Acumular en datos conjuntos
-              datosConjuntos[categoria][subcategoria].presupuesto += presupuestoVal;
-              datosConjuntos[categoria][subcategoria].gasto += gastoVal;
-            }
-          }
-
-          totalPresupuestoGlobal += totalPresupuestoPerfil;
           totalGastosGlobal += totalGastosPerfil;
-
-          // Tarjeta individual
-          const perfilCard = document.createElement('div');
-          perfilCard.className = 'perfil-card';
-
-          const headerClass = perfilActual === 'Maria' ? 'maria' : 'andres';
-          perfilCard.innerHTML = `
-            <div class="perfil-header ${headerClass}">
-              <span>${perfilActual === 'Maria' ? '👩' : '👨'} ${perfilActual}</span>
-              <div class="perfil-totales">
-                <span>💰 $${totalPresupuestoPerfil}</span>
-                <span>💸 $${totalGastosPerfil}</span>
-                <span>⚖️ $${totalPresupuestoPerfil - totalGastosPerfil}</span>
-              </div>
-            </div>
-          `;
-
-          const contentDiv = document.createElement('div');
-          contentDiv.className = 'perfil-content';
-
-          for (const [categoria, subcategorias] of Object.entries(categorias)) {
-            for (const subcategoria of subcategorias) {
-              const key = `${categoria}_${subcategoria}`;
-              const presupuestoVal = presupuestos[key] || 0;
-              const gastoVal = gastos[key] || 0;
-              
-              const subDiv = document.createElement('div');
-              subDiv.className = 'subcategoria-row';
-              subDiv.innerHTML = `
-                <span><strong>${categoria} - ${subcategoria}:</strong></span>
-                <span class="presupuesto">P: $${presupuestoVal}</span>
-                <span class="gasto">G: $${gastoVal}</span>
-                <span>Diferencia: $${presupuestoVal - gastoVal}</span>
-              `;
-              contentDiv.appendChild(subDiv);
-            }
-          }
-
-          perfilCard.appendChild(contentDiv);
-          container.appendChild(perfilCard);
         }
 
         // Actualizar totales globales
-        document.getElementById('totalPresupuestoGlobal').innerText = `$${totalPresupuestoGlobal}`;
+        document.getElementById('totalPresupuestoGlobal').innerText = `$${totalPresupuesto}`;
         document.getElementById('totalGastosGlobal').innerText = `$${totalGastosGlobal}`;
         
-        const diferenciaGlobal = totalPresupuestoGlobal - totalGastosGlobal;
+        const diferenciaGlobal = totalPresupuesto - totalGastosGlobal;
         document.getElementById('diferenciaGlobal').innerText = 
           diferenciaGlobal >= 0 ? `+$${diferenciaGlobal}` : `-$${Math.abs(diferenciaGlobal)}`;
         
-        const porcentaje = totalPresupuestoGlobal > 0 
-          ? ((totalGastosGlobal / totalPresupuestoGlobal) * 100).toFixed(1)
+        const porcentaje = totalPresupuesto > 0 
+          ? ((totalGastosGlobal / totalPresupuesto) * 100).toFixed(1)
           : 0;
         document.getElementById('porcentajeGlobal').innerText = `${porcentaje}% usado`;
 
-        // Mostrar resumen conjunto
-        mostrarResumenConjunto(datosConjuntos);
+        // Mostrar resumen conjunto (presupuesto único vs gastos combinados)
+        mostrarResumenConjunto(presupuestoUnico, gastosPorPerfil);
+        
+        // Mostrar gastos individuales
+        mostrarGastosIndividuales(gastosPorPerfil);
 
       } catch (error) {
         console.error(error);
@@ -470,42 +412,52 @@
       }
     }
 
-    function mostrarResumenConjunto(datos) {
+    function mostrarResumenConjunto(presupuesto, gastosPorPerfil) {
       const container = document.getElementById('resumenConjunto');
       
+      // Calcular gastos combinados (Maria + Andres)
+      const gastosCombinados = {};
+      
+      for (const perfil of ['Maria', 'Andres']) {
+        for (const [key, monto] of Object.entries(gastosPorPerfil[perfil])) {
+          gastosCombinados[key] = (gastosCombinados[key] || 0) + monto;
+        }
+      }
+
       let html = '';
       let totalPresupuesto = 0;
       let totalGastos = 0;
 
-      for (const [categoria, subcategorias] of Object.entries(datos)) {
+      for (const [categoria, subcategorias] of Object.entries(categorias)) {
         html += `<div class="categoria-conjunto">`;
         html += `<h3>${categoria === 'Mercado' ? '🛒 Mercado' : '💡 Servicios'}</h3>`;
         
         html += `<table class="tabla-conjunto">`;
-        html += `<tr><th>Subcategoría</th><th>Presupuesto</th><th>Gasto</th><th>Diferencia</th></tr>`;
+        html += `<tr><th>Subcategoría</th><th>Presupuesto</th><th>Gastos (M+A)</th><th>Diferencia</th></tr>`;
 
         let totalCategoriaPresupuesto = 0;
         let totalCategoriaGasto = 0;
 
-        for (const [subcategoria, valores] of Object.entries(subcategorias)) {
-          const presupuesto = valores.presupuesto;
-          const gasto = valores.gasto;
-          const diferencia = presupuesto - gasto;
+        for (const subcategoria of subcategorias) {
+          const key = `${categoria}_${subcategoria}`;
+          const presupuestoVal = presupuesto[key] || 0;
+          const gastoVal = gastosCombinados[key] || 0;
+          const diferencia = presupuestoVal - gastoVal;
           
-          totalCategoriaPresupuesto += presupuesto;
-          totalCategoriaGasto += gasto;
-          totalPresupuesto += presupuesto;
-          totalGastos += gasto;
+          totalCategoriaPresupuesto += presupuestoVal;
+          totalCategoriaGasto += gastoVal;
+          totalPresupuesto += presupuestoVal;
+          totalGastos += gastoVal;
 
           let diferenciaClass = 'neutro';
-          if (presupuesto > 0) {
+          if (presupuestoVal > 0) {
             diferenciaClass = diferencia >= 0 ? 'positivo' : 'negativo';
           }
 
           html += `<tr>`;
           html += `<td><strong>${subcategoria}</strong></td>`;
-          html += `<td>$${presupuesto}</td>`;
-          html += `<td>$${gasto}</td>`;
+          html += `<td>$${presupuestoVal}</td>`;
+          html += `<td>$${gastoVal}</td>`;
           html += `<td><span class="diferencia-badge ${diferenciaClass}">$${diferencia}</span></td>`;
           html += `</tr>`;
         }
@@ -534,10 +486,10 @@
         : 'neutro';
 
       html += `<div style="margin-top: 25px; padding: 20px; background: #f1f9ff; border-radius: 10px; text-align: center;">`;
-      html += `<h3 style="margin: 0 0 10px 0;">📊 GRAN TOTAL COMBINADO</h3>`;
+      html += `<h3 style="margin: 0 0 10px 0;">📊 GRAN TOTAL</h3>`;
       html += `<div style="display: flex; justify-content: space-around; font-size: 1.2rem;">`;
       html += `<div><strong>Presupuesto:</strong> $${totalPresupuesto}</div>`;
-      html += `<div><strong>Gastos:</strong> $${totalGastos}</div>`;
+      html += `<div><strong>Gastos (M+A):</strong> $${totalGastos}</div>`;
       html += `<div><strong>Diferencia:</strong> <span class="diferencia-badge ${totalDiferenciaClass}">$${diferenciaTotal}</span></div>`;
       html += `</div>`;
       html += `</div>`;
@@ -545,7 +497,64 @@
       container.innerHTML = html;
     }
 
-    cargarResumenGlobal();
+    function mostrarGastosIndividuales(gastosPorPerfil) {
+      const container = document.getElementById('perfilesContainer');
+      container.innerHTML = '';
+
+      for (const perfilActual of perfiles) {
+        let totalGastosPerfil = 0;
+        
+        // Calcular total del perfil
+        for (const [categoria, subcategorias] of Object.entries(categorias)) {
+          for (const subcategoria of subcategorias) {
+            const key = `${categoria}_${subcategoria}`;
+            totalGastosPerfil += gastosPorPerfil[perfilActual][key] || 0;
+          }
+        }
+
+        const perfilCard = document.createElement('div');
+        perfilCard.className = 'perfil-card';
+
+        const headerClass = perfilActual === 'Maria' ? 'maria' : 'andres';
+        perfilCard.innerHTML = `
+          <div class="perfil-header ${headerClass}">
+            <span>${perfilActual === 'Maria' ? '👩' : '👨'} ${perfilActual}</span>
+            <div class="perfil-totales">
+              <span>💸 Total Gastos: $${totalGastosPerfil}</span>
+            </div>
+          </div>
+        `;
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'perfil-content';
+
+        for (const [categoria, subcategorias] of Object.entries(categorias)) {
+          for (const subcategoria of subcategorias) {
+            const key = `${categoria}_${subcategoria}`;
+            const gastoVal = gastosPorPerfil[perfilActual][key] || 0;
+            
+            if (gastoVal > 0) {
+              const subDiv = document.createElement('div');
+              subDiv.className = 'subcategoria-row';
+              subDiv.innerHTML = `
+                <span><strong>${categoria} - ${subcategoria}:</strong></span>
+                <span class="gasto">$${gastoVal}</span>
+              `;
+              contentDiv.appendChild(subDiv);
+            }
+          }
+        }
+
+        if (contentDiv.children.length === 0) {
+          contentDiv.innerHTML = '<p style="color: #666;">No hay gastos registrados</p>';
+        }
+
+        perfilCard.appendChild(contentDiv);
+        container.appendChild(perfilCard);
+      }
+    }
+
+    cargarResumen();
   </script>
 </body>
 </html>
