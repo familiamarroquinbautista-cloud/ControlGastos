@@ -1,1 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Checklist de Gastos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #f0f2f5;
+    }
 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-volver {
+      padding: 10px 20px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .gasto-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .gasto-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .gasto-item label {
+      flex: 1;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .gasto-item.pagado label {
+      text-decoration: line-through;
+      color: #888;
+    }
+
+    .agregar-gasto {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .agregar-gasto input {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .agregar-gasto button {
+      padding: 10px 20px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .progreso {
+      background: #eee;
+      height: 10px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+
+    .barra-progreso {
+      height: 10px;
+      background: #27ae60;
+      border-radius: 5px;
+      width: 0%;
+      transition: width 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>✅ Checklist del Mes</h1>
+    <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+  </div>
+
+  <div class="card">
+    <h3>Progreso mensual</h3>
+    <div class="progreso">
+      <div class="barra-progreso" id="barra-progreso"></div>
+    </div>
+    <p id="contador">0/0 gastos cubiertos</p>
+  </div>
+
+  <div class="card">
+    <h3>Gastos del mes</h3>
+    <div id="lista-gastos"></div>
+    
+    <div class="agregar-gasto">
+      <input type="text" id="nuevo-gasto" placeholder="Nuevo gasto (ej: Agua, Luz, Internet)">
+      <button onclick="agregarGasto()">Agregar</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const db = getFirestore(initializeApp({
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    }));
+
+    window.agregarGasto = async () => {
+      const nombreGasto = document.getElementById("nuevo-gasto").value;
+      if (!nombreGasto) return;
+
+      try {
+        await addDoc(collection(db, "checklist"), {
+          nombre: nombreGasto,
+          pagado: false,
+          fecha: new Date(),
+          mes: new Date().getMonth() + 1,
+          año: new Date().getFullYear()
+        });
+        document.getElementById("nuevo-gasto").value = "";
+        cargarGastos();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    window.toggleGasto = async (id, pagado) => {
+      try {
+        await updateDoc(doc(db, "checklist", id), {
+          pagado: !pagado
+        });
+        cargarGastos();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    async function cargarGastos() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "checklist"));
+        const gastos = [];
+        querySnapshot.forEach(doc => {
+          gastos.push({ id: doc.id, ...doc.data() });
+        });
+
+        const lista = document.getElementById("lista-gastos");
+        lista.innerHTML = "";
+
+        let pagados = 0;
+        gastos.forEach(gasto => {
+          if (gasto.pagado) pagados++;
+          
+          const div = document.createElement("div");
+          div.className = `gasto-item ${gasto.pagado ? 'pagado' : ''}`;
+          div.innerHTML = `
+            <input type="checkbox" ${gasto.pagado ? 'checked' : ''} onchange="toggleGasto('${gasto.id}', ${gasto.pagado})">
+            <label>${gasto.nombre}</label>
+          `;
+          lista.appendChild(div);
+        });
+
+        // Actualizar progreso
+        const total = gastos.length;
+        document.getElementById("contador").innerText = `${pagados}/${total} gastos cubiertos`;
+        
+        const porcentaje = total > 0 ? (pagados / total) * 100 : 0;
+        document.getElementById("barra-progreso").style.width = `${porcentaje}%`;
+        
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    cargarGastos();
+  </script>
+</body>
+</html>
