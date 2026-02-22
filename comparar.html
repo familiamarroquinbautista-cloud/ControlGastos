@@ -154,6 +154,16 @@
       margin-top: 20px;
       font-size: 1.2rem;
     }
+
+    .aviso {
+      background: #fff3cd;
+      color: #856404;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -163,6 +173,10 @@
       <span class="perfil-info" id="perfilDisplay">Cargando...</span>
       <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
     </div>
+  </div>
+
+  <div class="aviso">
+    ⚠️ Comparando tus gastos vs Presupuesto GENERAL
   </div>
 
   <div class="resumen-general">
@@ -216,14 +230,16 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // Obtener PRESUPUESTO ÚNICO (GENERAL)
         const presupuestosQuery = query(
           collection(db, "presupuestos"),
-          where("usuario", "==", perfil),
+          where("usuario", "==", 'GENERAL'),
           where("mes", "==", mesActual),
           where("año", "==", añoActual)
         );
         const presupuestosSnap = await getDocs(presupuestosQuery);
         
+        // Obtener GASTOS del perfil actual
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -232,6 +248,7 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
 
+        // Organizar presupuesto único
         const presupuestos = {};
         presupuestosSnap.forEach(doc => {
           const data = doc.data();
@@ -239,6 +256,7 @@
           presupuestos[key] = (presupuestos[key] || 0) + data.monto;
         });
 
+        // Organizar gastos del perfil
         const gastos = {};
         gastosSnap.forEach(doc => {
           const data = doc.data();
@@ -292,8 +310,8 @@
                 <span class="diferencia ${diferenciaClass}">${diferenciaText}</span>
               </div>
               <div class="valores">
-                <span class="presupuesto">Presupuesto: $${presupuesto}</span>
-                <span class="gasto">Gastado: $${gasto}</span>
+                <span class="presupuesto">Presupuesto Gral: $${presupuesto}</span>
+                <span class="gasto">Tus Gastos: $${gasto}</span>
               </div>
             `;
             
@@ -307,7 +325,7 @@
         totalDiv.className = 'total-row';
         totalDiv.innerHTML = `
           <span>TOTALES:</span>
-          <span>Presupuesto: $${totalPresupuesto} | Gastado: $${totalGastos}</span>
+          <span>Presupuesto Gral: $${totalPresupuesto} | Tus Gastos: $${totalGastos}</span>
         `;
         container.appendChild(totalDiv);
 
@@ -317,7 +335,7 @@
         const diferenciaElement = document.getElementById('diferenciaGeneral');
         
         if (totalPresupuesto === 0) {
-          diferenciaElement.innerHTML = `<span class="neutro">📌 Configura un presupuesto</span>`;
+          diferenciaElement.innerHTML = `<span class="neutro">📌 No hay presupuesto configurado</span>`;
         } else if (diferenciaGeneral >= 0) {
           diferenciaElement.innerHTML = `<span class="positivo">✅ Disponible: $${diferenciaGeneral}</span>`;
         } else {
@@ -326,14 +344,14 @@
 
         const recomendaciones = document.getElementById('recomendaciones');
         if (totalPresupuesto === 0) {
-          recomendaciones.innerHTML = '📌 No has configurado presupuesto este mes';
+          recomendaciones.innerHTML = '📌 El administrador no ha configurado presupuesto este mes';
         } else if (totalGastos === 0) {
           recomendaciones.innerHTML = '📌 No has registrado gastos este mes';
         } else if (diferenciaGeneral >= 0) {
           const porcentaje = (totalGastos / totalPresupuesto * 100).toFixed(1);
-          recomendaciones.innerHTML = `✅ Vas bien! Has usado el ${porcentaje}% de tu presupuesto. Te quedan $${diferenciaGeneral} disponibles.`;
+          recomendaciones.innerHTML = `✅ Vas bien! Has usado el ${porcentaje}% del presupuesto general. Te quedan $${diferenciaGeneral} disponibles.`;
         } else {
-          recomendaciones.innerHTML = `⚠️ Has excedido tu presupuesto en $${Math.abs(diferenciaGeneral)}. Revisa tus gastos.`;
+          recomendaciones.innerHTML = `⚠️ Has excedido tu parte del presupuesto en $${Math.abs(diferenciaGeneral)}. Revisa tus gastos.`;
         }
 
       } catch (error) {
