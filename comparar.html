@@ -19,6 +19,14 @@
       margin-bottom: 20px;
     }
 
+    .perfil-info {
+      background: #9b59b6;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-weight: bold;
+    }
+
     .btn-volver {
       padding: 10px 20px;
       background: #9b59b6;
@@ -42,42 +50,72 @@
       justify-content: space-between;
       padding: 15px;
       border-bottom: 1px solid #eee;
+      font-size: 1.1rem;
     }
 
-    .positivo { color: #27ae60; font-weight: bold; }
-    .negativo { color: #e74c3c; font-weight: bold; }
+    .positivo { 
+      color: #27ae60; 
+      font-weight: bold;
+      background: #d4edda;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+    
+    .negativo { 
+      color: #e74c3c; 
+      font-weight: bold;
+      background: #f8d7da;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+
+    .resumen {
+      text-align: center;
+      font-size: 1.3rem;
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>🔍 Comparar vs Presupuesto</h1>
-    <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+    <h1>🔍 Comparación</h1>
+    <div>
+      <span class="perfil-info" id="perfilDisplay">Cargando...</span>
+      <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+    </div>
   </div>
 
   <div class="card">
-    <h3>Resumen del mes actual</h3>
+    <h3>Resumen del mes actual - <span id="fechaActual"></span></h3>
     <div class="comparacion-item">
-      <span>Presupuesto total:</span>
+      <span>💰 Presupuesto total:</span>
       <span id="presupuesto-total">Cargando...</span>
     </div>
     <div class="comparacion-item">
-      <span>Gastos registrados:</span>
+      <span>📝 Gastos registrados:</span>
       <span id="gastos-total">Cargando...</span>
     </div>
     <div class="comparacion-item">
-      <span>Diferencia:</span>
+      <span>⚖️ Diferencia:</span>
       <span id="diferencia">Cargando...</span>
     </div>
   </div>
 
   <div class="card">
-    <h3>Estado</h3>
-    <p id="estado-mensaje" style="font-size: 1.2rem; text-align: center;">Cargando datos...</p>
+    <h3>📊 Estado financiero</h3>
+    <div class="resumen" id="estado-mensaje">
+      Cargando datos...
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Últimos registros</h3>
+    <div id="ultimos-registros"></div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const db = getFirestore(initializeApp({
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -88,31 +126,95 @@
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     }));
 
+    const perfil = sessionStorage.getItem('perfil');
+    
+    if (!perfil) {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
+    document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+
     async function cargarComparacion() {
       try {
         // Obtener presupuesto del mes actual
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
         const presupuestosSnap = await getDocs(collection(db, "presupuestos"));
         let presupuestoTotal = 0;
         presupuestosSnap.forEach(doc => {
-          presupuestoTotal += doc.data().monto || 0;
+          const data = doc.data();
+          if (data.usuario === perfil) {
+            presupuestoTotal += data.monto || 0;
+          }
         });
 
-        // Obtener gastos del mes actual
+        // Obtener registros del mes actual
         const registrosSnap = await getDocs(collection(db, "registros"));
         let gastosTotal = 0;
         registrosSnap.forEach(doc => {
-          // Si en el futuro guardas montos numéricos, aquí los sumarías
-          // Por ahora es solo texto
+          const data = doc.data();
+          if (data.usuario === perfil) {
+            gastosTotal += 1; // Por ahora contamos registros, después será montos
+          }
         });
 
         // Mostrar resultados
-        document.getElementById("presupuesto-total").innerText = `$${presupuestoTotal}`;
-        document.getElementById("gastos-total").innerText = "En desarrollo";
+        document.getElementById("presupuesto-total").innerHTML = `<strong>$${presupuestoTotal}</strong>`;
+        document.getElementById("gastos-total").innerHTML = `<strong>${gastosTotal} registros</strong>`;
         
-        const diferencia = presupuestoTotal; // Temporal
-        document.getElementById("diferencia").innerHTML = `<span class="positivo">$${diferencia} disponible</span>`;
-        document.getElementById("estado-mensaje").innerHTML = "✅ Por debajo del presupuesto";
+        const diferencia = presupuestoTotal - gastosTotal;
+        const diferenciaElement = document.getElementById("diferencia");
         
+        if (diferencia >= 0) {
+          diferenciaElement.innerHTML = `<span class="positivo">+$${diferencia} disponible</span>`;
+        } else {
+          diferenciaElement.innerHTML = `<span class="negativo">-$${Math.abs(diferencia)} excedido</span>`;
+        }
+
+        // Estado financiero
+        const estadoElement = document.getElementById("estado-mensaje");
+        if (gastosTotal === 0) {
+          estadoElement.innerHTML = "📌 No hay gastos registrados este mes";
+        } else if (presupuestoTotal === 0) {
+          estadoElement.innerHTML = "⚠️ No has configurado presupuesto";
+        } else if (diferencia >= 0) {
+          const porcentaje = (gastosTotal / presupuestoTotal * 100).toFixed(1);
+          estadoElement.innerHTML = `✅ Vas bien! Has usado el ${porcentaje}% de tu presupuesto`;
+        } else {
+          estadoElement.innerHTML = `⚠️ Has excedido tu presupuesto en $${Math.abs(diferencia)}`;
+        }
+
+        // Últimos registros
+        const q = query(
+          collection(db, "registros"),
+          where("usuario", "==", perfil),
+          orderBy("fecha", "desc"),
+          limit(5)
+        );
+        
+        const registrosQuery = await getDocs(q);
+        const ultimosDiv = document.getElementById("ultimos-registros");
+        ultimosDiv.innerHTML = "";
+        
+        if (registrosQuery.empty) {
+          ultimosDiv.innerHTML = "<p>No hay registros aún</p>";
+          return;
+        }
+
+        registrosQuery.forEach(doc => {
+          const data = doc.data();
+          const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
+          const div = document.createElement("div");
+          div.className = "comparacion-item";
+          div.innerHTML = `
+            <span>${data.nombre || "Sin nombre"}</span>
+            <span>${fecha.toLocaleDateString()}</span>
+          `;
+          ultimosDiv.appendChild(div);
+        });
+
       } catch (error) {
         console.error(error);
         document.getElementById("estado-mensaje").innerHTML = "❌ Error al cargar datos";
