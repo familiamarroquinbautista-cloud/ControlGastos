@@ -124,7 +124,105 @@
       border-color: #a0a0a0;
     }
 
-    /* Card de registro */
+    /* Saldo disponible */
+    .saldo-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .saldo-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .saldo-label {
+      font-size: 0.8rem;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .saldo-valor {
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: #2c3e50;
+    }
+
+    .saldo-positivo {
+      color: #2c5a2c;
+    }
+
+    .saldo-negativo {
+      color: #8b3a3a;
+    }
+
+    .saldo-detalle {
+      text-align: right;
+      font-size: 0.85rem;
+      color: #95a5a6;
+    }
+
+    /* Switch Ingreso/Gasto */
+    .switch-container {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .switch-label {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+
+    .switch-buttons {
+      display: flex;
+      gap: 0.5rem;
+      background: #f0f0f0;
+      padding: 0.3rem;
+      border-radius: 50px;
+    }
+
+    .switch-btn {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+      color: #5a6a7a;
+    }
+
+    .switch-btn.active {
+      background: white;
+      color: #2c3e50;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .switch-btn.ingreso.active {
+      background: #2c5a2c;
+      color: white;
+    }
+
+    .switch-btn.gasto.active {
+      background: #8b3a3a;
+      color: white;
+    }
+
+    /* Cards */
     .card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -135,39 +233,15 @@
     }
 
     .card h2 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 400;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid #eaeaea;
       color: #2c3e50;
-    }
-
-    /* Selector de categoría */
-    .selector-categoria {
-      margin-bottom: 1.5rem;
-    }
-
-    .selector-categoria label {
-      display: block;
-      font-size: 0.9rem;
-      color: #5a6a7a;
-      margin-bottom: 0.5rem;
-    }
-
-    .selector-categoria select {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      background: white;
-      cursor: pointer;
-    }
-
-    .selector-categoria select:focus {
-      outline: none;
-      border-color: #2c3e50;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     /* Campos de registro */
@@ -176,7 +250,6 @@
       border: 1px solid #eaeaea;
       border-radius: 8px;
       padding: 1.2rem;
-      margin-bottom: 1rem;
     }
 
     .campo {
@@ -200,6 +273,7 @@
       border: 1px solid #e0e0e0;
       border-radius: 6px;
       font-size: 0.95rem;
+      background: white;
     }
 
     .campo input:focus, .campo select:focus {
@@ -235,6 +309,104 @@
       border-color: #909090;
     }
 
+    .btn-registro.ingreso {
+      border-color: #2c5a2c;
+      color: #2c5a2c;
+    }
+
+    .btn-registro.ingreso:hover {
+      background: #f0f7f0;
+    }
+
+    .btn-registro.gasto {
+      border-color: #8b3a3a;
+      color: #8b3a3a;
+    }
+
+    .btn-registro.gasto:hover {
+      background: #fcf0f0;
+    }
+
+    /* Tabs de registros */
+    .registros-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .registro-tab {
+      padding: 0.3rem 1rem;
+      background: none;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: #7f8c8d;
+      cursor: pointer;
+    }
+
+    .registro-tab.active {
+      background: #f0f0f0;
+      border-color: #a0a0a0;
+      color: #2c3e50;
+    }
+
+    .registros-lista {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .registro-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
+    }
+
+    .registro-item:last-child {
+      border-bottom: none;
+    }
+
+    .tipo-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .badge-ingreso {
+      background: #e8f0e8;
+      color: #2c5a2c;
+    }
+
+    .badge-gasto {
+      background: #f0e8e8;
+      color: #8b3a3a;
+    }
+
+    .categoria-text {
+      color: #5a6a7a;
+      font-size: 0.8rem;
+    }
+
+    .monto-positivo {
+      font-weight: 500;
+      color: #2c5a2c;
+    }
+
+    .monto-negativo {
+      font-weight: 500;
+      color: #8b3a3a;
+    }
+
+    .fecha-registro {
+      color: #95a5a6;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+
     /* Mensajes */
     .mensaje {
       margin: 1rem 0;
@@ -255,48 +427,6 @@
       background: #fef5f5;
       border-color: #e0c0c0;
       color: #8b3a3a;
-    }
-
-    /* Registros recientes */
-    .registros-recientes {
-      margin-top: 1.5rem;
-      max-height: 250px;
-      overflow-y: auto;
-      border-top: 1px solid #eaeaea;
-      padding-top: 1rem;
-    }
-
-    .registro-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 0.9rem;
-    }
-
-    .registro-item:last-child {
-      border-bottom: none;
-    }
-
-    .categoria-badge {
-      background: #f0f0f0;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: #4a5568;
-      margin-right: 0.8rem;
-    }
-
-    .monto-registro {
-      font-weight: 500;
-      color: #2c3e50;
-    }
-
-    .fecha-registro {
-      color: #95a5a6;
-      font-size: 0.8rem;
-      margin-left: 1rem;
     }
 
     /* Empty state */
@@ -330,79 +460,116 @@
       </div>
     </div>
 
-    <!-- Registro de gastos -->
-    <div class="card">
-      <h2>📝 NUEVO GASTO</h2>
-      
-      <!-- Selector principal de categoría -->
-      <div class="selector-categoria">
-        <label>Categoría</label>
-        <select id="categoriaPrincipal" onchange="cambiarCategoria()">
-          <option value="Mercado">🛒 Mercado</option>
-          <option value="Servicios">💡 Servicios</option>
-        </select>
+    <!-- Saldo disponible -->
+    <div class="saldo-card">
+      <div class="saldo-info">
+        <span class="saldo-label">SALDO DISPONIBLE</span>
+        <span class="saldo-valor" id="saldoDisponible">$0</span>
       </div>
-
-      <!-- Campos dinámicos según categoría -->
-      <div id="camposMercado" class="campos-registro">
-        <div class="campo">
-          <label>Subcategoría</label>
-          <select id="subcategoriaMercado">
-            <option value="Carnes">Carnes</option>
-            <option value="Verduras">Verduras</option>
-            <option value="Lacteos">Lácteos</option>
-            <option value="Abarrotes">Abarrotes</option>
-            <option value="Frutas">Frutas</option>
-            <option value="Limpieza">Limpieza</option>
-          </select>
-        </div>
-        
-        <div class="campo-row">
-          <div class="campo">
-            <label>Descripción</label>
-            <input type="text" id="descripcionMercado" placeholder="Ej: Pollo, Leche, etc.">
-          </div>
-          <div class="campo">
-            <label>Monto ($)</label>
-            <input type="number" id="montoMercado" placeholder="0" min="0" step="100">
-          </div>
-          <button class="btn-registro" onclick="registrarGastoDesdeSelector()">Registrar</button>
-        </div>
+      <div class="saldo-detalle">
+        <div>Ingresos: <span id="totalIngresos">$0</span></div>
+        <div>Gastos: <span id="totalGastos">$0</span></div>
       </div>
-
-      <div id="camposServicios" class="campos-registro" style="display: none;">
-        <div class="campo">
-          <label>Subcategoría</label>
-          <select id="subcategoriaServicios">
-            <option value="Luz">Luz</option>
-            <option value="Gas">Gas</option>
-            <option value="Agua">Agua</option>
-            <option value="Internet">Internet</option>
-            <option value="Telefono">Teléfono</option>
-            <option value="Gasolina">Gasolina</option>
-          </select>
-        </div>
-        
-        <div class="campo-row">
-          <div class="campo">
-            <label>Descripción</label>
-            <input type="text" id="descripcionServicios" placeholder="Ej: Factura mes">
-          </div>
-          <div class="campo">
-            <label>Monto ($)</label>
-            <input type="number" id="montoServicios" placeholder="0" min="0" step="100">
-          </div>
-          <button class="btn-registro" onclick="registrarGastoDesdeSelector()">Registrar</button>
-        </div>
-      </div>
-
-      <div id="mensaje" class="mensaje"></div>
     </div>
 
-    <!-- Últimos registros -->
+    <!-- Switch Ingreso/Gasto -->
+    <div class="switch-container">
+      <div class="switch-label">SELECCIONA TIPO DE MOVIMIENTO</div>
+      <div class="switch-buttons">
+        <button class="switch-btn ingreso" id="btnIngreso" onclick="cambiarTipoMovimiento('ingreso')">💰 Ingreso</button>
+        <button class="switch-btn gasto active" id="btnGasto" onclick="cambiarTipoMovimiento('gasto')">📝 Gasto</button>
+      </div>
+    </div>
+
+    <!-- Formulario de GASTOS (por defecto) -->
+    <div id="formGasto" class="card">
+      <h2>📝 NUEVO GASTO</h2>
+      
+      <div class="campos-registro">
+        <div class="campo">
+          <label>Categoría</label>
+          <select id="categoriaGasto" onchange="cambiarCategoriaGasto()">
+            <option value="Mercado">🛒 Mercado</option>
+            <option value="Servicios">💡 Servicios</option>
+          </select>
+        </div>
+
+        <!-- Subcategorías dinámicas para gastos -->
+        <div id="subcategoriaGastoContainer">
+          <div class="campo">
+            <label>Subcategoría</label>
+            <select id="subcategoriaGasto">
+              <!-- Se llena dinámicamente -->
+            </select>
+          </div>
+        </div>
+        
+        <div class="campo">
+          <label>Descripción</label>
+          <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal">
+        </div>
+        
+        <div class="campo-row">
+          <div class="campo">
+            <label>Monto ($)</label>
+            <input type="number" id="montoGasto" placeholder="0" min="0" step="100">
+          </div>
+          <button class="btn-registro gasto" onclick="registrarMovimiento('gasto')">Registrar Gasto</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario de INGRESOS (oculto inicialmente) -->
+    <div id="formIngreso" class="card" style="display: none;">
+      <h2>💰 NUEVO INGRESO</h2>
+      
+      <div class="campos-registro">
+        <div class="campo">
+          <label>Tipo de ingreso</label>
+          <select id="tipoIngreso">
+            <option value="credito">💳 Crédito (Tarjeta)</option>
+            <option value="debito">💵 Débito (Efectivo/Transferencia)</option>
+            <option value="prestamo">🏦 Préstamo (Recibido)</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>Destino del ingreso</label>
+          <select id="destinoIngreso">
+            <option value="individual">Individual (solo para mí)</option>
+            <option value="familiar">Familiar (para ambos)</option>
+          </select>
+        </div>
+        
+        <div class="campo">
+          <label>Descripción</label>
+          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario, Bono, Préstamo">
+        </div>
+        
+        <div class="campo-row">
+          <div class="campo">
+            <label>Monto ($)</label>
+            <input type="number" id="montoIngreso" placeholder="0" min="0" step="1000">
+          </div>
+          <button class="btn-registro ingreso" onclick="registrarMovimiento('ingreso')">Registrar Ingreso</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div id="mensaje" class="mensaje"></div>
+
+    <!-- Últimos movimientos -->
     <div class="card">
-      <h2>📋 ÚLTIMOS REGISTROS</h2>
-      <div class="registros-recientes" id="registrosRecientes">
+      <h2>📋 ÚLTIMOS MOVIMIENTOS</h2>
+      
+      <div class="registros-tabs">
+        <button class="registro-tab active" id="tabTodos" onclick="cargarTodosMovimientos()">Todos</button>
+        <button class="registro-tab" id="tabIngresos" onclick="cargarSoloIngresos()">Ingresos</button>
+        <button class="registro-tab" id="tabGastos" onclick="cargarSoloGastos()">Gastos</button>
+      </div>
+
+      <div class="registros-lista" id="registrosRecientes">
         <div class="empty-state">Cargando...</div>
       </div>
     </div>
@@ -433,36 +600,69 @@
     nombrePerfil.innerText = perfil;
     avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
 
-    // Función para cambiar entre categorías
-    window.cambiarCategoria = function() {
-      const categoria = document.getElementById('categoriaPrincipal').value;
-      const camposMercado = document.getElementById('camposMercado');
-      const camposServicios = document.getElementById('camposServicios');
+    let tipoMovimientoActual = 'gasto';
+    let filtroActual = 'todos';
+
+    // Definir subcategorías para gastos
+    const subcategoriasGasto = {
+      'Mercado': ['Carnes', 'Verduras', 'Lacteos', 'Abarrotes', 'Frutas', 'Limpieza'],
+      'Servicios': ['Luz', 'Gas', 'Agua', 'Internet', 'Telefono', 'Gasolina']
+    };
+
+    // Inicializar subcategorías de gastos
+    function actualizarSubcategoriasGasto() {
+      const categoria = document.getElementById('categoriaGasto').value;
+      const select = document.getElementById('subcategoriaGasto');
+      select.innerHTML = '';
       
-      if (categoria === 'Mercado') {
-        camposMercado.style.display = 'block';
-        camposServicios.style.display = 'none';
+      subcategoriasGasto[categoria].forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub;
+        option.textContent = sub;
+        select.appendChild(option);
+      });
+    }
+
+    window.cambiarCategoriaGasto = function() {
+      actualizarSubcategoriasGasto();
+    };
+
+    // Cambiar entre ingreso y gasto
+    window.cambiarTipoMovimiento = function(tipo) {
+      tipoMovimientoActual = tipo;
+      
+      const btnIngreso = document.getElementById('btnIngreso');
+      const btnGasto = document.getElementById('btnGasto');
+      const formIngreso = document.getElementById('formIngreso');
+      const formGasto = document.getElementById('formGasto');
+      
+      if (tipo === 'ingreso') {
+        btnIngreso.classList.add('active');
+        btnGasto.classList.remove('active');
+        formIngreso.style.display = 'block';
+        formGasto.style.display = 'none';
       } else {
-        camposMercado.style.display = 'none';
-        camposServicios.style.display = 'block';
+        btnIngreso.classList.remove('active');
+        btnGasto.classList.add('active');
+        formIngreso.style.display = 'none';
+        formGasto.style.display = 'block';
       }
     };
 
-    // Función para registrar gasto desde los selectores
-    window.registrarGastoDesdeSelector = async function() {
-      const categoria = document.getElementById('categoriaPrincipal').value;
-      
-      let subcategoria, descripcion, monto;
-      
-      if (categoria === 'Mercado') {
-        subcategoria = document.getElementById('subcategoriaMercado').value;
-        descripcion = document.getElementById('descripcionMercado').value.trim();
-        monto = parseFloat(document.getElementById('montoMercado').value);
+    // Registrar movimiento (ingreso o gasto)
+    window.registrarMovimiento = async function(tipo) {
+      if (tipo === 'gasto') {
+        await registrarGasto();
       } else {
-        subcategoria = document.getElementById('subcategoriaServicios').value;
-        descripcion = document.getElementById('descripcionServicios').value.trim();
-        monto = parseFloat(document.getElementById('montoServicios').value);
+        await registrarIngreso();
       }
+    };
+
+    async function registrarGasto() {
+      const categoria = document.getElementById('categoriaGasto').value;
+      const subcategoria = document.getElementById('subcategoriaGasto').value;
+      const descripcion = document.getElementById('descripcionGasto').value.trim();
+      const monto = parseFloat(document.getElementById('montoGasto').value);
       
       if (!descripcion) {
         mostrarMensaje("Escribe una descripción", "error");
@@ -483,26 +683,72 @@
           monto: monto,
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
-          año: new Date().getFullYear()
+          año: new Date().getFullYear(),
+          tipoMov: 'gasto'
         });
         
-        mostrarMensaje(`Registrado: $${monto} en ${categoria} - ${subcategoria}`, "exito");
+        mostrarMensaje(`Gasto registrado: $${monto} en ${categoria} - ${subcategoria}`, "exito");
         
-        // Limpiar campos
-        if (categoria === 'Mercado') {
-          document.getElementById('descripcionMercado').value = '';
-          document.getElementById('montoMercado').value = '';
-        } else {
-          document.getElementById('descripcionServicios').value = 'Factura ' + subcategoria.toLowerCase();
-          document.getElementById('montoServicios').value = '';
-        }
+        document.getElementById('descripcionGasto').value = '';
+        document.getElementById('montoGasto').value = '';
         
-        cargarRegistrosRecientes();
+        cargarTodosMovimientos();
+        calcularSaldo();
       } catch (error) {
         console.error(error);
         mostrarMensaje("Error al guardar", "error");
       }
-    };
+    }
+
+    async function registrarIngreso() {
+      const tipo = document.getElementById('tipoIngreso').value;
+      const destino = document.getElementById('destinoIngreso').value;
+      const descripcion = document.getElementById('descripcionIngreso').value.trim();
+      const monto = parseFloat(document.getElementById('montoIngreso').value);
+      
+      if (!descripcion) {
+        mostrarMensaje("Escribe una descripción", "error");
+        return;
+      }
+      
+      if (isNaN(monto) || monto <= 0) {
+        mostrarMensaje("Ingresa un monto válido", "error");
+        return;
+      }
+
+      // Mapear tipo a nombre legible
+      const tipoTexto = {
+        'credito': 'Crédito',
+        'debito': 'Débito',
+        'prestamo': 'Préstamo'
+      };
+
+      try {
+        await addDoc(collection(db, "ingresos"), { 
+          usuario: destino === 'individual' ? perfil : 'GENERAL',
+          tipoIngreso: tipo,
+          tipoTexto: tipoTexto[tipo],
+          destino: destino,
+          descripcion: descripcion,
+          monto: monto,
+          fecha: new Date(),
+          mes: new Date().getMonth() + 1,
+          año: new Date().getFullYear(),
+          tipoMov: 'ingreso'
+        });
+        
+        mostrarMensaje(`Ingreso registrado: $${monto} (${tipoTexto[tipo]})`, "exito");
+        
+        document.getElementById('descripcionIngreso').value = '';
+        document.getElementById('montoIngreso').value = '';
+        
+        cargarTodosMovimientos();
+        calcularSaldo();
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje("Error al guardar", "error");
+      }
+    }
 
     function mostrarMensaje(texto, tipo) {
       const mensaje = document.getElementById('mensaje');
@@ -514,49 +760,254 @@
       }, 3000);
     }
 
-    async function cargarRegistrosRecientes() {
+    // Calcular saldo disponible
+    async function calcularSaldo() {
       try {
-        const q = query(
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        // Obtener ingresos
+        const ingresosQuery = query(
+          collection(db, "ingresos"),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        const ingresosSnap = await getDocs(ingresosQuery);
+        
+        let totalIngresos = 0;
+        ingresosSnap.forEach(doc => {
+          const data = doc.data();
+          if (data.destino === 'familiar' || data.usuario === perfil) {
+            totalIngresos += data.monto;
+          }
+        });
+
+        // Obtener gastos
+        const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
-          orderBy("fecha", "desc"),
-          limit(10)
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
         );
+        const gastosSnap = await getDocs(gastosQuery);
         
-        const querySnapshot = await getDocs(q);
-        const container = document.getElementById('registrosRecientes');
-        
-        if (querySnapshot.empty) {
-          container.innerHTML = '<div class="empty-state">No hay registros aún</div>';
-          return;
-        }
-
-        container.innerHTML = '';
-        querySnapshot.forEach(doc => {
-          const data = doc.data();
-          const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
-          const div = document.createElement('div');
-          div.className = 'registro-item';
-          div.innerHTML = `
-            <div>
-              <span class="categoria-badge">${data.categoria}</span>
-              <span>${data.subcategoria}: ${data.descripcion}</span>
-            </div>
-            <div>
-              <span class="monto-registro">$${data.monto}</span>
-              <span class="fecha-registro">${fecha.toLocaleDateString()}</span>
-            </div>
-          `;
-          container.appendChild(div);
+        let totalGastos = 0;
+        gastosSnap.forEach(doc => {
+          totalGastos += doc.data().monto;
         });
+
+        const saldo = totalIngresos - totalGastos;
+        
+        document.getElementById('totalIngresos').innerText = `$${totalIngresos}`;
+        document.getElementById('totalGastos').innerText = `$${totalGastos}`;
+        
+        const saldoElement = document.getElementById('saldoDisponible');
+        saldoElement.innerText = `$${saldo}`;
+        saldoElement.className = `saldo-valor ${saldo >= 0 ? 'saldo-positivo' : 'saldo-negativo'}`;
+
       } catch (error) {
         console.error(error);
       }
     }
 
+    // Funciones para cargar movimientos
+    window.cargarTodosMovimientos = async function() {
+      filtroActual = 'todos';
+      actualizarTabsRegistro('todos');
+      
+      try {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        // Obtener gastos
+        const gastosQuery = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual),
+          orderBy("fecha", "desc"),
+          limit(15)
+        );
+        const gastosSnap = await getDocs(gastosQuery);
+        
+        // Obtener ingresos
+        const ingresosQuery = query(
+          collection(db, "ingresos"),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual),
+          orderBy("fecha", "desc"),
+          limit(15)
+        );
+        const ingresosSnap = await getDocs(ingresosQuery);
+        
+        const movimientos = [];
+        
+        gastosSnap.forEach(doc => {
+          const data = doc.data();
+          movimientos.push({
+            ...data,
+            id: doc.id,
+            tipo: 'gasto',
+            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+          });
+        });
+        
+        ingresosSnap.forEach(doc => {
+          const data = doc.data();
+          if (data.destino === 'familiar' || data.usuario === perfil) {
+            movimientos.push({
+              ...data,
+              id: doc.id,
+              tipo: 'ingreso',
+              fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+            });
+          }
+        });
+        
+        movimientos.sort((a, b) => b.fechaObj - a.fechaObj);
+        mostrarMovimientos(movimientos.slice(0, 15));
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    window.cargarSoloIngresos = async function() {
+      filtroActual = 'ingresos';
+      actualizarTabsRegistro('ingresos');
+      
+      try {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        const ingresosQuery = query(
+          collection(db, "ingresos"),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual),
+          orderBy("fecha", "desc"),
+          limit(15)
+        );
+        const ingresosSnap = await getDocs(ingresosQuery);
+        
+        const movimientos = [];
+        ingresosSnap.forEach(doc => {
+          const data = doc.data();
+          if (data.destino === 'familiar' || data.usuario === perfil) {
+            movimientos.push({
+              ...data,
+              id: doc.id,
+              tipo: 'ingreso',
+              fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+            });
+          }
+        });
+        
+        mostrarMovimientos(movimientos);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    window.cargarSoloGastos = async function() {
+      filtroActual = 'gastos';
+      actualizarTabsRegistro('gastos');
+      
+      try {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        const gastosQuery = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual),
+          orderBy("fecha", "desc"),
+          limit(15)
+        );
+        const gastosSnap = await getDocs(gastosQuery);
+        
+        const movimientos = [];
+        gastosSnap.forEach(doc => {
+          const data = doc.data();
+          movimientos.push({
+            ...data,
+            id: doc.id,
+            tipo: 'gasto',
+            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+          });
+        });
+        
+        mostrarMovimientos(movimientos);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    function actualizarTabsRegistro(tipo) {
+      const tabTodos = document.getElementById('tabTodos');
+      const tabIngresos = document.getElementById('tabIngresos');
+      const tabGastos = document.getElementById('tabGastos');
+      
+      tabTodos.classList.remove('active');
+      tabIngresos.classList.remove('active');
+      tabGastos.classList.remove('active');
+      
+      if (tipo === 'todos') tabTodos.classList.add('active');
+      else if (tipo === 'ingresos') tabIngresos.classList.add('active');
+      else if (tipo === 'gastos') tabGastos.classList.add('active');
+    }
+
+    function mostrarMovimientos(movimientos) {
+      const container = document.getElementById('registrosRecientes');
+      
+      if (movimientos.length === 0) {
+        container.innerHTML = '<div class="empty-state">No hay movimientos este mes</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      movimientos.forEach(mov => {
+        const div = document.createElement('div');
+        div.className = 'registro-item';
+        
+        if (mov.tipo === 'ingreso') {
+          const tipoIngresoTexto = mov.tipoTexto || (mov.tipoIngreso === 'credito' ? 'Crédito' : mov.tipoIngreso === 'debito' ? 'Débito' : 'Préstamo');
+          div.innerHTML = `
+            <div>
+              <span class="tipo-badge badge-ingreso">💰 INGRESO</span>
+              <span class="categoria-text">${tipoIngresoTexto}</span>
+              <span>${mov.descripcion}</span>
+              ${mov.destino === 'familiar' ? '<span style="color:#7f8c8d; font-size:0.75rem;"> (familiar)</span>' : ''}
+            </div>
+            <div>
+              <span class="monto-positivo">+$${mov.monto}</span>
+              <span class="fecha-registro">${mov.fechaObj.toLocaleDateString()}</span>
+            </div>
+          `;
+        } else {
+          div.innerHTML = `
+            <div>
+              <span class="tipo-badge badge-gasto">📝 GASTO</span>
+              <span class="categoria-text">${mov.categoria} - ${mov.subcategoria}</span>
+              <span>${mov.descripcion}</span>
+            </div>
+            <div>
+              <span class="monto-negativo">-$${mov.monto}</span>
+              <span class="fecha-registro">${mov.fechaObj.toLocaleDateString()}</span>
+            </div>
+          `;
+        }
+        
+        container.appendChild(div);
+      });
+    }
+
     // Inicializar
-    cargarRegistrosRecientes();
-    cambiarCategoria(); // Mostrar la categoría inicial correcta
+    actualizarSubcategoriasGasto();
+    cargarTodosMovimientos();
+    calcularSaldo();
   </script>
 </body>
 </html>
