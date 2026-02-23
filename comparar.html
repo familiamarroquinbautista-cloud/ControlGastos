@@ -4,89 +4,167 @@
   <meta charset="UTF-8">
   <title>Comparar vs Presupuesto</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #f0f2f5;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1e1e1e;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #2c3e50;
     }
 
     .perfil-info {
-      background: #9b59b6;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 50px;
-      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .perfil-badge {
+      background: #f0f0f0;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #2c3e50;
+      border: 1px solid #d0d0d0;
     }
 
     .btn-volver {
-      padding: 10px 20px;
-      background: #9b59b6;
-      color: white;
-      border: none;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.9rem;
       cursor: pointer;
-      font-size: 16px;
+      transition: all 0.2s;
+      text-decoration: none;
     }
 
+    .btn-volver:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
+    }
+
+    /* Aviso */
+    .aviso {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+    }
+
+    /* Card */
     .card {
       background: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .resumen-general {
-      text-align: center;
-      padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-
-    .resumen-general h2 {
-      margin: 0;
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
-
-    .resumen-general .total {
-      font-size: 3rem;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-
-    .categoria {
-      margin-bottom: 20px;
       border: 1px solid #e0e0e0;
-      border-radius: 10px;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+      color: #4a5568;
+      letter-spacing: 0.3px;
+    }
+
+    /* Resumen general */
+    .resumen-general {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .resumen-general .label {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 0.5rem;
+    }
+
+    .resumen-general .valores {
+      font-size: 2rem;
+      font-weight: 300;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .resumen-general .diferencia {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+    }
+
+    .diferencia.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
+    }
+
+    .diferencia.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
+    /* Categorías */
+    .categoria {
+      margin-bottom: 1.5rem;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
       overflow: hidden;
     }
 
     .categoria-header {
-      background: #f5f5f5;
-      padding: 12px 15px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      border-bottom: 2px solid #9b59b6;
+      background: #f8f9fa;
+      padding: 0.8rem 1rem;
+      font-weight: 500;
+      border-bottom: 1px solid #eaeaea;
+      color: #2c3e50;
     }
 
     .subcategoria {
-      padding: 12px 15px;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+      padding: 1rem;
+      border-bottom: 1px solid #f0f0f0;
     }
 
     .subcategoria:last-child {
@@ -96,106 +174,116 @@
     .subcategoria-header {
       display: flex;
       justify-content: space-between;
-      font-weight: bold;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .subcategoria-nombre {
+      font-weight: 500;
+      color: #4a5568;
+    }
+
+    .diferencia-badge {
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+    }
+
+    .diferencia-badge.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
+    }
+
+    .diferencia-badge.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
     }
 
     .valores {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.95rem;
-    }
-
-    .presupuesto {
-      color: #4a90e2;
-      font-weight: bold;
-    }
-
-    .gasto {
-      color: #e67e22;
-      font-weight: bold;
-    }
-
-    .diferencia {
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: bold;
+      gap: 1.5rem;
       font-size: 0.9rem;
     }
 
-    .positivo {
-      background: #d4edda;
-      color: #155724;
+    .presupuesto {
+      color: #7f8c8d;
     }
 
-    .negativo {
-      background: #f8d7da;
-      color: #721c24;
-    }
-
-    .neutro {
-      background: #e2e3e5;
-      color: #383d41;
+    .gasto {
+      color: #2c3e50;
+      font-weight: 500;
     }
 
     .total-row {
       background: #f8f9fa;
-      padding: 15px;
-      font-weight: bold;
+      padding: 1rem;
       display: flex;
       justify-content: space-between;
-      border-top: 2px solid #9b59b6;
+      font-weight: 500;
+      border-top: 1px solid #e0e0e0;
+      color: #2c3e50;
     }
 
-    .estado-mensaje {
-      text-align: center;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
-      font-size: 1.2rem;
-    }
-
-    .aviso {
-      background: #fff3cd;
-      color: #856404;
-      padding: 10px;
+    /* Recomendaciones */
+    .recomendaciones {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
       border-radius: 8px;
-      margin-bottom: 15px;
+      padding: 1rem;
       text-align: center;
-      font-weight: bold;
+      font-size: 0.95rem;
+      color: #5a6a7a;
+    }
+
+    /* Estados */
+    .empty-state {
+      text-align: center;
+      color: #95a5a6;
+      padding: 2rem;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>🔍 Comparación</h1>
-    <div>
-      <span class="perfil-info" id="perfilDisplay">Cargando...</span>
-      <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>COMPARAR</h1>
+      <div class="perfil-info">
+        <span class="perfil-badge" id="perfilDisplay">Cargando...</span>
+        <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+      </div>
     </div>
-  </div>
 
-  <div class="aviso">
-    ⚠️ Comparando tus gastos vs Presupuesto GENERAL
-  </div>
-
-  <div class="resumen-general">
-    <h2>Resumen del mes</h2>
-    <div class="total" id="totalGeneral">$0 vs $0</div>
-    <div id="diferenciaGeneral">⚖️ Cargando...</div>
-  </div>
-
-  <div class="card">
-    <h3>📊 Comparación por categorías</h3>
-    <div id="comparacionContainer">
-      Cargando datos...
+    <div class="aviso">
+      Presupuesto GENERAL vs gastos personales
     </div>
-  </div>
 
-  <div class="card">
-    <h3>📋 Recomendaciones</h3>
-    <div id="recomendaciones" class="estado-mensaje">
-      Cargando...
+    <!-- Resumen general -->
+    <div class="resumen-general">
+      <div class="label">RESUMEN DEL MES</div>
+      <div class="valores" id="totalGeneral">$0 vs $0</div>
+      <div id="diferenciaGeneral" class="diferencia">Cargando...</div>
+    </div>
+
+    <!-- Comparación por categorías -->
+    <div class="card">
+      <h2>POR CATEGORÍA</h2>
+      <div id="comparacionContainer">
+        <div class="empty-state">Cargando datos...</div>
+      </div>
+    </div>
+
+    <!-- Recomendaciones -->
+    <div class="card">
+      <h2>RECOMENDACIONES</h2>
+      <div id="recomendaciones" class="recomendaciones">
+        Cargando...
+      </div>
     </div>
   </div>
 
@@ -218,7 +306,7 @@
       window.location.href = "index.html";
     }
 
-    document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
+    document.getElementById('perfilDisplay').innerText = perfil;
 
     const categorias = {
       'Mercado': ['Carnes', 'Verduras'],
@@ -230,7 +318,7 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener PRESUPUESTO ÚNICO (GENERAL)
+        // Obtener presupuesto GENERAL
         const presupuestosQuery = query(
           collection(db, "presupuestos"),
           where("usuario", "==", 'GENERAL'),
@@ -239,7 +327,7 @@
         );
         const presupuestosSnap = await getDocs(presupuestosQuery);
         
-        // Obtener GASTOS del perfil actual
+        // Obtener gastos del perfil actual
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -248,7 +336,7 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
 
-        // Organizar presupuesto único
+        // Organizar datos
         const presupuestos = {};
         presupuestosSnap.forEach(doc => {
           const data = doc.data();
@@ -256,7 +344,6 @@
           presupuestos[key] = (presupuestos[key] || 0) + data.monto;
         });
 
-        // Organizar gastos del perfil
         const gastos = {};
         gastosSnap.forEach(doc => {
           const data = doc.data();
@@ -274,10 +361,10 @@
           const categoriaDiv = document.createElement('div');
           categoriaDiv.className = 'categoria';
           
-          let categoriaHeader = document.createElement('div');
-          categoriaHeader.className = 'categoria-header';
-          categoriaHeader.innerText = categoria === 'Mercado' ? '🛒 Mercado' : '💡 Servicios';
-          categoriaDiv.appendChild(categoriaHeader);
+          categoriaDiv.innerHTML = `<div class="categoria-header">${categoria}</div>`;
+
+          let totalCatPresupuesto = 0;
+          let totalCatGasto = 0;
 
           for (const subcategoria of subcategorias) {
             const key = `${categoria}_${subcategoria}`;
@@ -285,78 +372,79 @@
             const gasto = gastos[key] || 0;
             const diferencia = presupuesto - gasto;
 
+            totalCatPresupuesto += presupuesto;
+            totalCatGasto += gasto;
             totalPresupuesto += presupuesto;
             totalGastos += gasto;
 
-            const subDiv = document.createElement('div');
-            subDiv.className = 'subcategoria';
-            
-            let diferenciaClass = 'neutro';
+            let diferenciaClass = '';
             let diferenciaText = 'Sin presupuesto';
             
             if (presupuesto > 0) {
-              if (diferencia >= 0) {
-                diferenciaClass = 'positivo';
-                diferenciaText = `💰 Ahorraste $${diferencia}`;
-              } else {
-                diferenciaClass = 'negativo';
-                diferenciaText = `⚠️ Excediste $${Math.abs(diferencia)}`;
-              }
+              diferenciaClass = diferencia >= 0 ? 'positivo' : 'negativo';
+              diferenciaText = diferencia >= 0 ? `Ahorro $${diferencia}` : `Exceso $${Math.abs(diferencia)}`;
             }
 
+            const subDiv = document.createElement('div');
+            subDiv.className = 'subcategoria';
             subDiv.innerHTML = `
               <div class="subcategoria-header">
-                <span>${subcategoria}</span>
-                <span class="diferencia ${diferenciaClass}">${diferenciaText}</span>
+                <span class="subcategoria-nombre">${subcategoria}</span>
+                <span class="diferencia-badge ${diferenciaClass}">${diferenciaText}</span>
               </div>
               <div class="valores">
-                <span class="presupuesto">Presupuesto Gral: $${presupuesto}</span>
-                <span class="gasto">Tus Gastos: $${gasto}</span>
+                <span class="presupuesto">Presupuesto: $${presupuesto}</span>
+                <span class="gasto">Gastado: $${gasto}</span>
               </div>
             `;
-            
             categoriaDiv.appendChild(subDiv);
           }
+
+          // Total por categoría
+          const totalCatDiv = document.createElement('div');
+          totalCatDiv.className = 'total-row';
+          totalCatDiv.innerHTML = `
+            <span>Total ${categoria}</span>
+            <span>$${totalCatPresupuesto} / $${totalCatGasto}</span>
+          `;
+          categoriaDiv.appendChild(totalCatDiv);
 
           container.appendChild(categoriaDiv);
         }
 
-        const totalDiv = document.createElement('div');
-        totalDiv.className = 'total-row';
-        totalDiv.innerHTML = `
-          <span>TOTALES:</span>
-          <span>Presupuesto Gral: $${totalPresupuesto} | Tus Gastos: $${totalGastos}</span>
-        `;
-        container.appendChild(totalDiv);
-
+        // Actualizar resumen general
         document.getElementById('totalGeneral').innerHTML = `$${totalPresupuesto} vs $${totalGastos}`;
         
         const diferenciaGeneral = totalPresupuesto - totalGastos;
         const diferenciaElement = document.getElementById('diferenciaGeneral');
         
         if (totalPresupuesto === 0) {
-          diferenciaElement.innerHTML = `<span class="neutro">📌 No hay presupuesto configurado</span>`;
+          diferenciaElement.innerText = 'Sin presupuesto configurado';
+          diferenciaElement.className = 'diferencia';
         } else if (diferenciaGeneral >= 0) {
-          diferenciaElement.innerHTML = `<span class="positivo">✅ Disponible: $${diferenciaGeneral}</span>`;
+          diferenciaElement.innerText = `Disponible: $${diferenciaGeneral}`;
+          diferenciaElement.className = 'diferencia positivo';
         } else {
-          diferenciaElement.innerHTML = `<span class="negativo">⚠️ Déficit: $${Math.abs(diferenciaGeneral)}</span>`;
+          diferenciaElement.innerText = `Déficit: $${Math.abs(diferenciaGeneral)}`;
+          diferenciaElement.className = 'diferencia negativo';
         }
 
+        // Recomendaciones
         const recomendaciones = document.getElementById('recomendaciones');
         if (totalPresupuesto === 0) {
-          recomendaciones.innerHTML = '📌 El administrador no ha configurado presupuesto este mes';
+          recomendaciones.innerHTML = 'Configura un presupuesto en el módulo correspondiente.';
         } else if (totalGastos === 0) {
-          recomendaciones.innerHTML = '📌 No has registrado gastos este mes';
+          recomendaciones.innerHTML = 'No has registrado gastos este mes.';
         } else if (diferenciaGeneral >= 0) {
-          const porcentaje = (totalGastos / totalPresupuesto * 100).toFixed(1);
-          recomendaciones.innerHTML = `✅ Vas bien! Has usado el ${porcentaje}% del presupuesto general. Te quedan $${diferenciaGeneral} disponibles.`;
+          const porcentaje = ((totalGastos / totalPresupuesto) * 100).toFixed(1);
+          recomendaciones.innerHTML = `Has usado el ${porcentaje}% del presupuesto. Saldo disponible: $${diferenciaGeneral}.`;
         } else {
-          recomendaciones.innerHTML = `⚠️ Has excedido tu parte del presupuesto en $${Math.abs(diferenciaGeneral)}. Revisa tus gastos.`;
+          recomendaciones.innerHTML = `Has excedido el presupuesto en $${Math.abs(diferenciaGeneral)}. Revisa tus gastos.`;
         }
 
       } catch (error) {
         console.error(error);
-        document.getElementById('comparacionContainer').innerHTML = 'Error al cargar datos';
+        document.getElementById('comparacionContainer').innerHTML = '<div class="empty-state">Error al cargar datos</div>';
       }
     }
 
