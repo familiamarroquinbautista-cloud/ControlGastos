@@ -23,7 +23,6 @@
       padding: 0 1.5rem;
     }
 
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -72,7 +71,6 @@
       border-color: #a0a0a0;
     }
 
-    /* Aviso */
     .aviso {
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
@@ -84,25 +82,160 @@
       color: #5a6a7a;
     }
 
-    /* Card */
-    .card {
+    /* Cards de resumen financiero */
+    .finanzas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .finanza-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .finanza-card .label {
+      font-size: 0.75rem;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.3rem;
+    }
+
+    .finanza-card .valor {
+      font-size: 1.3rem;
+      font-weight: 300;
+    }
+
+    .finanza-card.ingresos .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.gastos .valor {
+      color: #8b3a3a;
+    }
+
+    .finanza-card.saldo .valor {
+      color: #2c3e50;
+      font-weight: 400;
+    }
+
+    .finanza-card.saldo.positivo .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.saldo.negativo .valor {
+      color: #8b3a3a;
+    }
+
+    /* Selector de período */
+    .periodo-selector {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .btn-periodo {
+      padding: 0.4rem 1rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #5a6a7a;
+    }
+
+    .btn-periodo.active {
+      background: #f0f0f0;
+      border-color: #a0a0a0;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    /* Comparativa ingresos vs gastos */
+    .comparativa-card {
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
-    .card h2 {
-      font-size: 1.1rem;
+    .comparativa-card h2 {
+      font-size: 1rem;
       font-weight: 400;
+      color: #7f8c8d;
       margin-bottom: 1.2rem;
-      color: #4a5568;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
     }
 
-    /* Resumen general */
+    .barra-container {
+      margin: 1rem 0;
+    }
+
+    .barra-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      margin-bottom: 0.3rem;
+    }
+
+    .barra {
+      height: 8px;
+      background: #eaeaea;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .barra-llenado {
+      height: 8px;
+      background: #2c3e50;
+      border-radius: 4px;
+      width: 0%;
+    }
+
+    .barra-positiva {
+      background: #2c5a2c;
+    }
+
+    .barra-negativa {
+      background: #8b3a3a;
+    }
+
+    .detalle-valores {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eaeaea;
+    }
+
+    .detalle-item {
+      text-align: center;
+    }
+
+    .detalle-item .valor {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .detalle-item .label {
+      font-size: 0.75rem;
+      color: #95a5a6;
+    }
+
+    /* Resumen general presupuesto */
     .resumen-general {
       background: white;
       border: 1px solid #e0e0e0;
@@ -146,7 +279,23 @@
       color: #8b3a3a;
     }
 
-    /* Categorías */
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+      color: #4a5568;
+      letter-spacing: 0.3px;
+    }
+
     .categoria {
       margin-bottom: 1.5rem;
       border: 1px solid #eaeaea;
@@ -228,7 +377,6 @@
       color: #2c3e50;
     }
 
-    /* Recomendaciones */
     .recomendaciones {
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
@@ -239,18 +387,38 @@
       color: #5a6a7a;
     }
 
-    /* Estados */
     .empty-state {
       text-align: center;
       color: #95a5a6;
       padding: 2rem;
       font-size: 0.9rem;
     }
+
+    /* Selector de mes */
+    .mes-selector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mes-selector button {
+      padding: 0.3rem 0.8rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .mes-selector span {
+      font-weight: 500;
+      color: #2c3e50;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header">
       <h1>COMPARAR</h1>
       <div class="perfil-info">
@@ -260,12 +428,65 @@
     </div>
 
     <div class="aviso">
-      Presupuesto GENERAL vs gastos personales
+      Comparativa completa: Ingresos vs Gastos vs Presupuesto
     </div>
 
-    <!-- Resumen general -->
+    <!-- Selector de período -->
+    <div class="periodo-selector">
+      <button class="btn-periodo active" onclick="cambiarPeriodo('mes')">Este mes</button>
+      <button class="btn-periodo" onclick="cambiarPeriodo('trimestre')">Últimos 3 meses</button>
+      <button class="btn-periodo" onclick="cambiarPeriodo('año')">Año actual</button>
+    </div>
+
+    <!-- Cards resumen financiero -->
+    <div class="finanzas-grid">
+      <div class="finanza-card ingresos">
+        <div class="label">Ingresos</div>
+        <div class="valor" id="totalIngresos">$0</div>
+      </div>
+      <div class="finanza-card gastos">
+        <div class="label">Gastos</div>
+        <div class="valor" id="totalGastos">$0</div>
+      </div>
+      <div class="finanza-card saldo" id="saldoCard">
+        <div class="label">Saldo</div>
+        <div class="valor" id="totalSaldo">$0</div>
+      </div>
+    </div>
+
+    <!-- Comparativa ingresos vs gastos -->
+    <div class="comparativa-card">
+      <h2>INGRESOS VS GASTOS</h2>
+      
+      <div class="barra-container">
+        <div class="barra-label">
+          <span>Ingresos: <span id="ingresosPorcentaje">0%</span></span>
+          <span>Gastos: <span id="gastosPorcentaje">0%</span></span>
+        </div>
+        <div class="barra">
+          <div class="barra-llenado" id="barraComparativa" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="detalle-valores">
+        <div class="detalle-item">
+          <div class="valor" id="detalleIngresos">$0</div>
+          <div class="label">INGRESOS</div>
+        </div>
+        <div class="detalle-item">
+          <div class="valor" id="detalleGastos">$0</div>
+          <div class="label">GASTOS</div>
+        </div>
+        <div class="detalle-item">
+          <div class="valor" id="detalleSaldo">$0</div>
+          <div class="label">SALDO</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen general presupuesto -->
     <div class="resumen-general">
-      <div class="label">RESUMEN DEL MES</div>
+      <div class="label">PRESUPUESTO VS GASTOS</div>
       <div class="valores" id="totalGeneral">$0 vs $0</div>
       <div id="diferenciaGeneral" class="diferencia">Cargando...</div>
     </div>
@@ -309,53 +530,223 @@
     document.getElementById('perfilDisplay').innerText = perfil;
 
     const categorias = {
-      'Mercado': ['Carnes', 'Verduras'],
-      'Servicios': ['Luz', 'Gas']
+      'Mercado': ['Carnes', 'Verduras', 'Lacteos', 'Abarrotes', 'Frutas', 'Limpieza'],
+      'Servicios': ['Luz', 'Gas', 'Agua', 'Internet', 'Telefono', 'Gasolina']
     };
 
-    async function cargarComparacion() {
-      try {
+    let periodoActual = 'mes';
+
+    window.cambiarPeriodo = function(periodo) {
+      periodoActual = periodo;
+      
+      // Actualizar botones
+      document.querySelectorAll('.btn-periodo').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      cargarTodo();
+    };
+
+    function obtenerFiltrosPeriodo() {
+      const ahora = new Date();
+      const mesActual = ahora.getMonth() + 1;
+      const añoActual = ahora.getFullYear();
+      
+      if (periodoActual === 'mes') {
+        return {
+          mes: mesActual,
+          año: añoActual
+        };
+      } else if (periodoActual === 'trimestre') {
+        // Últimos 3 meses
+        let meses = [];
+        for (let i = 0; i < 3; i++) {
+          let mes = mesActual - i;
+          let año = añoActual;
+          if (mes <= 0) {
+            mes += 12;
+            año -= 1;
+          }
+          meses.push({ mes, año });
+        }
+        return { meses, tipo: 'rango' };
+      } else {
+        // Año actual
+        return {
+          año: añoActual,
+          tipo: 'año'
+        };
+      }
+    }
+
+    async function obtenerIngresos(filtros) {
+      let ingresosQuery;
+      
+      if (filtros.tipo === 'rango') {
+        // Para trimestre, necesitamos hacer múltiples queries
+        let todosIngresos = [];
+        for (const { mes, año } of filtros.meses) {
+          const q = query(
+            collection(db, "ingresos"),
+            where("mes", "==", mes),
+            where("año", "==", año)
+          );
+          const snapshot = await getDocs(q);
+          snapshot.forEach(doc => todosIngresos.push(doc.data()));
+        }
+        return todosIngresos;
+      } else if (filtros.tipo === 'año') {
+        const q = query(
+          collection(db, "ingresos"),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      } else {
+        const q = query(
+          collection(db, "ingresos"),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      }
+    }
+
+    async function obtenerGastos(filtros) {
+      let gastosQuery;
+      
+      if (filtros.tipo === 'rango') {
+        let todosGastos = [];
+        for (const { mes, año } of filtros.meses) {
+          const q = query(
+            collection(db, "gastos"),
+            where("usuario", "==", perfil),
+            where("mes", "==", mes),
+            where("año", "==", año)
+          );
+          const snapshot = await getDocs(q);
+          snapshot.forEach(doc => todosGastos.push(doc.data()));
+        }
+        return todosGastos;
+      } else if (filtros.tipo === 'año') {
+        const q = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      } else {
+        const q = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      }
+    }
+
+    async function obtenerPresupuesto(filtros) {
+      if (filtros.tipo === 'rango' || filtros.tipo === 'año') {
+        // Para períodos largos, solo mostramos el mes actual
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
-        
-        // Obtener presupuesto GENERAL
-        const presupuestosQuery = query(
+        const q = query(
           collection(db, "presupuestos"),
           where("usuario", "==", 'GENERAL'),
           where("mes", "==", mesActual),
           where("año", "==", añoActual)
         );
-        const presupuestosSnap = await getDocs(presupuestosQuery);
-        
-        // Obtener gastos del perfil actual
-        const gastosQuery = query(
-          collection(db, "gastos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual)
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      } else {
+        const q = query(
+          collection(db, "presupuestos"),
+          where("usuario", "==", 'GENERAL'),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
         );
-        const gastosSnap = await getDocs(gastosQuery);
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      }
+    }
 
-        // Organizar datos
-        const presupuestos = {};
-        presupuestosSnap.forEach(doc => {
-          const data = doc.data();
-          const key = `${data.categoria}_${data.subcategoria}`;
-          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
+    async function cargarTodo() {
+      try {
+        const filtros = obtenerFiltrosPeriodo();
+        
+        // Obtener ingresos
+        const ingresosData = await obtenerIngresos(filtros);
+        let totalIngresos = 0;
+        ingresosData.forEach(data => {
+          if (data.tipo === 'familiar' || data.usuario === perfil) {
+            totalIngresos += data.monto;
+          }
         });
 
+        // Obtener gastos
+        const gastosData = await obtenerGastos(filtros);
+        let totalGastos = 0;
+        gastosData.forEach(data => {
+          totalGastos += data.monto;
+        });
+
+        const saldo = totalIngresos - totalGastos;
+        
+        // Actualizar UI
+        document.getElementById('totalIngresos').innerText = `$${totalIngresos}`;
+        document.getElementById('totalGastos').innerText = `$${totalGastos}`;
+        document.getElementById('totalSaldo').innerText = `$${saldo}`;
+        
+        const saldoCard = document.getElementById('saldoCard');
+        saldoCard.className = `finanza-card saldo ${saldo >= 0 ? 'positivo' : 'negativo'}`;
+
+        // Actualizar detalles
+        document.getElementById('detalleIngresos').innerText = `$${totalIngresos}`;
+        document.getElementById('detalleGastos').innerText = `$${totalGastos}`;
+        document.getElementById('detalleSaldo').innerText = `$${saldo}`;
+
+        // Calcular porcentajes para barra
+        const total = totalIngresos + totalGastos;
+        if (total > 0) {
+          const porcentajeIngresos = (totalIngresos / total) * 100;
+          const porcentajeGastos = (totalGastos / total) * 100;
+          
+          document.getElementById('ingresosPorcentaje').innerText = `${porcentajeIngresos.toFixed(1)}%`;
+          document.getElementById('gastosPorcentaje').innerText = `${porcentajeGastos.toFixed(1)}%`;
+          
+          const barra = document.getElementById('barraComparativa');
+          barra.style.width = `${porcentajeIngresos}%`;
+          barra.className = `barra-llenado ${porcentajeIngresos >= porcentajeGastos ? 'barra-positiva' : 'barra-negativa'}`;
+        }
+
+        // Obtener presupuesto
+        const presupuestoData = await obtenerPresupuesto(filtros);
+        const presupuestos = {};
+        let totalPresupuesto = 0;
+        
+        presupuestoData.forEach(data => {
+          const key = `${data.categoria}_${data.subcategoria}`;
+          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
+          totalPresupuesto += data.monto;
+        });
+
+        // Organizar gastos por categoría
         const gastos = {};
-        gastosSnap.forEach(doc => {
-          const data = doc.data();
+        gastosData.forEach(data => {
           const key = `${data.categoria}_${data.subcategoria}`;
           gastos[key] = (gastos[key] || 0) + data.monto;
         });
 
+        // Mostrar comparación por categorías
         const container = document.getElementById('comparacionContainer');
         container.innerHTML = '';
 
-        let totalPresupuesto = 0;
-        let totalGastos = 0;
+        let totalGastosCategoria = 0;
 
         for (const [categoria, subcategorias] of Object.entries(categorias)) {
           const categoriaDiv = document.createElement('div');
@@ -374,8 +765,7 @@
 
             totalCatPresupuesto += presupuesto;
             totalCatGasto += gasto;
-            totalPresupuesto += presupuesto;
-            totalGastos += gasto;
+            totalGastosCategoria += gasto;
 
             let diferenciaClass = '';
             let diferenciaText = 'Sin presupuesto';
@@ -400,7 +790,6 @@
             categoriaDiv.appendChild(subDiv);
           }
 
-          // Total por categoría
           const totalCatDiv = document.createElement('div');
           totalCatDiv.className = 'total-row';
           totalCatDiv.innerHTML = `
@@ -412,10 +801,9 @@
           container.appendChild(categoriaDiv);
         }
 
-        // Actualizar resumen general
-        document.getElementById('totalGeneral').innerHTML = `$${totalPresupuesto} vs $${totalGastos}`;
+        document.getElementById('totalGeneral').innerHTML = `$${totalPresupuesto} vs $${totalGastosCategoria}`;
         
-        const diferenciaGeneral = totalPresupuesto - totalGastos;
+        const diferenciaGeneral = totalPresupuesto - totalGastosCategoria;
         const diferenciaElement = document.getElementById('diferenciaGeneral');
         
         if (totalPresupuesto === 0) {
@@ -431,15 +819,13 @@
 
         // Recomendaciones
         const recomendaciones = document.getElementById('recomendaciones');
-        if (totalPresupuesto === 0) {
-          recomendaciones.innerHTML = 'Configura un presupuesto en el módulo correspondiente.';
-        } else if (totalGastos === 0) {
-          recomendaciones.innerHTML = 'No has registrado gastos este mes.';
-        } else if (diferenciaGeneral >= 0) {
-          const porcentaje = ((totalGastos / totalPresupuesto) * 100).toFixed(1);
-          recomendaciones.innerHTML = `Has usado el ${porcentaje}% del presupuesto. Saldo disponible: $${diferenciaGeneral}.`;
+        if (totalIngresos === 0 && totalGastos === 0) {
+          recomendaciones.innerHTML = 'No hay movimientos en este período.';
+        } else if (saldo >= 0) {
+          recomendaciones.innerHTML = `✅ Tus ingresos superan a tus gastos. Saldo positivo de $${saldo}. Sigue así!`;
         } else {
-          recomendaciones.innerHTML = `Has excedido el presupuesto en $${Math.abs(diferenciaGeneral)}. Revisa tus gastos.`;
+          const porcentajeGasto = totalIngresos > 0 ? ((totalGastos / totalIngresos) * 100).toFixed(1) : 100;
+          recomendaciones.innerHTML = `⚠️ Tus gastos superan a tus ingresos en $${Math.abs(saldo)} (${porcentajeGasto}% de tus ingresos). Revisa tus gastos.`;
         }
 
       } catch (error) {
@@ -448,7 +834,7 @@
       }
     }
 
-    cargarComparacion();
+    cargarTodo();
   </script>
 </body>
 </html>
