@@ -23,6 +23,7 @@
       padding: 0 1.5rem;
     }
 
+    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -79,6 +80,7 @@
       border-color: #a0a0a0;
     }
 
+    /* Navegación módulos */
     .nav-modulos {
       background: white;
       border: 1px solid #e0e0e0;
@@ -122,6 +124,7 @@
       border-color: #a0a0a0;
     }
 
+    /* Saldo disponible */
     .saldo-card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -165,6 +168,7 @@
       color: #95a5a6;
     }
 
+    /* Switch Ingreso/Gasto */
     .switch-container {
       background: white;
       border: 1px solid #e0e0e0;
@@ -218,6 +222,7 @@
       color: white;
     }
 
+    /* Cards */
     .card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -239,6 +244,7 @@
       gap: 0.5rem;
     }
 
+    /* Campos de registro */
     .campos-registro {
       background: #fafafa;
       border: 1px solid #eaeaea;
@@ -321,6 +327,7 @@
       background: #fcf0f0;
     }
 
+    /* Tabs de registros */
     .registros-tabs {
       display: flex;
       gap: 0.5rem;
@@ -400,6 +407,7 @@
       margin-left: 0.5rem;
     }
 
+    /* Mensajes */
     .mensaje {
       margin: 1rem 0;
       padding: 0.8rem;
@@ -421,6 +429,7 @@
       color: #8b3a3a;
     }
 
+    /* Empty state */
     .empty-state {
       text-align: center;
       color: #95a5a6;
@@ -431,17 +440,19 @@
 </head>
 <body>
   <div class="container">
+    <!-- Header con perfil -->
     <div class="header">
       <h1>REGISTRO</h1>
       <div class="perfil-info">
-        <div class="avatar" id="avatar"> </div>
+        <div class="avatar" id="avatar">👤</div>
         <span class="perfil-nombre" id="nombrePerfil">Cargando...</span>
         <button class="btn-outline" onclick="window.location.href='index.html'">Cambiar</button>
       </div>
     </div>
 
+    <!-- Navegación módulos -->
     <div class="nav-modulos">
-      <h2>MODULOS</h2>
+      <h2>MÓDULOS</h2>
       <div class="nav-botones">
         <button class="btn-modulo" onclick="window.location.href='presupuesto.html'">Presupuesto</button>
         <button class="btn-modulo" onclick="window.location.href='comparar.html'">Comparar</button>
@@ -449,6 +460,7 @@
       </div>
     </div>
 
+    <!-- Saldo disponible -->
     <div class="saldo-card">
       <div class="saldo-info">
         <span class="saldo-label">SALDO DISPONIBLE</span>
@@ -460,36 +472,40 @@
       </div>
     </div>
 
+    <!-- Switch Ingreso/Gasto -->
     <div class="switch-container">
       <div class="switch-label">SELECCIONA TIPO DE MOVIMIENTO</div>
       <div class="switch-buttons">
-        <button class="switch-btn ingreso" id="btnIngreso" onclick="cambiarTipoMovimiento('ingreso')"> Ingreso</button>
-        <button class="switch-btn gasto active" id="btnGasto" onclick="cambiarTipoMovimiento('gasto')"> Gasto</button>
+        <button class="switch-btn ingreso" id="btnIngreso" onclick="cambiarTipoMovimiento('ingreso')">💰 Ingreso</button>
+        <button class="switch-btn gasto active" id="btnGasto" onclick="cambiarTipoMovimiento('gasto')">📝 Gasto</button>
       </div>
     </div>
 
+    <!-- Formulario de GASTOS (por defecto) -->
     <div id="formGasto" class="card">
-      <h2> NUEVO GASTO</h2>
+      <h2>📝 NUEVO GASTO</h2>
       
       <div class="campos-registro">
         <div class="campo">
-          <label>Categoria</label>
+          <label>Categoría</label>
           <select id="categoriaGasto" onchange="cambiarCategoriaGasto()">
-            <option value="Mercado"> Mercado</option>
-            <option value="Servicios"> Servicios</option>
+            <option value="Mercado">🛒 Mercado</option>
+            <option value="Servicios">💡 Servicios</option>
           </select>
         </div>
 
+        <!-- Subcategorías dinámicas para gastos -->
         <div id="subcategoriaGastoContainer">
           <div class="campo">
-            <label>Subcategoria</label>
+            <label>Subcategoría</label>
             <select id="subcategoriaGasto">
+              <!-- Se llena dinámicamente -->
             </select>
           </div>
         </div>
         
         <div class="campo">
-          <label>Descripcion</label>
+          <label>Descripción</label>
           <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal">
         </div>
         
@@ -503,30 +519,31 @@
       </div>
     </div>
 
+    <!-- Formulario de INGRESOS (oculto inicialmente) -->
     <div id="formIngreso" class="card" style="display: none;">
-      <h2> NUEVO INGRESO</h2>
+      <h2>💰 NUEVO INGRESO</h2>
       
       <div class="campos-registro">
         <div class="campo">
           <label>Tipo de ingreso</label>
           <select id="tipoIngreso">
-            <option value="credito"> Credito (Tarjeta)</option>
-            <option value="debito"> Debito (Efectivo/Transferencia)</option>
-            <option value="prestamo"> Prestamo (Recibido)</option>
+            <option value="credito">💳 Crédito (Tarjeta)</option>
+            <option value="debito">💵 Débito (Efectivo/Transferencia)</option>
+            <option value="prestamo">🏦 Préstamo (Recibido)</option>
           </select>
         </div>
 
         <div class="campo">
           <label>Destino del ingreso</label>
           <select id="destinoIngreso">
-            <option value="individual">Individual (solo para mi)</option>
+            <option value="individual">Individual (solo para mí)</option>
             <option value="familiar">Familiar (para ambos)</option>
           </select>
         </div>
         
         <div class="campo">
-          <label>Descripcion</label>
-          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario, Bono, Prestamo">
+          <label>Descripción</label>
+          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario, Bono, Préstamo">
         </div>
         
         <div class="campo-row">
@@ -539,10 +556,12 @@
       </div>
     </div>
 
+    <!-- Mensajes -->
     <div id="mensaje" class="mensaje"></div>
 
+    <!-- Últimos movimientos -->
     <div class="card">
-      <h2> ULTIMOS MOVIMIENTOS</h2>
+      <h2>📋 ÚLTIMOS MOVIMIENTOS</h2>
       
       <div class="registros-tabs">
         <button class="registro-tab active" id="tabTodos" onclick="cargarTodosMovimientos()">Todos</button>
@@ -557,8 +576,17 @@
   </div>
 
   <script type="module">
-    import { db } from './firebase-config.js';
-    import { collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const db = getFirestore(initializeApp({
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    }));
 
     const perfil = sessionStorage.getItem('perfil');
     
@@ -570,16 +598,18 @@
     const nombrePerfil = document.getElementById('nombrePerfil');
     
     nombrePerfil.innerText = perfil;
-    avatar.innerText = perfil === 'Maria' ? 'M' : 'A';
+    avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
 
     let tipoMovimientoActual = 'gasto';
     let filtroActual = 'todos';
 
+    // Definir subcategorías para gastos
     const subcategoriasGasto = {
       'Mercado': ['Carnes', 'Verduras', 'Lacteos', 'Abarrotes', 'Frutas', 'Limpieza'],
       'Servicios': ['Luz', 'Gas', 'Agua', 'Internet', 'Telefono', 'Gasolina']
     };
 
+    // Inicializar subcategorías de gastos
     function actualizarSubcategoriasGasto() {
       const categoria = document.getElementById('categoriaGasto').value;
       const select = document.getElementById('subcategoriaGasto');
@@ -597,6 +627,7 @@
       actualizarSubcategoriasGasto();
     };
 
+    // Cambiar entre ingreso y gasto
     window.cambiarTipoMovimiento = function(tipo) {
       tipoMovimientoActual = tipo;
       
@@ -618,6 +649,7 @@
       }
     };
 
+    // Registrar movimiento (ingreso o gasto)
     window.registrarMovimiento = async function(tipo) {
       if (tipo === 'gasto') {
         await registrarGasto();
@@ -633,12 +665,12 @@
       const monto = parseFloat(document.getElementById('montoGasto').value);
       
       if (!descripcion) {
-        mostrarMensaje("Escribe una descripcion", "error");
+        mostrarMensaje("Escribe una descripción", "error");
         return;
       }
       
       if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje("Ingresa un monto valido", "error");
+        mostrarMensaje("Ingresa un monto válido", "error");
         return;
       }
 
@@ -675,19 +707,20 @@
       const monto = parseFloat(document.getElementById('montoIngreso').value);
       
       if (!descripcion) {
-        mostrarMensaje("Escribe una descripcion", "error");
+        mostrarMensaje("Escribe una descripción", "error");
         return;
       }
       
       if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje("Ingresa un monto valido", "error");
+        mostrarMensaje("Ingresa un monto válido", "error");
         return;
       }
 
+      // Mapear tipo a nombre legible
       const tipoTexto = {
-        'credito': 'Credito',
-        'debito': 'Debito',
-        'prestamo': 'Prestamo'
+        'credito': 'Crédito',
+        'debito': 'Débito',
+        'prestamo': 'Préstamo'
       };
 
       try {
@@ -727,11 +760,13 @@
       }, 3000);
     }
 
+    // Calcular saldo disponible
     async function calcularSaldo() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -747,6 +782,7 @@
           }
         });
 
+        // Obtener gastos
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -774,6 +810,7 @@
       }
     }
 
+    // Funciones para cargar movimientos
     window.cargarTodosMovimientos = async function() {
       filtroActual = 'todos';
       actualizarTabsRegistro('todos');
@@ -782,6 +819,7 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // Obtener gastos
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -792,6 +830,7 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
+        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -934,10 +973,10 @@
         div.className = 'registro-item';
         
         if (mov.tipo === 'ingreso') {
-          const tipoIngresoTexto = mov.tipoTexto || (mov.tipoIngreso === 'credito' ? 'Credito' : mov.tipoIngreso === 'debito' ? 'Debito' : 'Prestamo');
+          const tipoIngresoTexto = mov.tipoTexto || (mov.tipoIngreso === 'credito' ? 'Crédito' : mov.tipoIngreso === 'debito' ? 'Débito' : 'Préstamo');
           div.innerHTML = `
             <div>
-              <span class="tipo-badge badge-ingreso"> INGRESO</span>
+              <span class="tipo-badge badge-ingreso">💰 INGRESO</span>
               <span class="categoria-text">${tipoIngresoTexto}</span>
               <span>${mov.descripcion}</span>
               ${mov.destino === 'familiar' ? '<span style="color:#7f8c8d; font-size:0.75rem;"> (familiar)</span>' : ''}
@@ -950,7 +989,7 @@
         } else {
           div.innerHTML = `
             <div>
-              <span class="tipo-badge badge-gasto"> GASTO</span>
+              <span class="tipo-badge badge-gasto">📝 GASTO</span>
               <span class="categoria-text">${mov.categoria} - ${mov.subcategoria}</span>
               <span>${mov.descripcion}</span>
             </div>
@@ -965,6 +1004,7 @@
       });
     }
 
+    // Inicializar
     actualizarSubcategoriasGasto();
     cargarTodosMovimientos();
     calcularSaldo();
