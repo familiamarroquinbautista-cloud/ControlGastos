@@ -4,195 +4,297 @@
   <meta charset="UTF-8">
   <title>Checklist de Gastos</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #f0f2f5;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1e1e1e;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #2c3e50;
     }
 
     .perfil-info {
-      background: #e67e22;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 50px;
-      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .perfil-badge {
+      background: #f0f0f0;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #2c3e50;
+      border: 1px solid #d0d0d0;
     }
 
     .btn-volver {
-      padding: 10px 20px;
-      background: #e67e22;
-      color: white;
-      border: none;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.9rem;
       cursor: pointer;
-      font-size: 16px;
+      transition: all 0.2s;
+      text-decoration: none;
     }
 
+    .btn-volver:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
+    }
+
+    /* Cards */
     .card {
       background: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
-    .progreso {
-      background: #eee;
-      height: 20px;
-      border-radius: 10px;
-      margin: 20px 0;
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+      color: #4a5568;
+      letter-spacing: 0.3px;
+    }
+
+    /* Progreso */
+    .progreso-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .progreso-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+      margin-bottom: 0.5rem;
+    }
+
+    .progreso-barra {
+      height: 6px;
+      background: #eaeaea;
+      border-radius: 3px;
       overflow: hidden;
     }
 
-    .barra-progreso {
-      height: 20px;
-      background: #27ae60;
-      border-radius: 10px;
+    .progreso-llenado {
+      height: 6px;
+      background: #2c3e50;
+      border-radius: 3px;
       width: 0%;
       transition: width 0.3s;
     }
 
-    .contador {
+    /* Stats */
+    .stats-grid {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eaeaea;
+    }
+
+    .stat-item {
+      flex: 1;
       text-align: center;
-      font-size: 1.2rem;
-      font-weight: bold;
+    }
+
+    .stat-valor {
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: #2c3e50;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #95a5a6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Lista de gastos */
+    .lista-gastos {
+      margin: 1rem 0;
     }
 
     .gasto-item {
       display: flex;
       align-items: center;
-      padding: 15px;
-      border-bottom: 1px solid #eee;
-      background: white;
-      transition: background 0.2s;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #f0f0f0;
     }
 
-    .gasto-item:hover {
-      background: #f9f9f9;
+    .gasto-item:last-child {
+      border-bottom: none;
     }
 
     .gasto-item input[type="checkbox"] {
-      width: 22px;
-      height: 22px;
-      margin-right: 15px;
+      width: 18px;
+      height: 18px;
+      margin-right: 1rem;
       cursor: pointer;
+      accent-color: #2c3e50;
     }
 
     .gasto-item label {
       flex: 1;
-      font-size: 16px;
+      font-size: 0.95rem;
       cursor: pointer;
-      font-weight: 500;
+      color: #2c3e50;
     }
 
     .gasto-item.pagado label {
       text-decoration: line-through;
-      color: #888;
+      color: #95a5a6;
     }
 
     .fecha-gasto {
-      color: #999;
-      font-size: 0.85rem;
-      margin-left: 10px;
+      color: #95a5a6;
+      font-size: 0.8rem;
     }
 
+    /* Agregar nuevo */
     .agregar-gasto {
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eaeaea;
     }
 
     .agregar-gasto input {
       flex: 1;
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    .agregar-gasto button {
-      padding: 12px 25px;
-      background: #e67e22;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 2px solid #eee;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-valor {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #e67e22;
-    }
-
-    .stat-label {
+      padding: 0.8rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
       font-size: 0.9rem;
-      color: #666;
+    }
+
+    .agregar-gasto input:focus {
+      outline: none;
+      border-color: #2c3e50;
+    }
+
+    .btn-agregar {
+      padding: 0.8rem 1.5rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-agregar:hover {
+      background: #f5f5f5;
+      border-color: #909090;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      color: #95a5a6;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+
+    /* Contador simple */
+    .contador-simple {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>✅ Checklist</h1>
-    <div>
-      <span class="perfil-info" id="perfilDisplay">Cargando...</span>
-      <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>CHECKLIST</h1>
+      <div class="perfil-info">
+        <span class="perfil-badge" id="perfilDisplay">Cargando...</span>
+        <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+      </div>
     </div>
-  </div>
 
-  <div class="card">
-    <h3>📊 Progreso mensual</h3>
-    <div class="progreso">
-      <div class="barra-progreso" id="barra-progreso"></div>
-    </div>
-    <div class="contador" id="contador">0/0 gastos pagados</div>
-    
-    <div class="stats">
-      <div class="stat-item">
-        <div class="stat-valor" id="total-gastos">0</div>
-        <div class="stat-label">Total gastos</div>
+    <!-- Progreso mensual -->
+    <div class="card">
+      <h2>PROGRESO MENSUAL</h2>
+      
+      <div class="progreso-container">
+        <div class="progreso-label">
+          <span id="contador">0/0 gastos</span>
+          <span id="porcentaje">0%</span>
+        </div>
+        <div class="progreso-barra">
+          <div class="progreso-llenado" id="barra-progreso"></div>
+        </div>
       </div>
-      <div class="stat-item">
-        <div class="stat-valor" id="pagados-gastos">0</div>
-        <div class="stat-label">Pagados</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-valor" id="pendientes-gastos">0</div>
-        <div class="stat-label">Pendientes</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="card">
-    <h3>📋 Lista de gastos del mes</h3>
-    <div id="lista-gastos"></div>
-    
-    <div class="agregar-gasto">
-      <input type="text" id="nuevo-gasto" placeholder="Nuevo gasto (ej: Agua, Luz, Internet)">
-      <button onclick="agregarGasto()">➕ Agregar</button>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-valor" id="total-gastos">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-valor" id="pagados-gastos">0</div>
+          <div class="stat-label">Pagados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-valor" id="pendientes-gastos">0</div>
+          <div class="stat-label">Pend.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de gastos -->
+    <div class="card">
+      <h2>GASTOS DEL MES</h2>
+      
+      <div class="lista-gastos" id="lista-gastos">
+        <div class="empty-state">Cargando...</div>
+      </div>
+
+      <div class="agregar-gasto">
+        <input type="text" id="nuevo-gasto" placeholder="Nuevo gasto (ej: Agua, Internet)">
+        <button class="btn-agregar" onclick="agregarGasto()">Agregar</button>
+      </div>
     </div>
   </div>
 
@@ -215,7 +317,7 @@
       window.location.href = "index.html";
     }
 
-    document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
+    document.getElementById('perfilDisplay').innerText = perfil;
 
     window.agregarGasto = async () => {
       const nombreGasto = document.getElementById("nuevo-gasto").value.trim();
@@ -234,7 +336,7 @@
         cargarGastos();
       } catch (error) {
         console.error(error);
-        alert("Error al agregar gasto");
+        alert("Error al agregar");
       }
     };
 
@@ -273,7 +375,7 @@
         lista.innerHTML = "";
 
         if (gastos.length === 0) {
-          lista.innerHTML = '<p style="text-align: center; color: #666;">No hay gastos agregados este mes</p>';
+          lista.innerHTML = '<div class="empty-state">No hay gastos este mes</div>';
         }
 
         let pagados = 0;
@@ -296,19 +398,18 @@
 
         const total = gastos.length;
         const pendientes = total - pagados;
+        const porcentaje = total > 0 ? Math.round((pagados / total) * 100) : 0;
         
         document.getElementById("total-gastos").innerText = total;
         document.getElementById("pagados-gastos").innerText = pagados;
         document.getElementById("pendientes-gastos").innerText = pendientes;
-        
-        document.getElementById("contador").innerText = `${pagados}/${total} gastos pagados`;
-        
-        const porcentaje = total > 0 ? (pagados / total) * 100 : 0;
+        document.getElementById("contador").innerText = `${pagados}/${total} gastos`;
+        document.getElementById("porcentaje").innerText = `${porcentaje}%`;
         document.getElementById("barra-progreso").style.width = `${porcentaje}%`;
         
       } catch (error) {
         console.error(error);
-        document.getElementById("lista-gastos").innerHTML = '<p style="color: red;">Error al cargar gastos</p>';
+        document.getElementById("lista-gastos").innerHTML = '<div class="empty-state">Error al cargar</div>';
       }
     }
 
