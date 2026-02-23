@@ -84,6 +84,7 @@
       color: #5a6a7a;
     }
 
+    /* Selector de período */
     .periodo-selector {
       background: white;
       border: 1px solid #e0e0e0;
@@ -113,6 +114,7 @@
       font-weight: 500;
     }
 
+    /* Cards resumen global */
     .finanzas-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -163,6 +165,7 @@
       color: #8b3a3a;
     }
 
+    /* Gráfico de barras comparativo */
     .comparativa-global {
       background: white;
       border: 1px solid #e0e0e0;
@@ -235,6 +238,7 @@
       border-top: 1px solid #eaeaea;
     }
 
+    /* Cards dobles */
     .cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -267,6 +271,7 @@
       overflow-y: auto;
     }
 
+    /* Tablas */
     .tabla {
       width: 100%;
       border-collapse: collapse;
@@ -305,6 +310,7 @@
       font-weight: 500;
     }
 
+    /* Perfiles */
     .perfiles-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -376,7 +382,7 @@
     <div class="header">
       <h1>RESUMEN GENERAL</h1>
       <div class="perfil-info">
-        <span class="perfil-badge"> ADMIN</span>
+        <span class="perfil-badge">👑 ADMIN</span>
         <button class="btn-outline" onclick="window.location.href='index.html'">Cambiar perfil</button>
       </div>
     </div>
@@ -387,12 +393,14 @@
 
     <div class="fecha-actual" id="fechaActual"></div>
 
+    <!-- Selector de período -->
     <div class="periodo-selector">
       <button class="btn-periodo active" onclick="cambiarPeriodo('mes')">Este mes</button>
-      <button class="btn-periodo" onclick="cambiarPeriodo('trimestre')">Ultimos 3 meses</button>
+      <button class="btn-periodo" onclick="cambiarPeriodo('trimestre')">Últimos 3 meses</button>
       <button class="btn-periodo" onclick="cambiarPeriodo('año')">Año actual</button>
     </div>
 
+    <!-- Cards resumen financiero -->
     <div class="finanzas-grid">
       <div class="finanza-card ingresos">
         <div class="label">Ingresos totales</div>
@@ -408,41 +416,46 @@
       </div>
     </div>
 
+    <!-- Comparativa ingresos vs gastos -->
     <div class="comparativa-global">
       <h2>COMPARATIVA INGRESOS VS GASTOS</h2>
       
       <div class="barras-container" id="barrasMensuales">
+        <!-- Se genera dinámicamente -->
       </div>
 
       <div class="detalle-mensual">
         <div>
-          <span class="badge"> Ingresos promedio</span>
+          <span class="badge">💰 Ingresos promedio</span>
           <span id="promedioIngresos">$0</span>
         </div>
         <div>
-          <span class="badge"> Gastos promedio</span>
+          <span class="badge">📝 Gastos promedio</span>
           <span id="promedioGastos">$0</span>
         </div>
         <div>
-          <span class="badge"> Saldo promedio</span>
+          <span class="badge">⚖️ Saldo promedio</span>
           <span id="promedioSaldo">$0</span>
         </div>
       </div>
     </div>
 
+    <!-- Ingresos y Gastos por tipo -->
     <div class="cards-grid">
+      <!-- Ingresos del período -->
       <div class="card">
         <div class="card-header">
-          INGRESOS DEL PERIODO
+          💰 INGRESOS DEL PERÍODO
         </div>
         <div class="card-content" id="listaIngresos">
           <div class="empty-state">Cargando ingresos...</div>
         </div>
       </div>
 
+      <!-- Gastos del período -->
       <div class="card">
         <div class="card-header">
-          GASTOS DEL PERIODO
+          📝 GASTOS DEL PERÍODO
         </div>
         <div class="card-content" id="listaGastos">
           <div class="empty-state">Cargando gastos...</div>
@@ -450,15 +463,17 @@
       </div>
     </div>
 
+    <!-- Presupuesto vs Gastos -->
     <div class="card" style="margin-bottom: 2rem;">
       <div class="card-header">
-        PRESUPUESTO GENERAL vs GASTOS COMBINADOS
+        📊 PRESUPUESTO GENERAL vs GASTOS COMBINADOS
       </div>
       <div class="card-content" id="resumenConjunto">
         <div class="empty-state">Cargando...</div>
       </div>
     </div>
 
+    <!-- Gastos por persona -->
     <h2 style="font-weight: 400; margin: 2rem 0 1rem; color: #2c3e50;">GASTOS POR PERSONA</h2>
     <div class="perfiles-grid" id="perfilesContainer">
       <div class="empty-state">Cargando...</div>
@@ -466,8 +481,17 @@
   </div>
 
   <script type="module">
-    import { db } from './firebase-config.js';
-    import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const db = getFirestore(initializeApp({
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    }));
 
     const perfil = sessionStorage.getItem('perfil');
     
@@ -477,7 +501,7 @@
 
     const fecha = new Date();
     document.getElementById('fechaActual').innerText = 
-      `Periodo: ${fecha.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`;
+      `Período: ${fecha.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`;
 
     const perfiles = ['Maria', 'Andres'];
     const categorias = {
@@ -594,12 +618,14 @@
       try {
         const filtros = obtenerFiltrosPeriodo();
         
+        // Obtener ingresos
         const ingresos = await obtenerIngresosPeriodo(filtros);
         let totalIngresos = 0;
         ingresos.forEach(data => {
           totalIngresos += data.monto;
         });
 
+        // Obtener gastos
         const gastos = await obtenerGastosPeriodo(filtros);
         let totalGastos = 0;
         const gastosPorPerfil = {
@@ -617,6 +643,7 @@
 
         const saldo = totalIngresos - totalGastos;
         
+        // Actualizar cards
         document.getElementById('totalIngresosGlobal').innerText = `$${totalIngresos}`;
         document.getElementById('totalGastosGlobal').innerText = `$${totalGastos}`;
         document.getElementById('saldoGlobal').innerText = `$${saldo}`;
@@ -624,28 +651,30 @@
         const saldoCard = document.getElementById('saldoGlobalCard');
         saldoCard.className = `finanza-card saldo ${saldo >= 0 ? 'positivo' : 'negativo'}`;
 
+        // Mostrar listas
         mostrarListaIngresos(ingresos);
         mostrarListaGastos(gastos);
 
+        // Obtener presupuesto
         const presupuestoQuery = query(
           collection(db, "presupuestos"),
           where("usuario", "==", 'GENERAL')
         );
         const presupuestoSnap = await getDocs(presupuestoQuery);
         const presupuestos = {};
-        const categoriasVistas = new Set();
-        
         presupuestoSnap.forEach(doc => {
           const data = doc.data();
           const key = `${data.categoria}_${data.subcategoria}`;
-          if (!categoriasVistas.has(key)) {
-            presupuestos[key] = data.monto;
-            categoriasVistas.add(key);
-          }
+          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
         });
 
+        // Mostrar resumen conjunto
         mostrarResumenConjunto(presupuestos, gastosPorPerfil);
+        
+        // Mostrar gastos individuales
         mostrarGastosIndividuales(gastosPorPerfil);
+
+        // Mostrar gráfico de barras mensual
         mostrarGraficoBarras(ingresos, gastos, filtros);
 
       } catch (error) {
@@ -657,12 +686,12 @@
       const container = document.getElementById('listaIngresos');
       
       if (ingresos.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay ingresos en este periodo</div>';
+        container.innerHTML = '<div class="empty-state">No hay ingresos en este período</div>';
         return;
       }
 
       let html = '<table class="tabla">';
-      html += '<tr><th>Fecha</th><th>Usuario</th><th>Descripcion</th><th class="text-right">Monto</th></tr>';
+      html += '<tr><th>Fecha</th><th>Usuario</th><th>Descripción</th><th class="text-right">Monto</th></tr>';
 
       ingresos.sort((a, b) => {
         const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date();
@@ -686,12 +715,12 @@
       const container = document.getElementById('listaGastos');
       
       if (gastos.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay gastos en este periodo</div>';
+        container.innerHTML = '<div class="empty-state">No hay gastos en este período</div>';
         return;
       }
 
       let html = '<table class="tabla">';
-      html += '<tr><th>Fecha</th><th>Usuario</th><th>Categoria</th><th class="text-right">Monto</th></tr>';
+      html += '<tr><th>Fecha</th><th>Usuario</th><th>Categoría</th><th class="text-right">Monto</th></tr>';
 
       gastos.sort((a, b) => {
         const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date();
@@ -712,6 +741,7 @@
     }
 
     function mostrarGraficoBarras(ingresos, gastos, filtros) {
+      // Agrupar por mes
       const meses = {};
       
       ingresos.forEach(data => {
@@ -728,12 +758,14 @@
         meses[key].gastos += data.monto;
       });
 
+      // Ordenar por fecha
       const mesesOrdenados = Object.entries(meses).sort((a, b) => {
         const [m1, y1] = a[0].split('/').map(Number);
         const [m2, y2] = b[0].split('/').map(Number);
         return y1 - y2 || m1 - m2;
       });
 
+      // Calcular valores máximos para escala
       let maxValor = 0;
       mesesOrdenados.forEach(([_, datos]) => {
         maxValor = Math.max(maxValor, datos.ingresos, datos.gastos);
@@ -742,7 +774,7 @@
       const container = document.getElementById('barrasMensuales');
       container.innerHTML = '';
 
-      mesesOrdenados.slice(-6).forEach(([mes, datos]) => {
+      mesesOrdenados.slice(-6).forEach(([mes, datos]) => { // Últimos 6 meses máximo
         const alturaIngresos = maxValor > 0 ? (datos.ingresos / maxValor) * 180 : 0;
         const alturaGastos = maxValor > 0 ? (datos.gastos / maxValor) * 180 : 0;
 
@@ -762,6 +794,7 @@
         container.appendChild(barraDiv);
       });
 
+      // Calcular promedios
       const totalMeses = mesesOrdenados.length;
       const sumaIngresos = Object.values(meses).reduce((sum, d) => sum + d.ingresos, 0);
       const sumaGastos = Object.values(meses).reduce((sum, d) => sum + d.gastos, 0);
@@ -774,6 +807,7 @@
     function mostrarResumenConjunto(presupuesto, gastosPorPerfil) {
       const container = document.getElementById('resumenConjunto');
       
+      // Calcular gastos combinados
       const gastosCombinados = {};
       
       for (const perfil of ['Maria', 'Andres']) {
@@ -783,7 +817,7 @@
       }
 
       let html = '<table class="tabla">';
-      html += '<tr><th>Categoria</th><th>Subcategoria</th><th class="text-right">Presupuesto</th><th class="text-right">Gastos (M+A)</th><th class="text-right">Diferencia</th></tr>';
+      html += '<tr><th>Categoría</th><th>Subcategoría</th><th class="text-right">Presupuesto</th><th class="text-right">Gastos (M+A)</th><th class="text-right">Diferencia</th></tr>';
 
       let totalPresupuesto = 0;
       let totalGastos = 0;
@@ -814,12 +848,15 @@
       }
 
       const diferenciaTotal = totalPresupuesto - totalGastos;
+      const totalClass = totalPresupuesto > 0 
+        ? (diferenciaTotal >= 0 ? 'positivo' : 'negativo') 
+        : '';
 
       html += `<tr class="total-row">`;
       html += `<td colspan="2"><strong>TOTAL</strong></td>`;
       html += `<td class="text-right"><strong>$${totalPresupuesto}</strong></td>`;
       html += `<td class="text-right"><strong>$${totalGastos}</strong></td>`;
-      html += `<td class="text-right"><span class="diferencia-badge">$${diferenciaTotal}</span></td>`;
+      html += `<td class="text-right"><span class="diferencia-badge ${totalClass}">$${diferenciaTotal}</span></td>`;
       html += `</tr>`;
 
       html += '</table>';
@@ -845,7 +882,7 @@
 
         perfilCard.innerHTML = `
           <div class="perfil-header">
-            <span>${perfilActual === 'Maria' ? 'M' : 'A'} ${perfilActual}</span>
+            <span>${perfilActual === 'Maria' ? '👩' : '👨'} ${perfilActual}</span>
             <span>$${totalGastosPerfil}</span>
           </div>
         `;
