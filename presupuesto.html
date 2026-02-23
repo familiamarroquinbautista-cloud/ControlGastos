@@ -23,7 +23,6 @@
       padding: 0 1.5rem;
     }
 
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -72,7 +71,6 @@
       border-color: #a0a0a0;
     }
 
-    /* Aviso */
     .aviso {
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
@@ -84,7 +82,6 @@
       color: #5a6a7a;
     }
 
-    /* Cards */
     .card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -109,7 +106,6 @@
       color: #2c3e50;
     }
 
-    /* Categorías */
     .categoria {
       margin-bottom: 2rem;
       padding: 1rem;
@@ -183,7 +179,6 @@
       border-color: #909090;
     }
 
-    /* Total presupuesto */
     .total-presupuesto {
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
@@ -205,7 +200,6 @@
       color: #2c3e50;
     }
 
-    /* Historial */
     .historial-item {
       display: flex;
       justify-content: space-between;
@@ -224,7 +218,6 @@
       font-size: 0.8rem;
     }
 
-    /* Mensajes */
     .mensaje {
       margin: 1rem 0;
       padding: 0.8rem;
@@ -246,7 +239,6 @@
       color: #8b3a3a;
     }
 
-    /* Empty state */
     .empty-state {
       text-align: center;
       color: #95a5a6;
@@ -254,7 +246,6 @@
       font-size: 0.9rem;
     }
 
-    /* Nota importante */
     .nota {
       margin-top: 1rem;
       padding: 0.8rem;
@@ -269,7 +260,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header">
       <h1>PRESUPUESTO</h1>
       <div class="perfil-info">
@@ -279,17 +269,15 @@
     </div>
 
     <div class="aviso">
-      PRESUPUESTO GENERAL · Compartido por Maria y Andres
+      PRESUPUESTO GENERAL - Compartido por Maria y Andres
     </div>
 
-    <!-- Configuración de presupuesto -->
     <div class="card">
       <h2>CONFIGURAR MENSUAL</h2>
       
-      <!-- Mercado -->
       <div class="categoria">
         <div class="categoria-header">
-          <span>🛒 Mercado</span>
+          <span> Mercado</span>
         </div>
         
         <div class="subcategoria">
@@ -303,12 +291,35 @@
           <input type="number" id="presupuesto_mercado_verduras" placeholder="Monto" min="0">
           <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Verduras', 'presupuesto_mercado_verduras')">Guardar</button>
         </div>
+
+        <div class="subcategoria">
+          <label>Lacteos</label>
+          <input type="number" id="presupuesto_mercado_lacteos" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Lacteos', 'presupuesto_mercado_lacteos')">Guardar</button>
+        </div>
+
+        <div class="subcategoria">
+          <label>Abarrotes</label>
+          <input type="number" id="presupuesto_mercado_abarrotes" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Abarrotes', 'presupuesto_mercado_abarrotes')">Guardar</button>
+        </div>
+
+        <div class="subcategoria">
+          <label>Frutas</label>
+          <input type="number" id="presupuesto_mercado_frutas" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Frutas', 'presupuesto_mercado_frutas')">Guardar</button>
+        </div>
+
+        <div class="subcategoria">
+          <label>Limpieza</label>
+          <input type="number" id="presupuesto_mercado_limpieza" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Limpieza', 'presupuesto_mercado_limpieza')">Guardar</button>
+        </div>
       </div>
 
-      <!-- Servicios -->
       <div class="categoria">
         <div class="categoria-header">
-          <span>💡 Servicios</span>
+          <span> Servicios</span>
         </div>
         
         <div class="subcategoria">
@@ -322,6 +333,30 @@
           <input type="number" id="presupuesto_servicios_gas" placeholder="Monto" min="0">
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gas', 'presupuesto_servicios_gas')">Guardar</button>
         </div>
+
+        <div class="subcategoria">
+          <label>Agua</label>
+          <input type="number" id="presupuesto_servicios_agua" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Agua', 'presupuesto_servicios_agua')">Guardar</button>
+        </div>
+
+        <div class="subcategoria">
+          <label>Internet</label>
+          <input type="number" id="presupuesto_servicios_internet" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Internet', 'presupuesto_servicios_internet')">Guardar</button>
+        </div>
+
+        <div class="subcategoria">
+          <label>Telefono</label>
+          <input type="number" id="presupuesto_servicios_telefono" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Telefono', 'presupuesto_servicios_telefono')">Guardar</button>
+        </div>
+
+        <div class="subcategoria">
+          <label>Gasolina</label>
+          <input type="number" id="presupuesto_servicios_gasolina" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gasolina', 'presupuesto_servicios_gasolina')">Guardar</button>
+        </div>
       </div>
 
       <div class="total-presupuesto">
@@ -332,11 +367,10 @@
       <div id="mensaje" class="mensaje"></div>
       
       <div class="nota">
-        💡 Cada guardado acumula al presupuesto actual del mes
+        Cada guardado actualiza el presupuesto de la subcategoria para el mes actual
       </div>
     </div>
 
-    <!-- Historial -->
     <div class="card">
       <h2>REGISTROS DEL MES</h2>
       <div id="historial">
@@ -346,17 +380,8 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const db = getFirestore(initializeApp({
-      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
-      authDomain: "controlgastosprueba.firebaseapp.com",
-      projectId: "controlgastosprueba",
-      storageBucket: "controlgastosprueba.firebasestorage.app",
-      messagingSenderId: "679682152121",
-      appId: "1:679682152121:web:d3981591d952df1333ed68"
-    }));
+    import { db } from './firebase-config.js';
+    import { collection, addDoc, getDocs, updateDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const perfil = sessionStorage.getItem('perfil');
     
@@ -370,20 +395,41 @@
       const monto = parseFloat(document.getElementById(inputId).value);
       
       if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje("Ingresa un monto válido", "error");
+        mostrarMensaje("Ingresa un monto valido", "error");
         return;
       }
 
       try {
-        await addDoc(collection(db, "presupuestos"), {
-          usuario: 'GENERAL',
-          categoria: categoria,
-          subcategoria: subcategoria,
-          monto: monto,
-          fecha: new Date(),
-          mes: new Date().getMonth() + 1,
-          año: new Date().getFullYear()
-        });
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        const q = query(
+          collection(db, "presupuestos"),
+          where("categoria", "==", categoria),
+          where("subcategoria", "==", subcategoria),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+          await addDoc(collection(db, "presupuestos"), {
+            usuario: 'GENERAL',
+            categoria: categoria,
+            subcategoria: subcategoria,
+            monto: monto,
+            fecha: new Date(),
+            mes: mesActual,
+            año: añoActual
+          });
+        } else {
+          const docId = snapshot.docs[0].id;
+          await updateDoc(doc(db, "presupuestos", docId), {
+            monto: monto,
+            fecha: new Date()
+          });
+        }
         
         mostrarMensaje(`Presupuesto actualizado: ${categoria} - ${subcategoria} $${monto}`, "exito");
         document.getElementById(inputId).value = '';
@@ -430,7 +476,7 @@
         historial.innerHTML = '';
         querySnapshot.forEach(doc => {
           const data = doc.data();
-          const fecha = data.fecha.toDate ? data.fecha.toDate() : new Date();
+          const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
           const div = document.createElement("div");
           div.className = "historial-item";
           div.innerHTML = `
@@ -458,9 +504,16 @@
         
         const querySnapshot = await getDocs(q);
         let total = 0;
+        const categoriasVistas = new Set();
         
         querySnapshot.forEach(doc => {
-          total += doc.data().monto || 0;
+          const data = doc.data();
+          const key = `${data.categoria}_${data.subcategoria}`;
+          
+          if (!categoriasVistas.has(key)) {
+            total += data.monto || 0;
+            categoriasVistas.add(key);
+          }
         });
         
         document.getElementById('totalPresupuesto').innerText = `$${total}`;
