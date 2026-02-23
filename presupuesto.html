@@ -4,81 +4,162 @@
   <meta charset="UTF-8">
   <title>Configurar Presupuesto</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #f0f2f5;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1e1e1e;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #2c3e50;
     }
 
     .perfil-info {
-      background: #4a90e2;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 50px;
-      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .perfil-badge {
+      background: #f0f0f0;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #2c3e50;
+      border: 1px solid #d0d0d0;
     }
 
     .btn-volver {
-      padding: 10px 20px;
-      background: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.9rem;
       cursor: pointer;
-      font-size: 16px;
+      transition: all 0.2s;
+      text-decoration: none;
     }
 
+    .btn-volver:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
+    }
+
+    /* Aviso */
+    .aviso {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+    }
+
+    /* Cards */
     .card {
       background: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
-    .categoria {
-      margin-bottom: 25px;
-      padding: 15px;
-      background: #f9f9f9;
-      border-radius: 10px;
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+      color: #4a5568;
+      letter-spacing: 0.3px;
     }
 
-    .categoria h3 {
-      margin-top: 0;
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
       color: #2c3e50;
-      border-bottom: 2px solid #4a90e2;
-      padding-bottom: 5px;
+    }
+
+    /* Categorías */
+    .categoria {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #fafafa;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
+    }
+
+    .categoria-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .categoria-header span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #2c3e50;
     }
 
     .subcategoria {
       display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
       align-items: center;
-      gap: 10px;
-      margin: 15px 0;
       flex-wrap: wrap;
     }
 
     .subcategoria label {
       width: 80px;
-      font-weight: bold;
+      font-size: 0.9rem;
+      color: #5a6a7a;
     }
 
     .subcategoria input {
       flex: 1;
       min-width: 150px;
-      padding: 10px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 14px;
+      padding: 0.8rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: border 0.2s;
+    }
+
+    .subcategoria input:focus {
+      outline: none;
+      border-color: #2c3e50;
     }
 
     .subcategoria input[type="number"] {
@@ -87,133 +168,181 @@
     }
 
     .btn-guardar {
-      background: #4a90e2;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.9rem;
       cursor: pointer;
-      font-weight: bold;
+      transition: all 0.2s;
     }
 
     .btn-guardar:hover {
-      background: #2a5a9e;
+      background: #f5f5f5;
+      border-color: #909090;
     }
 
+    /* Total presupuesto */
     .total-presupuesto {
-      background: #e8f4f8;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.2rem;
       text-align: center;
-      font-size: 1.2rem;
+      margin-top: 1.5rem;
     }
 
-    .total-presupuesto span {
+    .total-presupuesto .label {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 0.5rem;
+    }
+
+    .total-presupuesto .valor {
       font-size: 2rem;
-      font-weight: bold;
-      color: #27ae60;
+      font-weight: 300;
+      color: #2c3e50;
     }
 
+    /* Historial */
     .historial-item {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
     }
 
+    .historial-item:last-child {
+      border-bottom: none;
+    }
+
+    .historial-item .fecha {
+      color: #95a5a6;
+      font-size: 0.8rem;
+    }
+
+    /* Mensajes */
     .mensaje {
-      margin-top: 15px;
-      padding: 10px;
-      border-radius: 8px;
+      margin: 1rem 0;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      border: 1px solid;
+      display: none;
     }
 
-    .aviso {
-      background: #fff3cd;
-      color: #856404;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.1rem;
-      border: 2px solid #ffc107;
+    .mensaje.exito {
+      background: #f8f9fa;
+      border-color: #c0c0c0;
+      color: #2c3e50;
     }
 
-    .importante {
-      background: #cce5ff;
-      color: #004085;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 15px;
+    .mensaje.error {
+      background: #fef5f5;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
+    /* Empty state */
+    .empty-state {
       text-align: center;
-      border: 1px solid #b8daff;
+      color: #95a5a6;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+
+    /* Nota importante */
+    .nota {
+      margin-top: 1rem;
+      padding: 0.8rem;
+      background: #f8f9fa;
+      border: 1px solid #eaeaea;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>📊 Presupuesto</h1>
-    <div>
-      <span class="perfil-info" id="perfilDisplay">Cargando...</span>
-      <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>PRESUPUESTO</h1>
+      <div class="perfil-info">
+        <span class="perfil-badge" id="perfilDisplay">Cargando...</span>
+        <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+      </div>
     </div>
-  </div>
 
-  <div class="card">
     <div class="aviso">
-      ⚠️ PRESUPUESTO GENERAL - Compartido por Maria y Andres
+      PRESUPUESTO GENERAL · Compartido por Maria y Andres
     </div>
 
-    <h2>Configurar presupuesto mensual</h2>
-    
-    <div class="categoria">
-      <h3>🛒 Mercado</h3>
+    <!-- Configuración de presupuesto -->
+    <div class="card">
+      <h2>CONFIGURAR MENSUAL</h2>
       
-      <div class="subcategoria">
-        <label>Carnes:</label>
-        <input type="number" id="presupuesto_mercado_carnes" placeholder="Monto $" min="0" step="1000">
-        <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Carnes', 'presupuesto_mercado_carnes')">Guardar</button>
+      <!-- Mercado -->
+      <div class="categoria">
+        <div class="categoria-header">
+          <span>🛒 Mercado</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Carnes</label>
+          <input type="number" id="presupuesto_mercado_carnes" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Carnes', 'presupuesto_mercado_carnes')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Verduras</label>
+          <input type="number" id="presupuesto_mercado_verduras" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Verduras', 'presupuesto_mercado_verduras')">Guardar</button>
+        </div>
       </div>
+
+      <!-- Servicios -->
+      <div class="categoria">
+        <div class="categoria-header">
+          <span>💡 Servicios</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Luz</label>
+          <input type="number" id="presupuesto_servicios_luz" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Luz', 'presupuesto_servicios_luz')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Gas</label>
+          <input type="number" id="presupuesto_servicios_gas" placeholder="Monto" min="0">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gas', 'presupuesto_servicios_gas')">Guardar</button>
+        </div>
+      </div>
+
+      <div class="total-presupuesto">
+        <div class="label">TOTAL PRESUPUESTO MENSUAL</div>
+        <div class="valor" id="totalPresupuesto">$0</div>
+      </div>
+
+      <div id="mensaje" class="mensaje"></div>
       
-      <div class="subcategoria">
-        <label>Verduras:</label>
-        <input type="number" id="presupuesto_mercado_verduras" placeholder="Monto $" min="0" step="1000">
-        <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Verduras', 'presupuesto_mercado_verduras')">Guardar</button>
+      <div class="nota">
+        💡 Cada guardado acumula al presupuesto actual del mes
       </div>
     </div>
 
-    <div class="categoria">
-      <h3>💡 Servicios</h3>
-      
-      <div class="subcategoria">
-        <label>Luz:</label>
-        <input type="number" id="presupuesto_servicios_luz" placeholder="Monto $" min="0" step="1000">
-        <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Luz', 'presupuesto_servicios_luz')">Guardar</button>
-      </div>
-      
-      <div class="subcategoria">
-        <label>Gas:</label>
-        <input type="number" id="presupuesto_servicios_gas" placeholder="Monto $" min="0" step="1000">
-        <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gas', 'presupuesto_servicios_gas')">Guardar</button>
+    <!-- Historial -->
+    <div class="card">
+      <h2>REGISTROS DEL MES</h2>
+      <div id="historial">
+        <div class="empty-state">Cargando...</div>
       </div>
     </div>
-
-    <div class="total-presupuesto">
-      <div>Presupuesto total del mes:</div>
-      <span id="totalPresupuesto">$0</span>
-    </div>
-
-    <div class="importante">
-      💡 Este presupuesto aplica para Maria y Andres. Ambos pueden modificarlo.
-    </div>
-
-    <div id="mensaje" class="mensaje"></div>
-  </div>
-
-  <div class="card">
-    <h3>📋 Presupuestos guardados este mes</h3>
-    <div id="historial"></div>
   </div>
 
   <script type="module">
@@ -235,13 +364,13 @@
       window.location.href = "index.html";
     }
 
-    document.getElementById('perfilDisplay').innerText = `👤 ${perfil}`;
+    document.getElementById('perfilDisplay').innerText = perfil;
 
     window.guardarPresupuesto = async (categoria, subcategoria, inputId) => {
       const monto = parseFloat(document.getElementById(inputId).value);
       
       if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje("❌ Ingresa un monto válido", "error");
+        mostrarMensaje("Ingresa un monto válido", "error");
         return;
       }
 
@@ -256,21 +385,24 @@
           año: new Date().getFullYear()
         });
         
-        mostrarMensaje(`✅ Presupuesto GENERAL actualizado: ${categoria} - ${subcategoria} $${monto}`, "exito");
+        mostrarMensaje(`Presupuesto actualizado: ${categoria} - ${subcategoria} $${monto}`, "exito");
         document.getElementById(inputId).value = '';
         cargarHistorial();
         calcularTotalPresupuesto();
       } catch (error) {
         console.error(error);
-        mostrarMensaje("❌ Error al guardar", "error");
+        mostrarMensaje("Error al guardar", "error");
       }
     };
 
     function mostrarMensaje(texto, tipo) {
       const mensaje = document.getElementById('mensaje');
+      mensaje.style.display = 'block';
       mensaje.innerText = texto;
-      mensaje.style.background = tipo === 'exito' ? "#d4edda" : "#f8d7da";
-      mensaje.style.color = tipo === 'exito' ? "#155724" : "#721c24";
+      mensaje.className = `mensaje ${tipo}`;
+      setTimeout(() => {
+        mensaje.style.display = 'none';
+      }, 3000);
     }
 
     async function cargarHistorial() {
@@ -289,13 +421,13 @@
         const querySnapshot = await getDocs(q);
         
         const historial = document.getElementById("historial");
-        historial.innerHTML = "";
         
         if (querySnapshot.empty) {
-          historial.innerHTML = "<p>No hay presupuestos guardados este mes</p>";
+          historial.innerHTML = '<div class="empty-state">No hay registros este mes</div>';
           return;
         }
 
+        historial.innerHTML = '';
         querySnapshot.forEach(doc => {
           const data = doc.data();
           const fecha = data.fecha.toDate ? data.fecha.toDate() : new Date();
@@ -303,7 +435,7 @@
           div.className = "historial-item";
           div.innerHTML = `
             <span><strong>${data.categoria} - ${data.subcategoria}:</strong> $${data.monto}</span>
-            <span>${fecha.toLocaleDateString()}</span>
+            <span class="fecha">${fecha.toLocaleDateString()}</span>
           `;
           historial.appendChild(div);
         });
