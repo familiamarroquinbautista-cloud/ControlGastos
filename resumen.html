@@ -4,65 +4,111 @@
   <meta charset="UTF-8">
   <title>Resumen General</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #f0f2f5;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1e1e1e;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
+      padding: 1rem 1.5rem;
       background: white;
-      padding: 15px 20px;
-      border-radius: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #2c3e50;
     }
 
     .perfil-info {
-      background: #f1c40f;
-      color: #2c3e50;
-      padding: 8px 20px;
-      border-radius: 50px;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-
-    .btn-volver {
-      padding: 10px 20px;
-      background: #2c3e50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .resumen-general {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 25px;
-      border-radius: 15px;
-      margin-bottom: 25px;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .resumen-general h2 {
-      margin: 0 0 15px 0;
-      font-size: 1.5rem;
-      opacity: 0.95;
-    }
-
-    .totales {
       display: flex;
-      justify-content: space-around;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .perfil-badge {
+      background: #f0f0f0;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #2c3e50;
+      border: 1px solid #d0d0d0;
+    }
+
+    .btn-outline {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-outline:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
+    }
+
+    /* Aviso */
+    .aviso {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+    }
+
+    /* Resumen global */
+    .resumen-global {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .resumen-global h2 {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #7f8c8d;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .totales-grid {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
       flex-wrap: wrap;
-      gap: 20px;
     }
 
     .total-item {
@@ -70,237 +116,251 @@
     }
 
     .total-item .label {
-      font-size: 1rem;
-      opacity: 0.9;
-      margin-bottom: 5px;
+      font-size: 0.85rem;
+      color: #95a5a6;
+      margin-bottom: 0.5rem;
     }
 
     .total-item .valor {
       font-size: 2.5rem;
-      font-weight: bold;
+      font-weight: 300;
+      color: #2c3e50;
+      line-height: 1.2;
     }
 
     .total-item .subvalor {
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    .card-conjunto {
-      background: white;
-      border-radius: 15px;
-      margin-bottom: 30px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      border: 3px solid #f1c40f;
-    }
-
-    .card-conjunto-header {
-      background: #f1c40f;
-      color: #2c3e50;
-      padding: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .card-conjunto-content {
-      padding: 20px;
-    }
-
-    .categoria-conjunto {
-      margin-bottom: 25px;
-    }
-
-    .categoria-conjunto h3 {
-      margin: 0 0 15px 0;
-      color: #2c3e50;
-      border-bottom: 3px solid #f1c40f;
-      padding-bottom: 8px;
-      font-size: 1.3rem;
-    }
-
-    .tabla-conjunto {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .tabla-conjunto th {
-      background: #f8f9fa;
-      padding: 12px;
-      text-align: left;
-      font-weight: bold;
-      color: #2c3e50;
-    }
-
-    .tabla-conjunto td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .tabla-conjunto tr:last-child td {
-      border-bottom: none;
-    }
-
-    .tabla-conjunto .total-row {
-      background: #f1f9ff;
-      font-weight: bold;
-      border-top: 2px solid #4a90e2;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-top: 0.3rem;
     }
 
     .diferencia-badge {
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-weight: bold;
       display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
     }
 
-    .positivo {
-      background: #d4edda;
-      color: #155724;
+    .diferencia-badge.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
     }
 
-    .negativo {
-      background: #f8d7da;
-      color: #721c24;
+    .diferencia-badge.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
     }
 
-    .neutro {
-      background: #e2e3e5;
-      color: #383d41;
+    /* Cards de secciones */
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #f8f9fa;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #eaeaea;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    /* Tablas */
+    .tabla {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .tabla th {
+      text-align: left;
+      padding: 0.8rem;
+      background: #fafafa;
+      font-weight: 500;
+      color: #4a5568;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .tabla td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .tabla tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tabla .total-row {
+      background: #f8f9fa;
+      font-weight: 500;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    /* Perfiles individuales */
+    .perfiles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
     }
 
     .perfil-card {
-      background: white;
-      border-radius: 15px;
-      margin-bottom: 20px;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .perfil-header {
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-      font-size: 1.3rem;
+      padding: 1rem;
+      font-weight: 500;
+      border-bottom: 1px solid #eaeaea;
     }
 
     .perfil-header.maria {
-      background: #ff9a9e;
-      color: #4a1e2a;
+      background: #fafafa;
     }
 
     .perfil-header.andres {
-      background: #a8e6cf;
-      color: #1a4a3a;
+      background: #fafafa;
     }
 
-    .perfil-totales {
-      display: flex;
-      gap: 20px;
-      font-size: 1rem;
+    .perfil-total {
+      padding: 0.8rem 1rem;
+      background: #f8f9fa;
+      border-bottom: 1px solid #eaeaea;
+      font-size: 0.9rem;
     }
 
-    .perfil-content {
-      padding: 20px;
+    .perfil-items {
+      padding: 0.5rem 1rem 1rem 1rem;
     }
 
-    .subcategoria-row {
+    .gasto-item {
       display: flex;
       justify-content: space-between;
-      padding: 8px 10px;
-      margin: 5px 0;
-      background: #f9f9f9;
-      border-radius: 8px;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 0.9rem;
     }
 
-    .subcategoria-row .gasto {
-      color: #e67e22;
-      font-weight: bold;
+    .gasto-item:last-child {
+      border-bottom: none;
     }
 
-    .no-datos {
+    .gasto-item .categoria {
+      color: #5a6a7a;
+    }
+
+    .gasto-item .monto {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      background: #f0f0f0;
+      color: #4a5568;
+    }
+
+    /* Empty state */
+    .empty-state {
       text-align: center;
-      padding: 30px;
-      color: #666;
-      font-style: italic;
+      color: #95a5a6;
+      padding: 2rem;
+      font-size: 0.9rem;
     }
 
+    /* Fecha actual */
     .fecha-actual {
       text-align: center;
-      margin: 20px 0;
-      color: #666;
-      font-size: 1.1rem;
+      margin: 1rem 0 2rem 0;
+      color: #95a5a6;
+      font-size: 0.9rem;
     }
 
-    .section-title {
-      margin: 30px 0 15px 0;
-      color: #2c3e50;
-      border-left: 5px solid #f1c40f;
-      padding-left: 15px;
-    }
-
-    .aviso {
-      background: #fff3cd;
-      color: #856404;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
+    /* Separador */
+    .separador {
+      height: 1px;
+      background: #eaeaea;
+      margin: 2rem 0;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>📊 Resumen General</h1>
-    <div>
-      <span class="perfil-info" id="perfilDisplay">👑 ADMIN</span>
-      <button class="btn-volver" onclick="window.location.href='index.html'">← Cambiar Perfil</button>
-    </div>
-  </div>
-
-  <div class="aviso">
-    ⚠️ Presupuesto ÚNICO para Maria y Andres | Gastos individuales
-  </div>
-
-  <div class="resumen-general">
-    <h2>💰 Resumen Global del Mes</h2>
-    <div class="totales">
-      <div class="total-item">
-        <div class="label">Presupuesto Total</div>
-        <div class="valor" id="totalPresupuestoGlobal">$0</div>
-      </div>
-      <div class="total-item">
-        <div class="label">Gastos Totales (M+A)</div>
-        <div class="valor" id="totalGastosGlobal">$0</div>
-      </div>
-      <div class="total-item">
-        <div class="label">Diferencia</div>
-        <div class="valor" id="diferenciaGlobal">$0</div>
-        <div class="subvalor" id="porcentajeGlobal">0% usado</div>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>RESUMEN GENERAL</h1>
+      <div class="perfil-info">
+        <span class="perfil-badge">👑 ADMIN</span>
+        <button class="btn-outline" onclick="window.location.href='index.html'">Cambiar perfil</button>
       </div>
     </div>
-  </div>
 
-  <div class="fecha-actual" id="fechaActual"></div>
-
-  <!-- 📊 PRESUPUESTO ÚNICO VS GASTOS COMBINADOS -->
-  <h2 class="section-title">📈 Presupuesto Único vs Gastos (Maria + Andres)</h2>
-  <div class="card-conjunto">
-    <div class="card-conjunto-header">
-      👥 PRESUPUESTO GENERAL vs GASTOS COMBINADOS
+    <div class="aviso">
+      PRESUPUESTO ÚNICO · Gastos individuales por persona
     </div>
-    <div class="card-conjunto-content" id="resumenConjunto">
-      Cargando datos conjuntos...
-    </div>
-  </div>
 
-  <!-- 👤 GASTOS INDIVIDUALES -->
-  <h2 class="section-title">👤 Gastos Individuales</h2>
-  <div id="perfilesContainer">
-    Cargando datos individuales...
+    <!-- Fecha actual -->
+    <div class="fecha-actual" id="fechaActual"></div>
+
+    <!-- Resumen global -->
+    <div class="resumen-global">
+      <h2>RESUMEN GLOBAL DEL MES</h2>
+      <div class="totales-grid">
+        <div class="total-item">
+          <div class="label">Presupuesto</div>
+          <div class="valor" id="totalPresupuestoGlobal">$0</div>
+        </div>
+        <div class="total-item">
+          <div class="label">Gastos (M+A)</div>
+          <div class="valor" id="totalGastosGlobal">$0</div>
+        </div>
+        <div class="total-item">
+          <div class="label">Diferencia</div>
+          <div class="valor" id="diferenciaGlobal">$0</div>
+          <div class="subvalor" id="porcentajeGlobal">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presupuesto vs Gastos combinados -->
+    <div class="card">
+      <div class="card-header">
+        📊 PRESUPUESTO GENERAL vs GASTOS COMBINADOS
+      </div>
+      <div class="card-content" id="resumenConjunto">
+        <div class="empty-state">Cargando datos...</div>
+      </div>
+    </div>
+
+    <!-- Gastos individuales -->
+    <h2 style="font-weight: 400; margin: 2rem 0 1rem; color: #2c3e50;">GASTOS POR PERSONA</h2>
+    <div class="perfiles-grid" id="perfilesContainer">
+      <div class="empty-state">Cargando...</div>
+    </div>
   </div>
 
   <script type="module">
@@ -337,7 +397,7 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener PRESUPUESTO ÚNICO (usuario = 'GENERAL')
+        // Obtener presupuesto GENERAL
         const presupuestoQuery = query(
           collection(db, "presupuestos"),
           where("usuario", "==", 'GENERAL'),
@@ -346,7 +406,7 @@
         );
         const presupuestoSnap = await getDocs(presupuestoQuery);
         
-        // Estructura para presupuesto único
+        // Estructura para presupuesto
         const presupuestoUnico = {};
         let totalPresupuesto = 0;
         
@@ -357,7 +417,7 @@
           totalPresupuesto += data.monto;
         });
 
-        // Obtener GASTOS de Maria y Andres
+        // Obtener gastos de Maria y Andres
         const gastosPorPerfil = {
           'Maria': {},
           'Andres': {}
@@ -374,16 +434,12 @@
           );
           const gastosSnap = await getDocs(gastosQuery);
           
-          let totalGastosPerfil = 0;
-          
           gastosSnap.forEach(doc => {
             const data = doc.data();
             const key = `${data.categoria}_${data.subcategoria}`;
             gastosPorPerfil[perfilActual][key] = (gastosPorPerfil[perfilActual][key] || 0) + data.monto;
-            totalGastosPerfil += data.monto;
+            totalGastosGlobal += data.monto;
           });
-          
-          totalGastosGlobal += totalGastosPerfil;
         }
 
         // Actualizar totales globales
@@ -391,15 +447,15 @@
         document.getElementById('totalGastosGlobal').innerText = `$${totalGastosGlobal}`;
         
         const diferenciaGlobal = totalPresupuesto - totalGastosGlobal;
-        document.getElementById('diferenciaGlobal').innerText = 
-          diferenciaGlobal >= 0 ? `+$${diferenciaGlobal}` : `-$${Math.abs(diferenciaGlobal)}`;
+        const diferenciaElement = document.getElementById('diferenciaGlobal');
+        diferenciaElement.innerText = diferenciaGlobal >= 0 ? `+$${diferenciaGlobal}` : `-$${Math.abs(diferenciaGlobal)}`;
         
         const porcentaje = totalPresupuesto > 0 
           ? ((totalGastosGlobal / totalPresupuesto) * 100).toFixed(1)
           : 0;
         document.getElementById('porcentajeGlobal').innerText = `${porcentaje}% usado`;
 
-        // Mostrar resumen conjunto (presupuesto único vs gastos combinados)
+        // Mostrar resumen conjunto
         mostrarResumenConjunto(presupuestoUnico, gastosPorPerfil);
         
         // Mostrar gastos individuales
@@ -408,14 +464,14 @@
       } catch (error) {
         console.error(error);
         document.getElementById('perfilesContainer').innerHTML = 
-          '<div class="no-datos">Error al cargar los datos</div>';
+          '<div class="empty-state">Error al cargar los datos</div>';
       }
     }
 
     function mostrarResumenConjunto(presupuesto, gastosPorPerfil) {
       const container = document.getElementById('resumenConjunto');
       
-      // Calcular gastos combinados (Maria + Andres)
+      // Calcular gastos combinados
       const gastosCombinados = {};
       
       for (const perfil of ['Maria', 'Andres']) {
@@ -424,76 +480,51 @@
         }
       }
 
-      let html = '';
+      let html = '<table class="tabla">';
+      html += '<tr><th>Categoría</th><th>Subcategoría</th><th class="text-right">Presupuesto</th><th class="text-right">Gastos (M+A)</th><th class="text-right">Diferencia</th></tr>';
+
       let totalPresupuesto = 0;
       let totalGastos = 0;
 
       for (const [categoria, subcategorias] of Object.entries(categorias)) {
-        html += `<div class="categoria-conjunto">`;
-        html += `<h3>${categoria === 'Mercado' ? '🛒 Mercado' : '💡 Servicios'}</h3>`;
-        
-        html += `<table class="tabla-conjunto">`;
-        html += `<tr><th>Subcategoría</th><th>Presupuesto</th><th>Gastos (M+A)</th><th>Diferencia</th></tr>`;
-
-        let totalCategoriaPresupuesto = 0;
-        let totalCategoriaGasto = 0;
-
         for (const subcategoria of subcategorias) {
           const key = `${categoria}_${subcategoria}`;
           const presupuestoVal = presupuesto[key] || 0;
           const gastoVal = gastosCombinados[key] || 0;
           const diferencia = presupuestoVal - gastoVal;
           
-          totalCategoriaPresupuesto += presupuestoVal;
-          totalCategoriaGasto += gastoVal;
           totalPresupuesto += presupuestoVal;
           totalGastos += gastoVal;
 
-          let diferenciaClass = 'neutro';
+          let diferenciaClass = '';
           if (presupuestoVal > 0) {
             diferenciaClass = diferencia >= 0 ? 'positivo' : 'negativo';
           }
 
           html += `<tr>`;
-          html += `<td><strong>${subcategoria}</strong></td>`;
-          html += `<td>$${presupuestoVal}</td>`;
-          html += `<td>$${gastoVal}</td>`;
-          html += `<td><span class="diferencia-badge ${diferenciaClass}">$${diferencia}</span></td>`;
+          html += `<td>${categoria}</td>`;
+          html += `<td>${subcategoria}</td>`;
+          html += `<td class="text-right">$${presupuestoVal}</td>`;
+          html += `<td class="text-right">$${gastoVal}</td>`;
+          html += `<td class="text-right"><span class="diferencia-badge ${diferenciaClass}">$${diferencia}</span></td>`;
           html += `</tr>`;
         }
-
-        // Total por categoría
-        const diferenciaCategoria = totalCategoriaPresupuesto - totalCategoriaGasto;
-        let catDiferenciaClass = totalCategoriaPresupuesto > 0 
-          ? (diferenciaCategoria >= 0 ? 'positivo' : 'negativo') 
-          : 'neutro';
-
-        html += `<tr class="total-row">`;
-        html += `<td><strong>TOTAL ${categoria}</strong></td>`;
-        html += `<td><strong>$${totalCategoriaPresupuesto}</strong></td>`;
-        html += `<td><strong>$${totalCategoriaGasto}</strong></td>`;
-        html += `<td><span class="diferencia-badge ${catDiferenciaClass}">$${diferenciaCategoria}</span></td>`;
-        html += `</tr>`;
-
-        html += `</table>`;
-        html += `</div>`;
       }
 
-      // Gran total
+      // Total general
       const diferenciaTotal = totalPresupuesto - totalGastos;
-      const totalDiferenciaClass = totalPresupuesto > 0 
+      const totalClass = totalPresupuesto > 0 
         ? (diferenciaTotal >= 0 ? 'positivo' : 'negativo') 
-        : 'neutro';
+        : '';
 
-      html += `<div style="margin-top: 25px; padding: 20px; background: #f1f9ff; border-radius: 10px; text-align: center;">`;
-      html += `<h3 style="margin: 0 0 10px 0;">📊 GRAN TOTAL</h3>`;
-      html += `<div style="display: flex; justify-content: space-around; font-size: 1.2rem;">`;
-      html += `<div><strong>Presupuesto:</strong> $${totalPresupuesto}</div>`;
-      html += `<div><strong>Gastos (M+A):</strong> $${totalGastos}</div>`;
-      html += `<div><strong>Diferencia:</strong> <span class="diferencia-badge ${totalDiferenciaClass}">$${diferenciaTotal}</span></div>`;
-      html += `</div>`;
-      html += `</div>`;
+      html += `<tr class="total-row">`;
+      html += `<td colspan="2"><strong>TOTAL</strong></td>`;
+      html += `<td class="text-right"><strong>$${totalPresupuesto}</strong></td>`;
+      html += `<td class="text-right"><strong>$${totalGastos}</strong></td>`;
+      html += `<td class="text-right"><span class="diferencia-badge ${totalClass}">$${diferenciaTotal}</span></td>`;
+      html += `</tr>`;
 
+      html += '</table>';
       container.innerHTML = html;
     }
 
@@ -504,7 +535,7 @@
       for (const perfilActual of perfiles) {
         let totalGastosPerfil = 0;
         
-        // Calcular total del perfil
+        // Calcular total
         for (const [categoria, subcategorias] of Object.entries(categorias)) {
           for (const subcategoria of subcategorias) {
             const key = `${categoria}_${subcategoria}`;
@@ -515,41 +546,43 @@
         const perfilCard = document.createElement('div');
         perfilCard.className = 'perfil-card';
 
-        const headerClass = perfilActual === 'Maria' ? 'maria' : 'andres';
         perfilCard.innerHTML = `
-          <div class="perfil-header ${headerClass}">
-            <span>${perfilActual === 'Maria' ? '👩' : '👨'} ${perfilActual}</span>
-            <div class="perfil-totales">
-              <span>💸 Total Gastos: $${totalGastosPerfil}</span>
-            </div>
+          <div class="perfil-header ${perfilActual.toLowerCase()}">
+            ${perfilActual === 'Maria' ? '👩' : '👨'} ${perfilActual}
           </div>
+          <div class="perfil-total">
+            Total gastos: <strong>$${totalGastosPerfil}</strong>
+          </div>
+          <div class="perfil-items" id="items-${perfilActual}">
         `;
 
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'perfil-content';
+        const itemsDiv = document.createElement('div');
+        itemsDiv.className = 'perfil-items';
 
+        let tieneGastos = false;
         for (const [categoria, subcategorias] of Object.entries(categorias)) {
           for (const subcategoria of subcategorias) {
             const key = `${categoria}_${subcategoria}`;
             const gastoVal = gastosPorPerfil[perfilActual][key] || 0;
             
             if (gastoVal > 0) {
-              const subDiv = document.createElement('div');
-              subDiv.className = 'subcategoria-row';
-              subDiv.innerHTML = `
-                <span><strong>${categoria} - ${subcategoria}:</strong></span>
-                <span class="gasto">$${gastoVal}</span>
+              tieneGastos = true;
+              const itemDiv = document.createElement('div');
+              itemDiv.className = 'gasto-item';
+              itemDiv.innerHTML = `
+                <span class="categoria">${categoria} - ${subcategoria}</span>
+                <span class="monto">$${gastoVal}</span>
               `;
-              contentDiv.appendChild(subDiv);
+              itemsDiv.appendChild(itemDiv);
             }
           }
         }
 
-        if (contentDiv.children.length === 0) {
-          contentDiv.innerHTML = '<p style="color: #666;">No hay gastos registrados</p>';
+        if (!tieneGastos) {
+          itemsDiv.innerHTML = '<div style="color: #95a5a6; text-align: center; padding: 1rem;">Sin gastos</div>';
         }
 
-        perfilCard.appendChild(contentDiv);
+        perfilCard.appendChild(itemsDiv);
         container.appendChild(perfilCard);
       }
     }
