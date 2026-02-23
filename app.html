@@ -4,278 +4,340 @@
   <meta charset="UTF-8">
   <title>Registro de Gastos</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #f0f2f5;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .perfil-activo {
-      background: white;
-      padding: 15px;
-      border-radius: 50px;
-      margin-bottom: 20px;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1e1e1e;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #2c3e50;
+    }
+
+    .perfil-info {
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      gap: 1rem;
     }
 
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
+      background: #f0f0f0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
       font-size: 1.2rem;
+      border: 1px solid #d0d0d0;
     }
 
-    .avatar.maria {
-      background: #ff9a9e;
-      color: #4a1e2a;
+    .perfil-nombre {
+      font-weight: 500;
+      color: #2c3e50;
     }
 
-    .avatar.andres {
-      background: #a8e6cf;
-      color: #1a4a3a;
-    }
-
-    .info-perfil {
-      flex: 1;
-      font-weight: bold;
-    }
-
-    .cambiar-perfil {
-      padding: 8px 15px;
-      background: #2c3e50;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
+    .btn-outline {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
       font-size: 0.9rem;
-    }
-
-    .menu-modulos {
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      border: 3px solid #2c3e50;
-    }
-
-    .menu-modulos h2 {
-      margin-top: 0;
-      color: #2c3e50;
-      font-size: 1.5rem;
-      text-align: center;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
-    }
-
-    .boton-modulo {
-      display: block;
-      width: 100%;
-      padding: 18px;
-      margin: 12px 0;
-      border: none;
-      border-radius: 12px;
-      font-size: 20px;
-      font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-align: center;
-      letter-spacing: 1px;
+      transition: all 0.2s;
+      text-decoration: none;
     }
 
-    .boton-modulo:hover {
-      transform: scale(1.02);
-      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    .btn-outline:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
     }
 
-    .boton-presupuesto { 
-      background: #4a90e2; 
-      color: white;
-      border-bottom: 5px solid #2a5a9e;
-    }
-    .boton-comparar { 
-      background: #9b59b6; 
-      color: white;
-      border-bottom: 5px solid #6c3483;
-    }
-    .boton-gastos { 
-      background: #e67e22; 
-      color: white;
-      border-bottom: 5px solid #b45f15;
-    }
-
-    .seccion-registro {
+    /* Navegación módulos */
+    .nav-modulos {
       background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
-    h1, h2, h3 {
-      color: #333;
-      margin-top: 0;
+    .nav-modulos h2 {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #7f8c8d;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
     }
 
-    .categoria {
-      margin-bottom: 20px;
-      padding: 15px;
-      background: #f9f9f9;
-      border-radius: 10px;
+    .nav-botones {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
     }
 
-    .categoria h3 {
-      margin-top: 0;
+    .btn-modulo {
+      padding: 0.8rem 1.2rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
       color: #2c3e50;
-      border-bottom: 2px solid #4a90e2;
-      padding-bottom: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      flex: 1;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .btn-modulo:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
+    }
+
+    /* Cards de categorías */
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eaeaea;
+      color: #2c3e50;
     }
 
     .subcategoria {
       display: flex;
-      gap: 10px;
-      margin: 10px 0;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
       align-items: center;
       flex-wrap: wrap;
     }
 
     .subcategoria label {
       width: 80px;
-      font-weight: bold;
+      font-size: 0.9rem;
+      color: #5a6a7a;
     }
 
     .subcategoria input {
       flex: 1;
       min-width: 150px;
-      padding: 8px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 14px;
+      padding: 0.8rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: border 0.2s;
+    }
+
+    .subcategoria input:focus {
+      outline: none;
+      border-color: #2c3e50;
     }
 
     .subcategoria input[type="number"] {
-      width: 100px;
+      width: 120px;
       flex: 0 1 auto;
     }
 
     .btn-registro {
-      background: #27ae60;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.9rem;
       cursor: pointer;
-      font-weight: bold;
+      transition: all 0.2s;
     }
 
     .btn-registro:hover {
-      background: #219a52;
+      background: #f5f5f5;
+      border-color: #909090;
     }
 
+    /* Mensajes */
+    .mensaje {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      border: 1px solid;
+    }
+
+    .mensaje.exito {
+      background: #f8f9fa;
+      border-color: #c0c0c0;
+      color: #2c3e50;
+    }
+
+    .mensaje.error {
+      background: #fef5f5;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
+    /* Registros recientes */
     .registros-recientes {
-      margin-top: 20px;
-      max-height: 200px;
+      margin-top: 1.5rem;
+      max-height: 250px;
       overflow-y: auto;
+      border-top: 1px solid #eaeaea;
+      padding-top: 1rem;
     }
 
     .registro-item {
-      padding: 8px;
-      border-bottom: 1px solid #eee;
       display: flex;
       justify-content: space-between;
-      font-size: 14px;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
     }
 
-    .registro-item .categoria-badge {
-      background: #4a90e2;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
+    .registro-item:last-child {
+      border-bottom: none;
     }
 
-    .mensaje {
-      margin-top: 15px;
-      padding: 10px;
-      border-radius: 8px;
+    .categoria-badge {
+      background: #f0f0f0;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #4a5568;
+      margin-right: 0.8rem;
+    }
+
+    .monto-registro {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    .fecha-registro {
+      color: #95a5a6;
+      font-size: 0.8rem;
+      margin-left: 1rem;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      color: #95a5a6;
+      padding: 2rem 0;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <div class="perfil-activo" id="perfilContainer">
-    <div class="avatar" id="avatar">👤</div>
-    <div class="info-perfil" id="nombrePerfil">Cargando...</div>
-    <button class="cambiar-perfil" onclick="window.location.href='index.html'">🔄 Cambiar perfil</button>
-  </div>
-
-  <div class="menu-modulos">
-    <h2>📌 SELECCIONA UN MÓDULO</h2>
-    
-    <button class="boton-modulo boton-presupuesto" onclick="window.location.href='presupuesto.html'">
-      📊 1. CONFIGURAR PRESUPUESTO (GENERAL)
-    </button>
-    
-    <button class="boton-modulo boton-comparar" onclick="window.location.href='comparar.html'">
-      🔍 2. COMPARAR VS PRESUPUESTO
-    </button>
-    
-    <button class="boton-modulo boton-gastos" onclick="window.location.href='checklist.html'">
-      ✅ 3. CHECKLIST DE GASTOS
-    </button>
-  </div>
-
-  <div class="seccion-registro">
-    <h2>📝 Registrar Gasto</h2>
-    
-    <div class="categoria">
-      <h3>🛒 Mercado</h3>
-      
-      <div class="subcategoria">
-        <label>Carnes:</label>
-        <input type="text" id="mercado_carnes_desc" placeholder="Ej: Pollo, Res, Cerdo">
-        <input type="number" id="mercado_carnes_monto" placeholder="Monto $" min="0" step="100">
-        <button class="btn-registro" onclick="registrarGasto('Mercado', 'Carnes', 'mercado_carnes_desc', 'mercado_carnes_monto')">+ Registrar</button>
-      </div>
-      
-      <div class="subcategoria">
-        <label>Verduras:</label>
-        <input type="text" id="mercado_verduras_desc" placeholder="Ej: Tomate, Lechuga">
-        <input type="number" id="mercado_verduras_monto" placeholder="Monto $" min="0" step="100">
-        <button class="btn-registro" onclick="registrarGasto('Mercado', 'Verduras', 'mercado_verduras_desc', 'mercado_verduras_monto')">+ Registrar</button>
+  <div class="container">
+    <!-- Header con perfil -->
+    <div class="header">
+      <h1>REGISTRO</h1>
+      <div class="perfil-info">
+        <div class="avatar" id="avatar">👤</div>
+        <span class="perfil-nombre" id="nombrePerfil">Cargando...</span>
+        <button class="btn-outline" onclick="window.location.href='index.html'">Cambiar</button>
       </div>
     </div>
 
-    <div class="categoria">
-      <h3>💡 Servicios</h3>
-      
-      <div class="subcategoria">
-        <label>Luz:</label>
-        <input type="text" id="servicios_luz_desc" placeholder="Ej: Factura luz" value="Factura luz">
-        <input type="number" id="servicios_luz_monto" placeholder="Monto $" min="0" step="100">
-        <button class="btn-registro" onclick="registrarGasto('Servicios', 'Luz', 'servicios_luz_desc', 'servicios_luz_monto')">+ Registrar</button>
-      </div>
-      
-      <div class="subcategoria">
-        <label>Gas:</label>
-        <input type="text" id="servicios_gas_desc" placeholder="Ej: Factura gas" value="Factura gas">
-        <input type="number" id="servicios_gas_monto" placeholder="Monto $" min="0" step="100">
-        <button class="btn-registro" onclick="registrarGasto('Servicios', 'Gas', 'servicios_gas_desc', 'servicios_gas_monto')">+ Registrar</button>
+    <!-- Navegación módulos -->
+    <div class="nav-modulos">
+      <h2>MÓDULOS</h2>
+      <div class="nav-botones">
+        <button class="btn-modulo" onclick="window.location.href='presupuesto.html'">Presupuesto</button>
+        <button class="btn-modulo" onclick="window.location.href='comparar.html'">Comparar</button>
+        <button class="btn-modulo" onclick="window.location.href='checklist.html'">Checklist</button>
       </div>
     </div>
 
-    <div id="mensaje" class="mensaje"></div>
+    <!-- Registro de gastos -->
+    <div class="card">
+      <h2>📝 NUEVO GASTO</h2>
+      
+      <!-- Mercado -->
+      <div style="margin-bottom: 2rem;">
+        <h3 style="font-weight: 400; margin-bottom: 1rem; color: #4a5568;">🛒 Mercado</h3>
+        
+        <div class="subcategoria">
+          <label>Carnes</label>
+          <input type="text" id="mercado_carnes_desc" placeholder="Descripción">
+          <input type="number" id="mercado_carnes_monto" placeholder="Monto" min="0">
+          <button class="btn-registro" onclick="registrarGasto('Mercado', 'Carnes', 'mercado_carnes_desc', 'mercado_carnes_monto')">Registrar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Verduras</label>
+          <input type="text" id="mercado_verduras_desc" placeholder="Descripción">
+          <input type="number" id="mercado_verduras_monto" placeholder="Monto" min="0">
+          <button class="btn-registro" onclick="registrarGasto('Mercado', 'Verduras', 'mercado_verduras_desc', 'mercado_verduras_monto')">Registrar</button>
+        </div>
+      </div>
 
-    <h3>📋 Últimos registros</h3>
-    <div class="registros-recientes" id="registrosRecientes">
-      Cargando...
+      <!-- Servicios -->
+      <div>
+        <h3 style="font-weight: 400; margin-bottom: 1rem; color: #4a5568;">💡 Servicios</h3>
+        
+        <div class="subcategoria">
+          <label>Luz</label>
+          <input type="text" id="servicios_luz_desc" placeholder="Descripción" value="Factura luz">
+          <input type="number" id="servicios_luz_monto" placeholder="Monto" min="0">
+          <button class="btn-registro" onclick="registrarGasto('Servicios', 'Luz', 'servicios_luz_desc', 'servicios_luz_monto')">Registrar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Gas</label>
+          <input type="text" id="servicios_gas_desc" placeholder="Descripción" value="Factura gas">
+          <input type="number" id="servicios_gas_monto" placeholder="Monto" min="0">
+          <button class="btn-registro" onclick="registrarGasto('Servicios', 'Gas', 'servicios_gas_desc', 'servicios_gas_monto')">Registrar</button>
+        </div>
+      </div>
+
+      <div id="mensaje" class="mensaje" style="display: none;"></div>
+    </div>
+
+    <!-- Últimos registros -->
+    <div class="card">
+      <h2>📋 ÚLTIMOS REGISTROS</h2>
+      <div class="registros-recientes" id="registrosRecientes">
+        <div class="empty-state">Cargando...</div>
+      </div>
     </div>
   </div>
 
@@ -301,27 +363,20 @@
     const avatar = document.getElementById('avatar');
     const nombrePerfil = document.getElementById('nombrePerfil');
     
-    nombrePerfil.innerText = `Perfil: ${perfil}`;
-    
-    if (perfil === 'Maria') {
-      avatar.classList.add('maria');
-      avatar.innerText = '👩';
-    } else if (perfil === 'Andres') {
-      avatar.classList.add('andres');
-      avatar.innerText = '👨';
-    }
+    nombrePerfil.innerText = perfil;
+    avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
 
     window.registrarGasto = async (categoria, subcategoria, descId, montoId) => {
       const descripcion = document.getElementById(descId).value.trim();
       const monto = parseFloat(document.getElementById(montoId).value);
       
       if (!descripcion) {
-        mostrarMensaje("❌ Escribe una descripción", "error");
+        mostrarMensaje("Escribe una descripción", "error");
         return;
       }
       
       if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje("❌ Ingresa un monto válido", "error");
+        mostrarMensaje("Ingresa un monto válido", "error");
         return;
       }
 
@@ -337,7 +392,7 @@
           año: new Date().getFullYear()
         });
         
-        mostrarMensaje(`✅ ${perfil} registró $${monto} en ${categoria} - ${subcategoria}`, "exito");
+        mostrarMensaje(`Registrado: $${monto} en ${categoria} - ${subcategoria}`, "exito");
         
         document.getElementById(descId).value = categoria === 'Mercado' ? '' : `Factura ${subcategoria.toLowerCase()}`;
         document.getElementById(montoId).value = '';
@@ -345,15 +400,18 @@
         cargarRegistrosRecientes();
       } catch (error) {
         console.error(error);
-        mostrarMensaje("❌ Error al guardar", "error");
+        mostrarMensaje("Error al guardar", "error");
       }
     };
 
     function mostrarMensaje(texto, tipo) {
       const mensaje = document.getElementById('mensaje');
+      mensaje.style.display = 'block';
       mensaje.innerText = texto;
-      mensaje.style.background = tipo === 'exito' ? "#d4edda" : "#f8d7da";
-      mensaje.style.color = tipo === 'exito' ? "#155724" : "#721c24";
+      mensaje.className = `mensaje ${tipo}`;
+      setTimeout(() => {
+        mensaje.style.display = 'none';
+      }, 3000);
     }
 
     async function cargarRegistrosRecientes() {
@@ -367,24 +425,27 @@
         
         const querySnapshot = await getDocs(q);
         const container = document.getElementById('registrosRecientes');
-        container.innerHTML = '';
         
         if (querySnapshot.empty) {
-          container.innerHTML = '<p>No hay registros aún</p>';
+          container.innerHTML = '<div class="empty-state">No hay registros aún</div>';
           return;
         }
 
+        container.innerHTML = '';
         querySnapshot.forEach(doc => {
           const data = doc.data();
           const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
           const div = document.createElement('div');
           div.className = 'registro-item';
           div.innerHTML = `
-            <span>
+            <div>
               <span class="categoria-badge">${data.categoria}</span>
-              <strong>${data.subcategoria}:</strong> ${data.descripcion}
-            </span>
-            <span><strong>$${data.monto}</strong> ${fecha.toLocaleDateString()}</span>
+              <span>${data.subcategoria}: ${data.descripcion}</span>
+            </div>
+            <div>
+              <span class="monto-registro">$${data.monto}</span>
+              <span class="fecha-registro">${fecha.toLocaleDateString()}</span>
+            </div>
           `;
           container.appendChild(div);
         });
