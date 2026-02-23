@@ -124,7 +124,7 @@
       border-color: #a0a0a0;
     }
 
-    /* Cards de categorías */
+    /* Card de registro */
     .card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -143,49 +143,91 @@
       color: #2c3e50;
     }
 
-    .subcategoria {
-      display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1rem;
-      align-items: center;
-      flex-wrap: wrap;
+    /* Selector de categoría */
+    .selector-categoria {
+      margin-bottom: 1.5rem;
     }
 
-    .subcategoria label {
-      width: 80px;
+    .selector-categoria label {
+      display: block;
       font-size: 0.9rem;
       color: #5a6a7a;
+      margin-bottom: 0.5rem;
     }
 
-    .subcategoria input {
-      flex: 1;
-      min-width: 150px;
+    .selector-categoria select {
+      width: 100%;
       padding: 0.8rem;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
-      font-size: 0.9rem;
-      transition: border 0.2s;
+      font-size: 0.95rem;
+      background: white;
+      cursor: pointer;
     }
 
-    .subcategoria input:focus {
+    .selector-categoria select:focus {
       outline: none;
       border-color: #2c3e50;
     }
 
-    .subcategoria input[type="number"] {
-      width: 120px;
-      flex: 0 1 auto;
+    /* Campos de registro */
+    .campos-registro {
+      background: #fafafa;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .campo {
+      margin-bottom: 1rem;
+    }
+
+    .campo:last-child {
+      margin-bottom: 0;
+    }
+
+    .campo label {
+      display: block;
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      margin-bottom: 0.3rem;
+    }
+
+    .campo input, .campo select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .campo input:focus, .campo select:focus {
+      outline: none;
+      border-color: #2c3e50;
+    }
+
+    .campo-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+
+    .campo-row .campo {
+      flex: 1;
+      margin-bottom: 0;
     }
 
     .btn-registro {
-      padding: 0.8rem 1.2rem;
+      padding: 0.8rem 1.5rem;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .btn-registro:hover {
@@ -200,6 +242,7 @@
       border-radius: 6px;
       font-size: 0.9rem;
       border: 1px solid;
+      display: none;
     }
 
     .mensaje.exito {
@@ -291,45 +334,69 @@
     <div class="card">
       <h2>📝 NUEVO GASTO</h2>
       
-      <!-- Mercado -->
-      <div style="margin-bottom: 2rem;">
-        <h3 style="font-weight: 400; margin-bottom: 1rem; color: #4a5568;">🛒 Mercado</h3>
-        
-        <div class="subcategoria">
-          <label>Carnes</label>
-          <input type="text" id="mercado_carnes_desc" placeholder="Descripción">
-          <input type="number" id="mercado_carnes_monto" placeholder="Monto" min="0">
-          <button class="btn-registro" onclick="registrarGasto('Mercado', 'Carnes', 'mercado_carnes_desc', 'mercado_carnes_monto')">Registrar</button>
+      <!-- Selector principal de categoría -->
+      <div class="selector-categoria">
+        <label>Categoría</label>
+        <select id="categoriaPrincipal" onchange="cambiarCategoria()">
+          <option value="Mercado">🛒 Mercado</option>
+          <option value="Servicios">💡 Servicios</option>
+        </select>
+      </div>
+
+      <!-- Campos dinámicos según categoría -->
+      <div id="camposMercado" class="campos-registro">
+        <div class="campo">
+          <label>Subcategoría</label>
+          <select id="subcategoriaMercado">
+            <option value="Carnes">Carnes</option>
+            <option value="Verduras">Verduras</option>
+            <option value="Lacteos">Lácteos</option>
+            <option value="Abarrotes">Abarrotes</option>
+            <option value="Frutas">Frutas</option>
+            <option value="Limpieza">Limpieza</option>
+          </select>
         </div>
         
-        <div class="subcategoria">
-          <label>Verduras</label>
-          <input type="text" id="mercado_verduras_desc" placeholder="Descripción">
-          <input type="number" id="mercado_verduras_monto" placeholder="Monto" min="0">
-          <button class="btn-registro" onclick="registrarGasto('Mercado', 'Verduras', 'mercado_verduras_desc', 'mercado_verduras_monto')">Registrar</button>
+        <div class="campo-row">
+          <div class="campo">
+            <label>Descripción</label>
+            <input type="text" id="descripcionMercado" placeholder="Ej: Pollo, Leche, etc.">
+          </div>
+          <div class="campo">
+            <label>Monto ($)</label>
+            <input type="number" id="montoMercado" placeholder="0" min="0" step="100">
+          </div>
+          <button class="btn-registro" onclick="registrarGastoDesdeSelector()">Registrar</button>
         </div>
       </div>
 
-      <!-- Servicios -->
-      <div>
-        <h3 style="font-weight: 400; margin-bottom: 1rem; color: #4a5568;">💡 Servicios</h3>
-        
-        <div class="subcategoria">
-          <label>Luz</label>
-          <input type="text" id="servicios_luz_desc" placeholder="Descripción" value="Factura luz">
-          <input type="number" id="servicios_luz_monto" placeholder="Monto" min="0">
-          <button class="btn-registro" onclick="registrarGasto('Servicios', 'Luz', 'servicios_luz_desc', 'servicios_luz_monto')">Registrar</button>
+      <div id="camposServicios" class="campos-registro" style="display: none;">
+        <div class="campo">
+          <label>Subcategoría</label>
+          <select id="subcategoriaServicios">
+            <option value="Luz">Luz</option>
+            <option value="Gas">Gas</option>
+            <option value="Agua">Agua</option>
+            <option value="Internet">Internet</option>
+            <option value="Telefono">Teléfono</option>
+            <option value="Gasolina">Gasolina</option>
+          </select>
         </div>
         
-        <div class="subcategoria">
-          <label>Gas</label>
-          <input type="text" id="servicios_gas_desc" placeholder="Descripción" value="Factura gas">
-          <input type="number" id="servicios_gas_monto" placeholder="Monto" min="0">
-          <button class="btn-registro" onclick="registrarGasto('Servicios', 'Gas', 'servicios_gas_desc', 'servicios_gas_monto')">Registrar</button>
+        <div class="campo-row">
+          <div class="campo">
+            <label>Descripción</label>
+            <input type="text" id="descripcionServicios" placeholder="Ej: Factura mes">
+          </div>
+          <div class="campo">
+            <label>Monto ($)</label>
+            <input type="number" id="montoServicios" placeholder="0" min="0" step="100">
+          </div>
+          <button class="btn-registro" onclick="registrarGastoDesdeSelector()">Registrar</button>
         </div>
       </div>
 
-      <div id="mensaje" class="mensaje" style="display: none;"></div>
+      <div id="mensaje" class="mensaje"></div>
     </div>
 
     <!-- Últimos registros -->
@@ -366,9 +433,36 @@
     nombrePerfil.innerText = perfil;
     avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
 
-    window.registrarGasto = async (categoria, subcategoria, descId, montoId) => {
-      const descripcion = document.getElementById(descId).value.trim();
-      const monto = parseFloat(document.getElementById(montoId).value);
+    // Función para cambiar entre categorías
+    window.cambiarCategoria = function() {
+      const categoria = document.getElementById('categoriaPrincipal').value;
+      const camposMercado = document.getElementById('camposMercado');
+      const camposServicios = document.getElementById('camposServicios');
+      
+      if (categoria === 'Mercado') {
+        camposMercado.style.display = 'block';
+        camposServicios.style.display = 'none';
+      } else {
+        camposMercado.style.display = 'none';
+        camposServicios.style.display = 'block';
+      }
+    };
+
+    // Función para registrar gasto desde los selectores
+    window.registrarGastoDesdeSelector = async function() {
+      const categoria = document.getElementById('categoriaPrincipal').value;
+      
+      let subcategoria, descripcion, monto;
+      
+      if (categoria === 'Mercado') {
+        subcategoria = document.getElementById('subcategoriaMercado').value;
+        descripcion = document.getElementById('descripcionMercado').value.trim();
+        monto = parseFloat(document.getElementById('montoMercado').value);
+      } else {
+        subcategoria = document.getElementById('subcategoriaServicios').value;
+        descripcion = document.getElementById('descripcionServicios').value.trim();
+        monto = parseFloat(document.getElementById('montoServicios').value);
+      }
       
       if (!descripcion) {
         mostrarMensaje("Escribe una descripción", "error");
@@ -394,8 +488,14 @@
         
         mostrarMensaje(`Registrado: $${monto} en ${categoria} - ${subcategoria}`, "exito");
         
-        document.getElementById(descId).value = categoria === 'Mercado' ? '' : `Factura ${subcategoria.toLowerCase()}`;
-        document.getElementById(montoId).value = '';
+        // Limpiar campos
+        if (categoria === 'Mercado') {
+          document.getElementById('descripcionMercado').value = '';
+          document.getElementById('montoMercado').value = '';
+        } else {
+          document.getElementById('descripcionServicios').value = 'Factura ' + subcategoria.toLowerCase();
+          document.getElementById('montoServicios').value = '';
+        }
         
         cargarRegistrosRecientes();
       } catch (error) {
@@ -454,7 +554,9 @@
       }
     }
 
+    // Inicializar
     cargarRegistrosRecientes();
+    cambiarCategoria(); // Mostrar la categoría inicial correcta
   </script>
 </body>
 </html>
