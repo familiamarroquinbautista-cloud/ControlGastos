@@ -483,14 +483,14 @@
 
     <!-- Formulario de GASTOS (por defecto) -->
     <div id="formGasto" class="card">
-      <h2>📝 NUEVO GASTO</h2>
+      <h2> NUEVO GASTO</h2>
       
       <div class="campos-registro">
         <div class="campo">
           <label>Categoría</label>
           <select id="categoriaGasto" onchange="cambiarCategoriaGasto()">
-            <option value="Mercado">🛒 Mercado</option>
-            <option value="Servicios">💡 Servicios</option>
+            <option value="Mercado"> Mercado</option>
+            <option value="Servicios"> Servicios</option>
           </select>
         </div>
 
@@ -527,9 +527,9 @@
         <div class="campo">
           <label>Tipo de ingreso</label>
           <select id="tipoIngreso">
-            <option value="credito">💳 Crédito (Tarjeta)</option>
-            <option value="debito">💵 Débito (Efectivo/Transferencia)</option>
-            <option value="prestamo">🏦 Préstamo (Recibido)</option>
+            <option value="credito">Crédito (Tarjeta)</option>
+            <option value="debito"> Débito (Efectivo/Transferencia)</option>
+            <option value="prestamo"> Préstamo (Recibido)</option>
           </select>
         </div>
 
@@ -561,7 +561,7 @@
 
     <!-- Últimos movimientos -->
     <div class="card">
-      <h2>📋 ÚLTIMOS MOVIMIENTOS</h2>
+      <h2> ÚLTIMOS MOVIMIENTOS</h2>
       
       <div class="registros-tabs">
         <button class="registro-tab active" id="tabTodos" onclick="cargarTodosMovimientos()">Todos</button>
@@ -598,7 +598,7 @@
     const nombrePerfil = document.getElementById('nombrePerfil');
     
     nombrePerfil.innerText = perfil;
-    avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
+    avatar.innerText = perfil === 'Maria' ? '' : '';
 
     let tipoMovimientoActual = 'gasto';
     let filtroActual = 'todos';
@@ -976,7 +976,7 @@
           const tipoIngresoTexto = mov.tipoTexto || (mov.tipoIngreso === 'credito' ? 'Crédito' : mov.tipoIngreso === 'debito' ? 'Débito' : 'Préstamo');
           div.innerHTML = `
             <div>
-              <span class="tipo-badge badge-ingreso">💰 INGRESO</span>
+              <span class="tipo-badge badge-ingreso"> INGRESO</span>
               <span class="categoria-text">${tipoIngresoTexto}</span>
               <span>${mov.descripcion}</span>
               ${mov.destino === 'familiar' ? '<span style="color:#7f8c8d; font-size:0.75rem;"> (familiar)</span>' : ''}
@@ -989,7 +989,7 @@
         } else {
           div.innerHTML = `
             <div>
-              <span class="tipo-badge badge-gasto">📝 GASTO</span>
+              <span class="tipo-badge badge-gasto"> GASTO</span>
               <span class="categoria-text">${mov.categoria} - ${mov.subcategoria}</span>
               <span>${mov.descripcion}</span>
             </div>
