@@ -82,6 +82,11 @@
       display: inline-block;
     }
 
+    .btn-outline:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
+    }
+
     /* Navegación módulos */
     .nav-modulos {
       background: white;
@@ -118,6 +123,11 @@
       flex: 1 1 auto;
       text-align: center;
       min-width: 100px;
+    }
+
+    .btn-modulo:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
     }
 
     /* Saldo disponible */
@@ -157,12 +167,45 @@
       word-break: break-word;
     }
 
+    /* COLORES RESTAURADOS PARA SALDO */
+    .saldo-positivo {
+      color: #2c5a2c;
+    }
+
+    .saldo-negativo {
+      color: #8b3a3a;
+    }
+
+    .saldo-valor.saldo-positivo {
+      color: #2c5a2c;
+    }
+
+    .saldo-valor.saldo-negativo {
+      color: #8b3a3a;
+    }
+
     .saldo-detalle {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 0.3rem;
       text-align: center;
       font-size: 0.8rem;
+    }
+
+    .detalle-item .label {
+      color: #95a5a6;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .detalle-item .valor {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    /* COLOR RESTAURADO PARA TARJETA */
+    .detalle-item .valor.tarjeta {
+      color: #8b4a4a;
     }
 
     /* Switch Ingreso/Gasto */
@@ -200,6 +243,17 @@
       cursor: pointer;
       background: transparent;
       color: #5a6a7a;
+    }
+
+    /* COLORES RESTAURADOS PARA SWITCH */
+    .switch-btn.ingreso.active {
+      background: #2c5a2c;
+      color: white;
+    }
+
+    .switch-btn.gasto.active {
+      background: #8b3a3a;
+      color: white;
     }
 
     /* Cards */
@@ -250,22 +304,16 @@
       appearance: none;
     }
 
-    /* INPUT NUMÉRICO: elimina flechas y fuerza teclado numérico en móvil */
-    .campo input[type="number"] {
+    /* INPUT NUMÉRICO */
+    .campo input[type="text"] {
       -moz-appearance: textfield;
       appearance: textfield;
     }
     
-    .campo input[type="number"]::-webkit-outer-spin-button,
-    .campo input[type="number"]::-webkit-inner-spin-button {
+    .campo input[type="text"]::-webkit-outer-spin-button,
+    .campo input[type="text"]::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
-    }
-    
-    /* Forzar teclado numérico en móvil */
-    .campo input[type="number"],
-    .campo input[pattern="\d*"] {
-      -webkit-text-security: none;
     }
 
     /* Método de pago */
@@ -303,6 +351,23 @@
       min-width: 80px;
     }
 
+    .metodo-pago-opcion.seleccionado {
+      background: white;
+      color: #2c3e50;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* COLORES RESTAURADOS PARA MÉTODO DE PAGO */
+    .metodo-pago-opcion.debito.seleccionado {
+      background: #2c5a2c;
+      color: white;
+    }
+
+    .metodo-pago-opcion.credito.seleccionado {
+      background: #8b3a3a;
+      color: white;
+    }
+
     .campo-row {
       display: flex;
       gap: 0.8rem;
@@ -328,6 +393,30 @@
       min-width: 120px;
     }
 
+    .btn-registro:hover {
+      background: #f5f5f5;
+      border-color: #909090;
+    }
+
+    /* COLORES RESTAURADOS PARA BOTONES DE REGISTRO */
+    .btn-registro.ingreso {
+      border-color: #2c5a2c;
+      color: #2c5a2c;
+    }
+
+    .btn-registro.ingreso:hover {
+      background: #f0f7f0;
+    }
+
+    .btn-registro.gasto {
+      border-color: #8b3a3a;
+      color: #8b3a3a;
+    }
+
+    .btn-registro.gasto:hover {
+      background: #fcf0f0;
+    }
+
     /* Tabs de registros */
     .registros-tabs {
       display: flex;
@@ -344,6 +433,12 @@
       font-size: 0.8rem;
       color: #7f8c8d;
       cursor: pointer;
+    }
+
+    .registro-tab.active {
+      background: #f0f0f0;
+      border-color: #a0a0a0;
+      color: #2c3e50;
     }
 
     .registros-lista {
@@ -380,6 +475,17 @@
       display: inline-block;
     }
 
+    /* COLORES RESTAURADOS PARA BADGES */
+    .badge-ingreso {
+      background: #e8f0e8;
+      color: #2c5a2c;
+    }
+
+    .badge-gasto {
+      background: #f0e8e8;
+      color: #8b3a3a;
+    }
+
     .badge-credito {
       background: #f0e0e0;
       color: #8b4a4a;
@@ -388,6 +494,22 @@
       padding: 0.1rem 0.3rem;
       border-radius: 3px;
       display: inline-block;
+    }
+
+    .categoria-text {
+      color: #5a6a7a;
+      font-size: 0.8rem;
+    }
+
+    /* COLORES RESTAURADOS PARA MONTOS */
+    .monto-positivo {
+      color: #2c5a2c;
+      font-weight: 500;
+    }
+
+    .monto-negativo {
+      color: #8b3a3a;
+      font-weight: 500;
     }
 
     .fecha-registro {
@@ -405,6 +527,26 @@
       border: 1px solid;
       display: none;
       word-break: break-word;
+    }
+
+    .mensaje.exito {
+      background: #f8f9fa;
+      border-color: #c0c0c0;
+      color: #2c3e50;
+    }
+
+    .mensaje.error {
+      background: #fef5f5;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      color: #95a5a6;
+      padding: 2rem 0;
+      font-size: 0.9rem;
     }
 
     /* Ajustes para móvil pequeño */
@@ -461,7 +603,7 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header con perfil (sin cambios en estructura) -->
+    <!-- Header con perfil -->
     <div class="header">
       <h1>REGISTRO</h1>
       <div class="perfil-info">
@@ -554,7 +696,6 @@
         <div class="campo-row">
           <div class="campo">
             <label>Monto ($)</label>
-            <!-- CAMBIO: inputmode="numeric" y pattern para teclado numérico -->
             <input type="text" id="montoGasto" placeholder="0" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           </div>
           <button class="btn-registro gasto" onclick="registrarMovimiento('gasto')">Registrar Gasto</button>
@@ -586,7 +727,6 @@
         <div class="campo-row">
           <div class="campo">
             <label>Monto ($)</label>
-            <!-- CAMBIO: inputmode="numeric" y pattern para teclado numérico -->
             <input type="text" id="montoIngreso" placeholder="0" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           </div>
           <button class="btn-registro ingreso" onclick="registrarMovimiento('ingreso')">Registrar Ingreso</button>
@@ -614,7 +754,7 @@
   </div>
 
   <script type="module">
-    // [MISMO CÓDIGO JAVASCRIPT EXISTENTE - SIN CAMBIOS]
+    // [MISMO CÓDIGO JAVASCRIPT - SIN CAMBIOS]
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
