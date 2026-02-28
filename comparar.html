@@ -112,6 +112,13 @@
       min-width: 80px;
     }
 
+    .btn-periodo.active {
+      background: #f0f0f0;
+      border-color: #a0a0a0;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
     /* Cards de resumen financiero */
     .finanzas-grid {
       display: grid;
@@ -140,6 +147,23 @@
       font-size: 1.1rem;
       font-weight: 300;
       word-break: break-word;
+    }
+
+    /* COLORES RESTAURADOS PARA CARDS */
+    .finanza-card.ingresos .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.gastos .valor {
+      color: #8b3a3a;
+    }
+
+    .finanza-card.saldo.positivo .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.saldo.negativo .valor {
+      color: #8b3a3a;
     }
 
     /* Comparativa ingresos vs gastos */
@@ -179,6 +203,22 @@
       border-radius: 4px;
       overflow: hidden;
       margin-bottom: 1rem;
+    }
+
+    .barra-llenado {
+      height: 8px;
+      background: #2c3e50;
+      border-radius: 4px;
+      width: 0%;
+    }
+
+    /* COLORES RESTAURADOS PARA BARRAS */
+    .barra-llenado.barra-positiva {
+      background: #2c5a2c;
+    }
+
+    .barra-llenado.barra-negativa {
+      background: #8b3a3a;
     }
 
     .detalle-valores {
@@ -236,6 +276,19 @@
       font-size: 0.85rem;
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
+    }
+
+    /* COLORES RESTAURADOS PARA DIFERENCIA */
+    .diferencia.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
+    }
+
+    .diferencia.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
     }
 
     .card {
@@ -299,11 +352,34 @@
       white-space: nowrap;
     }
 
+    /* COLORES RESTAURADOS PARA BADGES */
+    .diferencia-badge.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
+    }
+
+    .diferencia-badge.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
     .valores {
       display: flex;
       gap: 1rem;
       font-size: 0.85rem;
       flex-wrap: wrap;
+    }
+
+    /* COLORES RESTAURADOS PARA TEXTOS */
+    .presupuesto {
+      color: #7f8c8d;
+    }
+
+    .gasto {
+      color: #2c3e50;
+      font-weight: 500;
     }
 
     .total-row {
@@ -486,7 +562,6 @@
   </div>
 
   <script type="module">
-    // [MISMO CÓDIGO JAVASCRIPT EXISTENTE - SIN CAMBIOS]
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
