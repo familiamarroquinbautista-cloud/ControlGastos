@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Checklist de Gastos</title>
   <style>
+    /* (Mantén todos los estilos igual que antes) */
     * {
       margin: 0;
       padding: 0;
@@ -89,7 +90,6 @@
       color: #2c3e50;
     }
 
-    /* Lista */
     .lista-container {
       margin: 1rem 0;
       max-height: 400px;
@@ -204,6 +204,12 @@
       color: #2c3e50;
     }
 
+    .mensaje.error {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+
     .empty-state {
       text-align: center;
       color: #95a5a6;
@@ -211,9 +217,13 @@
       font-size: 0.9rem;
     }
   </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <div class="container">
+    <!-- Header -->
     <div class="header">
       <h1>CHECKLIST</h1>
       <div class="perfil-info">
@@ -222,19 +232,24 @@
       </div>
     </div>
 
+    <!-- Mensaje -->
     <div id="mensaje" class="mensaje"></div>
 
+    <!-- Card principal -->
     <div class="card">
       <h2>LISTA DE GASTOS PENDIENTES</h2>
       
+      <!-- Contador -->
       <div class="contador" id="contador">
         <span>Completados: <span id="completados">0</span>/<span id="total">0</span></span>
       </div>
       
+      <!-- Lista de items -->
       <div class="lista-container" id="listaContainer">
         <div class="empty-state">Cargando...</div>
       </div>
 
+      <!-- Agregar nuevo -->
       <div class="agregar-item">
         <input type="text" id="nuevoItem" placeholder="Escribe un item..." onkeypress="if(event.key==='Enter') agregarItem()">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
@@ -250,70 +265,90 @@
     }
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // Clave para storage
-    const STORAGE_KEY = `checklist_simple_${perfil}`;
+    // Configuración de Firebase (REEMPLAZA CON TUS DATOS)
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_AUTH_DOMAIN",
+      projectId: "TU_PROJECT_ID",
+      storageBucket: "TU_STORAGE_BUCKET",
+      messagingSenderId: "TU_MESSAGING_SENDER_ID",
+      appId: "TU_APP_ID"
+    };
 
-    // Array de items
+    // Inicializar Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // REFERENCIA ÚNICA para TODOS los perfiles (lista compartida)
+    const itemsRef = db.collection('checklist_compartido').doc('lista_principal').collection('items');
+
+    // Array de items (se mantiene en memoria para la UI)
     let items = [];
 
     // Mostrar mensaje
-    function mostrarMensaje(texto) {
+    function mostrarMensaje(texto, esError = false) {
       const mensaje = document.getElementById('mensaje');
       mensaje.style.display = 'block';
       mensaje.innerText = texto;
-      mensaje.className = 'mensaje exito';
+      mensaje.className = esError ? 'mensaje error' : 'mensaje exito';
       setTimeout(() => {
         mensaje.style.display = 'none';
-      }, 1500);
+      }, 2000);
     }
 
-    // Guardar en sessionStorage
-    function guardarItems() {
-      try {
-        const itemsString = JSON.stringify(items);
-        sessionStorage.setItem(STORAGE_KEY, itemsString);
-        console.log('Guardados:', items.length, 'items');
-      } catch (e) {
-        console.error('Error al guardar:', e);
-      }
-    }
-
-    // Cargar de sessionStorage
+    // Cargar items desde Firestore en tiempo real
     function cargarItems() {
-      try {
-        const guardados = sessionStorage.getItem(STORAGE_KEY);
-        console.log('Cargando storage:', guardados);
-        
-        if (guardados) {
-          items = JSON.parse(guardados);
-          console.log('Items cargados:', items.length);
-        } else {
-          console.log('No hay datos, creando ejemplos');
-          items = [
-            {
-              id: '1',
-              texto: 'Pagar agua',
-              completado: false,
-              fecha: new Date().toLocaleDateString()
-            },
-            {
-              id: '2',
-              texto: 'Comprar mercado',
-              completado: true,
-              fecha: new Date().toLocaleDateString()
-            }
-          ];
-          guardarItems();
-        }
-        actualizarLista();
-      } catch (e) {
-        console.error('Error al cargar:', e);
+      itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         items = [];
+        snapshot.forEach((doc) => {
+          items.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+        
         actualizarLista();
+        
+        // Si no hay items, crear algunos de ejemplo (solo una vez)
+        if (items.length === 0) {
+          crearItemsEjemplo();
+        }
+      }, (error) => {
+        console.error("Error al cargar items:", error);
+        mostrarMensaje('Error al cargar los datos', true);
+        document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error al cargar. Recarga la página.</div>';
+      });
+    }
+
+    // Crear items de ejemplo
+    async function crearItemsEjemplo() {
+      const ejemplos = [
+        {
+          texto: 'Pagar agua',
+          completado: false,
+          fecha: new Date().toLocaleDateString(),
+          timestamp: Date.now() - 100000,
+          creadoPor: 'Sistema' // Quién creó el item
+        },
+        {
+          texto: 'Comprar mercado',
+          completado: true,
+          fecha: new Date().toLocaleDateString(),
+          timestamp: Date.now() - 200000,
+          creadoPor: 'Sistema'
+        }
+      ];
+
+      for (const ejemplo of ejemplos) {
+        try {
+          await itemsRef.add(ejemplo);
+        } catch (error) {
+          console.error("Error creando item ejemplo:", error);
+        }
       }
     }
 
-    // Actualizar la lista
+    // Actualizar la lista en pantalla
     function actualizarLista() {
       const container = document.getElementById('listaContainer');
       const completadosSpan = document.getElementById('completados');
@@ -329,7 +364,10 @@
       let completados = 0;
       let html = '';
 
-      items.forEach(item => {
+      // Ordenar por timestamp (más nuevos primero)
+      const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
+
+      itemsOrdenados.forEach(item => {
         if (item.completado) completados++;
         
         html += `
@@ -350,57 +388,65 @@
     }
 
     // Agregar nuevo item
-    window.agregarItem = function() {
+    window.agregarItem = async function() {
       const input = document.getElementById('nuevoItem');
       const texto = input.value.trim();
       
       if (texto === '') {
+        mostrarMensaje('Escribe un texto para el item', true);
         return;
       }
 
       const nuevoItem = {
-        id: Date.now().toString(),
         texto: texto,
         completado: false,
-        fecha: new Date().toLocaleDateString()
+        fecha: new Date().toLocaleDateString(),
+        timestamp: Date.now(),
+        creadoPor: perfil // Guardamos quién creó el item
       };
 
-      items.push(nuevoItem);
-      input.value = '';
-      
-      guardarItems();
-      actualizarLista();
-      mostrarMensaje('Item agregado');
-      
-      console.log('Item agregado, total:', items.length);
+      try {
+        await itemsRef.add(nuevoItem);
+        input.value = '';
+        mostrarMensaje('Item agregado');
+      } catch (error) {
+        console.error("Error al agregar item:", error);
+        mostrarMensaje('Error al agregar el item', true);
+      }
     };
 
-    // Toggle checkbox
-    window.toggleItem = function(id) {
+    // Cambiar estado del checkbox
+    window.toggleItem = async function(id) {
       const item = items.find(i => i.id === id);
       if (item) {
-        item.completado = !item.completado;
-        guardarItems();
-        actualizarLista();
+        try {
+          await itemsRef.doc(id).update({
+            completado: !item.completado,
+            actualizadoPor: perfil,
+            actualizadoEn: Date.now()
+          });
+        } catch (error) {
+          console.error("Error al actualizar item:", error);
+          mostrarMensaje('Error al actualizar', true);
+        }
       }
     };
 
     // Eliminar item
-    window.eliminarItem = function(id) {
-      items = items.filter(i => i.id !== id);
-      guardarItems();
-      actualizarLista();
-      mostrarMensaje('Item eliminado');
+    window.eliminarItem = async function(id) {
+      if (confirm('¿Eliminar este item?')) {
+        try {
+          await itemsRef.doc(id).delete();
+          mostrarMensaje('Item eliminado');
+        } catch (error) {
+          console.error("Error al eliminar item:", error);
+          mostrarMensaje('Error al eliminar', true);
+        }
+      }
     };
 
-    // Cargar al iniciar
-    console.log('Iniciando checklist para:', perfil);
+    // Cargar items al iniciar
     cargarItems();
-
-    // Guardar antes de salir
-    window.addEventListener('beforeunload', function() {
-      guardarItems();
-    });
   </script>
 </body>
 </html>
