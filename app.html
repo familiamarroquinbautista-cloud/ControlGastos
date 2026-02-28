@@ -266,9 +266,6 @@
       padding-bottom: 0.5rem;
       border-bottom: 1px solid #eaeaea;
       color: #2c3e50;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
 
     /* Campos de registro */
@@ -308,7 +305,7 @@
       border-color: #2c3e50;
     }
 
-    /* Método de pago - Versión mejorada */
+    /* Método de pago */
     .metodo-pago-container {
       margin-bottom: 1rem;
     }
@@ -322,47 +319,40 @@
 
     .metodo-pago-opciones {
       display: flex;
-      gap: 1rem;
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 0.5rem;
+      gap: 0.5rem;
+      background: #f0f0f0;
+      padding: 0.3rem;
+      border-radius: 6px;
     }
 
     .metodo-pago-opcion {
       flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.8rem;
-      border-radius: 6px;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
-      background: #f5f5f5;
+      background: transparent;
       color: #5a6a7a;
-      font-weight: 500;
-      border: 1px solid transparent;
-    }
-
-    .metodo-pago-opcion:hover {
-      background: #eaeaea;
+      text-align: center;
     }
 
     .metodo-pago-opcion.seleccionado {
-      background: #2c3e50;
-      color: white;
-      border-color: #1a2632;
+      background: white;
+      color: #2c3e50;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .metodo-pago-opcion.debito.seleccionado {
       background: #2c5a2c;
-      border-color: #1e3e1e;
+      color: white;
     }
 
     .metodo-pago-opcion.credito.seleccionado {
       background: #8b3a3a;
-      border-color: #5e2727;
+      color: white;
     }
 
     .campo-row {
@@ -589,14 +579,14 @@
 
     <!-- Formulario de GASTOS (por defecto) -->
     <div id="formGasto" class="card">
-      <h2>💰 NUEVO GASTO</h2>
+      <h2>NUEVO GASTO</h2>
       
       <div class="campos-registro">
         <div class="campo">
           <label>Categoría</label>
           <select id="categoriaGasto" onchange="cambiarCategoriaGasto()">
-            <option value="Mercado">🛒 Mercado</option>
-            <option value="Servicios">💡 Servicios</option>
+            <option value="Mercado">Mercado</option>
+            <option value="Servicios">Servicios</option>
           </select>
         </div>
 
@@ -610,21 +600,21 @@
           </div>
         </div>
 
-        <!-- Método de pago - Versión mejorada -->
+        <!-- Método de pago -->
         <div class="metodo-pago-container">
           <div class="metodo-pago-label">Método de pago</div>
           <div class="metodo-pago-opciones">
-            <div class="metodo-pago-opcion debito seleccionado" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">
-              <span>💳</span> Débito/Efectivo
-            </div>
-            <div class="metodo-pago-opcion credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">
-              <span>💳</span> Crédito
-            </div>
+            <button class="metodo-pago-opcion debito seleccionado" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">
+              Débito/Efectivo
+            </button>
+            <button class="metodo-pago-opcion credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">
+              Crédito
+            </button>
           </div>
         </div>
         
         <div class="campo">
-          <label>Descripción</label>
+          <label>Descripción (opcional)</label>
           <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal">
         </div>
         
@@ -640,22 +630,22 @@
 
     <!-- Formulario de INGRESOS (oculto inicialmente) -->
     <div id="formIngreso" class="card" style="display: none;">
-      <h2>💰 NUEVO INGRESO</h2>
+      <h2>NUEVO INGRESO</h2>
       
       <div class="campos-registro">
         <div class="campo">
           <label>Tipo de ingreso</label>
           <select id="tipoIngreso">
-            <option value="Nomina"> Nómina</option>
-            <option value="Prima"> Prima</option>
-            <option value="Prestamo"> Préstamo</option>
-            <option value="Subsidio"> Subsidio</option>
-            <option value="Otros"> Otros</option>
+            <option value="Nomina">Nómina</option>
+            <option value="Prima">Prima</option>
+            <option value="Prestamo">Préstamo</option>
+            <option value="Subsidio">Subsidio</option>
+            <option value="Otros">Otros</option>
           </select>
         </div>
         
         <div class="campo">
-          <label>Descripción</label>
+          <label>Descripción (opcional)</label>
           <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual">
         </div>
         
@@ -674,7 +664,7 @@
 
     <!-- Últimos movimientos -->
     <div class="card">
-      <h2>📋 ÚLTIMOS MOVIMIENTOS</h2>
+      <h2>ÚLTIMOS MOVIMIENTOS</h2>
       
       <div class="registros-tabs">
         <button class="registro-tab active" id="tabTodos" onclick="cargarTodosMovimientos()">Todos</button>
@@ -794,11 +784,6 @@
       const descripcion = document.getElementById('descripcionGasto').value.trim();
       const monto = parseFloat(document.getElementById('montoGasto').value);
       
-      if (!descripcion) {
-        mostrarMensaje("Escribe una descripción", "error");
-        return;
-      }
-      
       if (isNaN(monto) || monto <= 0) {
         mostrarMensaje("Ingresa un monto válido", "error");
         return;
@@ -809,7 +794,7 @@
           usuario: perfil,
           categoria: categoria,
           subcategoria: subcategoria,
-          descripcion: descripcion,
+          descripcion: descripcion || "Sin descripción",
           monto: monto,
           metodoPago: metodoPagoActual,
           fecha: new Date(),
@@ -837,11 +822,6 @@
       const descripcion = document.getElementById('descripcionIngreso').value.trim();
       const monto = parseFloat(document.getElementById('montoIngreso').value);
       
-      if (!descripcion) {
-        mostrarMensaje("Escribe una descripción", "error");
-        return;
-      }
-      
       if (isNaN(monto) || monto <= 0) {
         mostrarMensaje("Ingresa un monto válido", "error");
         return;
@@ -851,7 +831,7 @@
         await addDoc(collection(db, "ingresos"), { 
           usuario: perfil,
           tipoIngreso: tipo,
-          descripcion: descripcion,
+          descripcion: descripcion || "Sin descripción",
           monto: monto,
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
@@ -1097,7 +1077,7 @@
         if (mov.tipo === 'ingreso') {
           div.innerHTML = `
             <div>
-              <span class="tipo-badge badge-ingreso"> INGRESO</span>
+              <span class="tipo-badge badge-ingreso">INGRESO</span>
               <span class="categoria-text">${mov.tipoIngreso}</span>
               <span>${mov.descripcion}</span>
             </div>
@@ -1110,7 +1090,7 @@
           const metodoTexto = mov.metodoPago === 'credito' ? '<span class="badge-credito">Crédito</span>' : '';
           div.innerHTML = `
             <div>
-              <span class="tipo-badge badge-gasto"> GASTO</span>
+              <span class="tipo-badge badge-gasto">GASTO</span>
               <span class="categoria-text">${mov.categoria} - ${mov.subcategoria}</span>
               ${metodoTexto}
               <span>${mov.descripcion}</span>
