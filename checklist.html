@@ -316,24 +316,7 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    // Configuración de Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
-      authDomain: "controlgastosprueba.firebaseapp.com",
-      projectId: "controlgastosprueba",
-      storageBucket: "controlgastosprueba.firebasestorage.app",
-      messagingSenderId: "679682152121",
-      appId: "1:679682152121:web:d3981591d952df1333ed68"
-    };
-
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+  <script>
     // Obtener perfil
     const perfil = sessionStorage.getItem('perfil');
     
@@ -355,115 +338,49 @@
       }, 2000);
     }
 
-    // Agregar nuevo item
-    window.agregarItem = async () => {
-      const texto = document.getElementById('nuevoItem').value.trim();
-      if (!texto) {
-        mostrarMensaje("Escribe una descripción", "error");
+    // Cargar items del localStorage
+    function cargarItems() {
+      const itemsGuardados = localStorage.getItem(`checklist_${perfil}`);
+      const items = itemsGuardados ? JSON.parse(itemsGuardados) : [];
+      
+      const tablaBody = document.getElementById('tablaBody');
+      tablaBody.innerHTML = '';
+
+      if (items.length === 0) {
+        tablaBody.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
+        actualizarProgreso(0, 0);
         return;
       }
 
-      try {
-        const fecha = new Date();
-        await addDoc(collection(db, "checklist"), {
-          usuario: perfil,
-          texto: texto,
-          completado: false,
-          fecha: fecha.toISOString(),
-          timestamp: fecha.getTime()
-        });
+      // Ordenar por fecha (más recientes primero)
+      items.sort((a, b) => b.timestamp - a.timestamp);
+
+      let completados = 0;
+      
+      items.forEach(item => {
+        if (item.completado) completados++;
         
-        mostrarMensaje("Item agregado", "exito");
-        document.getElementById('nuevoItem').value = '';
-        await cargarItems();
-      } catch (error) {
-        console.error("Error al agregar:", error);
-        mostrarMensaje("Error al agregar", "error");
-      }
-    };
-
-    // Toggle completado
-    window.toggleItem = async (id, completadoActual) => {
-      try {
-        await updateDoc(doc(db, "checklist", id), {
-          completado: !completadoActual
-        });
-        await cargarItems();
-      } catch (error) {
-        console.error("Error al actualizar:", error);
-        mostrarMensaje("Error al actualizar", "error");
-      }
-    };
-
-    // Cargar items
-    async function cargarItems() {
-      try {
-        const q = query(
-          collection(db, "checklist"),
-          where("usuario", "==", perfil)
-        );
+        const fila = document.createElement('div');
+        fila.className = 'tabla-fila';
         
-        const querySnapshot = await getDocs(q);
-        const items = [];
+        const fecha = new Date(item.timestamp);
+        const fechaTexto = fecha.toLocaleDateString();
         
-        querySnapshot.forEach(doc => {
-          items.push({ id: doc.id, ...doc.data() });
-        });
-
-        // Ordenar por fecha (más recientes primero)
-        items.sort((a, b) => {
-          const fechaA = a.timestamp || 0;
-          const fechaB = b.timestamp || 0;
-          return fechaB - fechaA;
-        });
-
-        const tablaBody = document.getElementById('tablaBody');
-        tablaBody.innerHTML = '';
-
-        if (items.length === 0) {
-          tablaBody.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
-          actualizarProgreso(0, 0);
-          return;
-        }
-
-        let completados = 0;
+        fila.innerHTML = `
+          <div class="col-checkbox">
+            <input type="checkbox" ${item.completado ? 'checked' : ''} onchange="toggleItem('${item.id}')">
+          </div>
+          <div class="col-texto ${item.completado ? 'completado' : ''}">${item.texto}</div>
+          <div class="col-fecha">${fechaTexto}</div>
+        `;
         
-        items.forEach(item => {
-          if (item.completado) completados++;
-          
-          const fila = document.createElement('div');
-          fila.className = 'tabla-fila';
-          
-          let fechaTexto = '';
-          if (item.fecha) {
-            try {
-              const fecha = new Date(item.fecha);
-              fechaTexto = fecha.toLocaleDateString();
-            } catch (e) {
-              fechaTexto = '';
-            }
-          }
-          
-          fila.innerHTML = `
-            <div class="col-checkbox">
-              <input type="checkbox" ${item.completado ? 'checked' : ''} onchange="toggleItem('${item.id}', ${item.completado})">
-            </div>
-            <div class="col-texto ${item.completado ? 'completado' : ''}">${item.texto || ''}</div>
-            <div class="col-fecha">${fechaTexto}</div>
-          `;
-          
-          tablaBody.appendChild(fila);
-        });
+        tablaBody.appendChild(fila);
+      });
 
-        actualizarProgreso(completados, items.length);
-
-      } catch (error) {
-        console.error("Error al cargar items:", error);
-        document.getElementById('tablaBody').innerHTML = '<div class="empty-state">Error al cargar items</div>';
-        mostrarMensaje("Error al cargar los items", "error");
-      }
+      actualizarProgreso(completados, items.length);
     }
 
+    // Actualizar progreso
     function actualizarProgreso(completados, total) {
       document.getElementById('itemsCompletados').innerText = completados;
       document.getElementById('itemsTotales').innerText = total;
@@ -472,6 +389,52 @@
       document.getElementById('porcentaje').innerText = porcentaje + '%';
       document.getElementById('barraProgreso').style.width = porcentaje + '%';
     }
+
+    // Guardar items en localStorage
+    function guardarItems(items) {
+      localStorage.setItem(`checklist_${perfil}`, JSON.stringify(items));
+    }
+
+    // Agregar nuevo item
+    window.agregarItem = () => {
+      const texto = document.getElementById('nuevoItem').value.trim();
+      if (!texto) {
+        mostrarMensaje("Escribe una descripción", "error");
+        return;
+      }
+
+      // Obtener items actuales
+      const itemsGuardados = localStorage.getItem(`checklist_${perfil}`);
+      const items = itemsGuardados ? JSON.parse(itemsGuardados) : [];
+      
+      // Crear nuevo item
+      const nuevoItem = {
+        id: Date.now().toString(),
+        texto: texto,
+        completado: false,
+        timestamp: Date.now()
+      };
+      
+      items.push(nuevoItem);
+      guardarItems(items);
+      
+      mostrarMensaje("Item agregado", "exito");
+      document.getElementById('nuevoItem').value = '';
+      cargarItems();
+    };
+
+    // Toggle completado
+    window.toggleItem = (id) => {
+      const itemsGuardados = localStorage.getItem(`checklist_${perfil}`);
+      const items = itemsGuardados ? JSON.parse(itemsGuardados) : [];
+      
+      const itemIndex = items.findIndex(item => item.id === id);
+      if (itemIndex !== -1) {
+        items[itemIndex].completado = !items[itemIndex].completado;
+        guardarItems(items);
+        cargarItems();
+      }
+    };
 
     // Cargar items al inicio
     cargarItems();
