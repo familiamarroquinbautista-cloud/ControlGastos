@@ -682,27 +682,35 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const db = getFirestore(initializeApp({
+    // Configuración de Firebase
+    const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
       projectId: "controlgastosprueba",
       storageBucket: "controlgastosprueba.firebasestorage.app",
       messagingSenderId: "679682152121",
       appId: "1:679682152121:web:d3981591d952df1333ed68"
-    }));
+    };
 
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Obtener perfil de sessionStorage
     const perfil = sessionStorage.getItem('perfil');
     
     if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
 
+    // Elementos del DOM
     const avatar = document.getElementById('avatar');
     const nombrePerfil = document.getElementById('nombrePerfil');
     
     nombrePerfil.innerText = perfil;
     avatar.innerText = perfil === 'Maria' ? '' : '';
 
+    // Variables de estado
     let tipoMovimientoActual = 'gasto';
     let filtroActual = 'todos';
     let metodoPagoActual = 'debito';
@@ -809,10 +817,10 @@
         document.getElementById('descripcionGasto').value = '';
         document.getElementById('montoGasto').value = '';
         
-        cargarTodosMovimientos();
-        calcularSaldo();
+        await cargarTodosMovimientos();
+        await calcularSaldo();
       } catch (error) {
-        console.error(error);
+        console.error("Error al registrar gasto:", error);
         mostrarMensaje("Error al guardar", "error");
       }
     }
@@ -845,10 +853,10 @@
         document.getElementById('descripcionIngreso').value = '';
         document.getElementById('montoIngreso').value = '';
         
-        cargarTodosMovimientos();
-        calcularSaldo();
+        await cargarTodosMovimientos();
+        await calcularSaldo();
       } catch (error) {
-        console.error(error);
+        console.error("Error al registrar ingreso:", error);
         mostrarMensaje("Error al guardar", "error");
       }
     }
@@ -914,7 +922,7 @@
         saldoElement.className = `saldo-valor ${saldo >= 0 ? 'saldo-positivo' : 'saldo-negativo'}`;
 
       } catch (error) {
-        console.error(error);
+        console.error("Error al calcular saldo:", error);
       }
     }
 
@@ -927,6 +935,7 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // Obtener gastos
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -937,6 +946,7 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
+        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -972,7 +982,8 @@
         mostrarMovimientos(movimientos.slice(0, 15));
 
       } catch (error) {
-        console.error(error);
+        console.error("Error al cargar movimientos:", error);
+        document.getElementById('registrosRecientes').innerHTML = '<div class="empty-state">Error al cargar movimientos</div>';
       }
     };
 
@@ -1007,7 +1018,8 @@
         mostrarMovimientos(movimientos);
 
       } catch (error) {
-        console.error(error);
+        console.error("Error al cargar ingresos:", error);
+        document.getElementById('registrosRecientes').innerHTML = '<div class="empty-state">Error al cargar ingresos</div>';
       }
     };
 
@@ -1043,7 +1055,8 @@
         mostrarMovimientos(movimientos);
 
       } catch (error) {
-        console.error(error);
+        console.error("Error al cargar gastos:", error);
+        document.getElementById('registrosRecientes').innerHTML = '<div class="empty-state">Error al cargar gastos</div>';
       }
     };
 
