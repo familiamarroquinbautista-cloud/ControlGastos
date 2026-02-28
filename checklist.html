@@ -72,7 +72,7 @@
       border-color: #a0a0a0;
     }
 
-    /* Cards */
+    /* Card principal */
     .card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -86,125 +86,80 @@
       font-size: 1.1rem;
       font-weight: 400;
       margin-bottom: 1.2rem;
-      color: #4a5568;
-      letter-spacing: 0.3px;
-    }
-
-    /* Progreso */
-    .progreso-container {
-      margin-bottom: 1.5rem;
-    }
-
-    .progreso-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      color: #5a6a7a;
-      margin-bottom: 0.5rem;
-    }
-
-    .progreso-barra {
-      height: 6px;
-      background: #eaeaea;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .progreso-llenado {
-      height: 6px;
-      background: #2c3e50;
-      border-radius: 3px;
-      width: 0%;
-      transition: width 0.3s;
-    }
-
-    /* Stats */
-    .stats-grid {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #eaeaea;
-    }
-
-    .stat-item {
-      flex: 1;
-      text-align: center;
-    }
-
-    .stat-valor {
-      font-size: 1.8rem;
-      font-weight: 300;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eaeaea;
       color: #2c3e50;
-      line-height: 1.2;
     }
 
-    .stat-label {
-      font-size: 0.8rem;
-      color: #95a5a6;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Lista de gastos */
-    .lista-gastos {
+    /* Lista de items */
+    .lista-items {
       margin: 1rem 0;
+      max-height: 400px;
+      overflow-y: auto;
     }
 
-    .gasto-item {
+    .item-row {
       display: flex;
       align-items: center;
+      gap: 1rem;
       padding: 0.8rem 0;
       border-bottom: 1px solid #f0f0f0;
     }
 
-    .gasto-item:last-child {
+    .item-row:last-child {
       border-bottom: none;
     }
 
-    .gasto-item input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      margin-right: 1rem;
+    .item-checkbox {
+      width: 20px;
+      height: 20px;
       cursor: pointer;
       accent-color: #2c3e50;
     }
 
-    .gasto-item label {
+    .item-text {
       flex: 1;
       font-size: 0.95rem;
-      cursor: pointer;
       color: #2c3e50;
     }
 
-    .gasto-item.pagado label {
+    .item-text.checked {
       text-decoration: line-through;
       color: #95a5a6;
     }
 
-    .fecha-gasto {
+    .item-fecha {
       color: #95a5a6;
       font-size: 0.8rem;
     }
 
-    /* Agregar nuevo */
-    .agregar-gasto {
-      display: flex;
-      gap: 0.8rem;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
+    /* Barra de progreso simple */
+    .progreso-simple {
+      margin-top: 1rem;
+      padding-top: 1rem;
       border-top: 1px solid #eaeaea;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+      display: flex;
+      justify-content: space-between;
     }
 
-    .agregar-gasto input {
+    /* Agregar nuevo item */
+    .agregar-item {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .agregar-item input {
       flex: 1;
       padding: 0.8rem;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
-    .agregar-gasto input:focus {
+    .agregar-item input:focus {
       outline: none;
       border-color: #2c3e50;
     }
@@ -215,9 +170,10 @@
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .btn-agregar:hover {
@@ -270,54 +226,32 @@
     <!-- Mensajes -->
     <div id="mensaje" class="mensaje"></div>
 
-    <!-- Progreso mensual -->
+    <!-- Card principal -->
     <div class="card">
-      <h2>PROGRESO MENSUAL</h2>
+      <h2>LISTA DE GASTOS PENDIENTES</h2>
       
-      <div class="progreso-container">
-        <div class="progreso-label">
-          <span id="contador">0/0 gastos</span>
-          <span id="porcentaje">0%</span>
-        </div>
-        <div class="progreso-barra">
-          <div class="progreso-llenado" id="barra-progreso"></div>
-        </div>
+      <!-- Lista de items -->
+      <div class="lista-items" id="listaItems">
+        <div class="empty-state">No hay items. Agrega uno nuevo.</div>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-valor" id="total-gastos">0</div>
-          <div class="stat-label">Total</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-valor" id="pagados-gastos">0</div>
-          <div class="stat-label">Pagados</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-valor" id="pendientes-gastos">0</div>
-          <div class="stat-label">Pend.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lista de gastos -->
-    <div class="card">
-      <h2>GASTOS DEL MES</h2>
-      
-      <div class="lista-gastos" id="lista-gastos">
-        <div class="empty-state">Cargando...</div>
+      <!-- Barra de progreso simple -->
+      <div class="progreso-simple" id="progreso">
+        <span>Progreso: <span id="itemsCompletados">0</span>/<span id="itemsTotales">0</span></span>
+        <span id="porcentaje">0%</span>
       </div>
 
-      <div class="agregar-gasto">
-        <input type="text" id="nuevo-gasto" placeholder="Nuevo gasto (ej: Agua, Internet)">
-        <button class="btn-agregar" onclick="agregarGasto()">Agregar</button>
+      <!-- Agregar nuevo item -->
+      <div class="agregar-item">
+        <input type="text" id="nuevoItem" placeholder="Ej: Pagar agua, Comprar mercado...">
+        <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
       </div>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // Configuración de Firebase
     const firebaseConfig = {
@@ -329,170 +263,142 @@
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     };
 
-    try {
-      // Inicializar Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-      // Obtener perfil de sessionStorage
-      const perfil = sessionStorage.getItem('perfil');
-      
-      if (!perfil || perfil === 'Admin') {
-        window.location.href = "index.html";
+    // Obtener perfil
+    const perfil = sessionStorage.getItem('perfil');
+    
+    if (!perfil || perfil === 'Admin') {
+      window.location.href = "index.html";
+    }
+
+    // Mostrar perfil
+    document.getElementById('perfilDisplay').innerText = perfil;
+
+    // Función para mostrar mensajes
+    function mostrarMensaje(texto, tipo) {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.style.display = 'block';
+      mensaje.innerText = texto;
+      mensaje.className = `mensaje ${tipo}`;
+      setTimeout(() => {
+        mensaje.style.display = 'none';
+      }, 2000);
+    }
+
+    // Agregar nuevo item
+    window.agregarItem = async () => {
+      const texto = document.getElementById('nuevoItem').value.trim();
+      if (!texto) {
+        mostrarMensaje("Escribe un texto para el item", "error");
+        return;
       }
 
-      // Mostrar perfil
-      document.getElementById('perfilDisplay').innerText = perfil;
-
-      // Función para mostrar mensajes
-      function mostrarMensaje(texto, tipo) {
-        const mensaje = document.getElementById('mensaje');
-        mensaje.style.display = 'block';
-        mensaje.innerText = texto;
-        mensaje.className = `mensaje ${tipo}`;
-        setTimeout(() => {
-          mensaje.style.display = 'none';
-        }, 3000);
+      try {
+        await addDoc(collection(db, "checklist"), {
+          usuario: perfil,
+          texto: texto,
+          completado: false,
+          fecha: new Date().toISOString()
+        });
+        
+        mostrarMensaje("Item agregado", "exito");
+        document.getElementById('nuevoItem').value = '';
+        cargarItems();
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje("Error al agregar", "error");
       }
+    };
 
-      // Agregar nuevo gasto al checklist
-      window.agregarGasto = async () => {
-        const nombreGasto = document.getElementById("nuevo-gasto").value.trim();
-        if (!nombreGasto) {
-          mostrarMensaje("Escribe un nombre para el gasto", "error");
+    // Toggle completado
+    window.toggleItem = async (id, completadoActual) => {
+      try {
+        await updateDoc(doc(db, "checklist", id), {
+          completado: !completadoActual
+        });
+        cargarItems();
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje("Error al actualizar", "error");
+      }
+    };
+
+    // Cargar items
+    async function cargarItems() {
+      try {
+        const q = query(
+          collection(db, "checklist"),
+          where("usuario", "==", perfil)
+        );
+        
+        const querySnapshot = await getDocs(q);
+        const items = [];
+        
+        querySnapshot.forEach(doc => {
+          items.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Ordenar por fecha (más recientes primero)
+        items.sort((a, b) => {
+          return (b.fecha || '').localeCompare(a.fecha || '');
+        });
+
+        const lista = document.getElementById('listaItems');
+        lista.innerHTML = '';
+
+        if (items.length === 0) {
+          lista.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
+          document.getElementById('itemsCompletados').innerText = '0';
+          document.getElementById('itemsTotales').innerText = '0';
+          document.getElementById('porcentaje').innerText = '0%';
           return;
         }
 
-        try {
-          const docRef = await addDoc(collection(db, "checklist"), {
-            usuario: perfil,
-            nombre: nombreGasto,
-            pagado: false,
-            fecha: new Date(),
-            mes: new Date().getMonth() + 1,
-            año: new Date().getFullYear()
-          });
+        let completados = 0;
+        
+        items.forEach(item => {
+          if (item.completado) completados++;
           
-          console.log("Gasto agregado con ID:", docRef.id);
-          mostrarMensaje(`Gasto "${nombreGasto}" agregado`, "exito");
-          document.getElementById("nuevo-gasto").value = "";
-          await cargarGastos();
-        } catch (error) {
-          console.error("Error detallado al agregar gasto:", error);
-          mostrarMensaje("Error al agregar: " + error.message, "error");
-        }
-      };
-
-      // Cambiar estado de un gasto (pagado/no pagado)
-      window.toggleGasto = async (id, pagadoActual) => {
-        try {
-          await updateDoc(doc(db, "checklist", id), {
-            pagado: !pagadoActual
-          });
-          await cargarGastos();
-        } catch (error) {
-          console.error("Error detallado al actualizar gasto:", error);
-          mostrarMensaje("Error al actualizar: " + error.message, "error");
-        }
-      };
-
-      // Cargar todos los gastos del checklist
-      async function cargarGastos() {
-        try {
-          const mesActual = new Date().getMonth() + 1;
-          const añoActual = new Date().getFullYear();
+          const div = document.createElement('div');
+          div.className = 'item-row';
           
-          console.log("Consultando checklist para:", perfil, mesActual, añoActual);
-          
-          // Primero, probar sin filtros para ver si hay datos
-          const pruebaQuery = query(collection(db, "checklist"));
-          const pruebaSnapshot = await getDocs(pruebaQuery);
-          console.log("Total documentos en checklist:", pruebaSnapshot.size);
-          
-          pruebaSnapshot.forEach(doc => {
-            console.log("Documento encontrado:", doc.id, doc.data());
-          });
-
-          // Ahora hacer la consulta con filtros
-          const q = query(
-            collection(db, "checklist"),
-            where("usuario", "==", perfil),
-            where("mes", "==", mesActual),
-            where("año", "==", añoActual)
-          );
-          
-          const querySnapshot = await getDocs(q);
-          console.log("Documentos encontrados con filtros:", querySnapshot.size);
-          
-          const gastos = [];
-          querySnapshot.forEach(doc => {
-            gastos.push({ id: doc.id, ...doc.data() });
-          });
-
-          // Ordenar manualmente por fecha descendente
-          gastos.sort((a, b) => {
-            const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date(0);
-            const fechaB = b.fecha?.toDate ? b.fecha.toDate() : new Date(0);
-            return fechaB - fechaA;
-          });
-
-          const lista = document.getElementById("lista-gastos");
-          lista.innerHTML = "";
-
-          if (gastos.length === 0) {
-            lista.innerHTML = '<div class="empty-state">No hay gastos este mes. ¡Agrega uno!</div>';
-          }
-
-          let pagados = 0;
-          gastos.forEach(gasto => {
-            if (gasto.pagado) pagados++;
-            
-            const div = document.createElement("div");
-            div.className = `gasto-item ${gasto.pagado ? 'pagado' : ''}`;
-            
-            let fechaStr = "Fecha no disponible";
-            if (gasto.fecha) {
-              try {
-                const fecha = gasto.fecha.toDate ? gasto.fecha.toDate() : new Date(gasto.fecha);
-                fechaStr = fecha.toLocaleDateString();
-              } catch (e) {
-                console.error("Error al formatear fecha:", e);
-              }
+          let fechaTexto = '';
+          if (item.fecha) {
+            try {
+              const fecha = new Date(item.fecha);
+              fechaTexto = fecha.toLocaleDateString();
+            } catch (e) {
+              fechaTexto = '';
             }
-            
-            div.innerHTML = `
-              <input type="checkbox" ${gasto.pagado ? 'checked' : ''} onchange="toggleGasto('${gasto.id}', ${gasto.pagado})">
-              <label>${gasto.nombre || "Sin nombre"}</label>
-              <span class="fecha-gasto">${fechaStr}</span>
-            `;
-            lista.appendChild(div);
-          });
+          }
+          
+          div.innerHTML = `
+            <input type="checkbox" class="item-checkbox" ${item.completado ? 'checked' : ''} onchange="toggleItem('${item.id}', ${item.completado})">
+            <span class="item-text ${item.completado ? 'checked' : ''}">${item.texto || 'Sin texto'}</span>
+            <span class="item-fecha">${fechaTexto}</span>
+          `;
+          
+          lista.appendChild(div);
+        });
 
-          const total = gastos.length;
-          const pendientes = total - pagados;
-          const porcentaje = total > 0 ? Math.round((pagados / total) * 100) : 0;
-          
-          document.getElementById("total-gastos").innerText = total;
-          document.getElementById("pagados-gastos").innerText = pagados;
-          document.getElementById("pendientes-gastos").innerText = pendientes;
-          document.getElementById("contador").innerText = `${pagados}/${total} gastos`;
-          document.getElementById("porcentaje").innerText = `${porcentaje}%`;
-          document.getElementById("barra-progreso").style.width = `${porcentaje}%`;
-          
-        } catch (error) {
-          console.error("Error detallado al cargar gastos:", error);
-          document.getElementById("lista-gastos").innerHTML = '<div class="empty-state">Error al cargar: ' + error.message + '</div>';
-          mostrarMensaje("Error al cargar los gastos: " + error.message, "error");
-        }
+        const total = items.length;
+        const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
+        
+        document.getElementById('itemsCompletados').innerText = completados;
+        document.getElementById('itemsTotales').innerText = total;
+        document.getElementById('porcentaje').innerText = porcentaje + '%';
+
+      } catch (error) {
+        console.error(error);
+        document.getElementById('listaItems').innerHTML = '<div class="empty-state">Error al cargar items</div>';
       }
-
-      // Inicializar
-      cargarGastos();
-
-    } catch (error) {
-      console.error("Error de inicialización:", error);
-      document.getElementById('perfilDisplay').innerText = "Error de conexión";
     }
+
+    // Cargar items al inicio
+    cargarItems();
   </script>
 </body>
 </html>
