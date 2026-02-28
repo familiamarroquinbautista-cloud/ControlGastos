@@ -114,6 +114,13 @@
       min-width: 80px;
     }
 
+    .btn-periodo.active {
+      background: #f0f0f0;
+      border-color: #a0a0a0;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
     /* Cards resumen global */
     .finanzas-grid {
       display: grid;
@@ -143,6 +150,23 @@
       font-weight: 300;
       line-height: 1.2;
       word-break: break-word;
+    }
+
+    /* COLORES RESTAURADOS PARA CARDS */
+    .finanza-card.ingresos .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.gastos .valor {
+      color: #8b3a3a;
+    }
+
+    .finanza-card.saldo.positivo .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.saldo.negativo .valor {
+      color: #8b3a3a;
     }
 
     /* Gráfico de barras comparativo */
@@ -189,6 +213,7 @@
       position: relative;
     }
 
+    /* COLORES RESTAURADOS PARA BARRAS */
     .barra.ingresos {
       background: #2c5a2c;
     }
@@ -282,6 +307,44 @@
       text-align: right;
     }
 
+    /* COLORES RESTAURADOS PARA MONTOS EN TABLAS */
+    .monto-positivo {
+      color: #2c5a2c;
+    }
+
+    .monto-negativo {
+      color: #8b3a3a;
+    }
+
+    /* Diferencia badges */
+    .diferencia-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      white-space: nowrap;
+    }
+
+    /* COLORES RESTAURADOS PARA DIFERENCIA BADGES */
+    .diferencia-badge.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
+    }
+
+    .diferencia-badge.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
+    .total-row {
+      background: #f8f9fa;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
     /* Perfiles */
     .perfiles-grid {
       display: grid;
@@ -305,6 +368,7 @@
       font-size: 0.9rem;
       flex-wrap: wrap;
       gap: 0.5rem;
+      color: #2c3e50;
     }
 
     .perfil-items {
@@ -319,6 +383,7 @@
       font-size: 0.8rem;
       flex-wrap: wrap;
       gap: 0.3rem;
+      color: #4a5568;
     }
 
     .badge {
@@ -328,6 +393,11 @@
       font-size: 0.7rem;
       background: #f0f0f0;
       color: #4a5568;
+    }
+
+    .badge-familiar {
+      background: #e8e8f0;
+      color: #3a3a5a;
     }
 
     .empty-state {
@@ -535,7 +605,6 @@
   </div>
 
   <script type="module">
-    // [MISMO CÓDIGO JAVASCRIPT EXISTENTE - SIN CAMBIOS]
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
