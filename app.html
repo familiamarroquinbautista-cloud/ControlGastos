@@ -411,117 +411,6 @@
       background: #fcf0f0;
     }
 
-    /* Tabs de registros */
-    .registros-tabs {
-      display: flex;
-      gap: 0.4rem;
-      margin-bottom: 0.8rem;
-      flex-wrap: wrap;
-    }
-
-    .registro-tab {
-      padding: 0.3rem 0.8rem;
-      background: none;
-      border: 1px solid #e0e0e0;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      color: #7f8c8d;
-      cursor: pointer;
-    }
-
-    .registro-tab.active {
-      background: #f0f0f0;
-      border-color: #a0a0a0;
-      color: #2c3e50;
-    }
-
-    .registros-lista {
-      max-height: 400px;
-      overflow-y: auto;
-      border: 1px solid #f0f0f0;
-      border-radius: 8px;
-      padding: 0.5rem;
-    }
-
-    .registro-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 0.85rem;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      transition: background-color 0.2s;
-    }
-
-    .registro-item:hover {
-      background-color: #fafafa;
-    }
-
-    .registro-item:last-child {
-      border-bottom: none;
-    }
-
-    .registro-item > div:first-child {
-      flex: 2 1 200px;
-    }
-
-    .registro-item > div:last-child {
-      flex: 1 1 auto;
-      text-align: right;
-    }
-
-    .tipo-badge {
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      margin-right: 0.3rem;
-      display: inline-block;
-    }
-
-    .badge-ingreso {
-      background: #e8f0e8;
-      color: #2c5a2c;
-    }
-
-    .badge-gasto {
-      background: #f0e8e8;
-      color: #8b3a3a;
-    }
-
-    .badge-credito {
-      background: #f0e0e0;
-      color: #8b4a4a;
-      font-size: 0.65rem;
-      margin-left: 0.2rem;
-      padding: 0.1rem 0.3rem;
-      border-radius: 3px;
-      display: inline-block;
-    }
-
-    .categoria-text {
-      color: #5a6a7a;
-      font-size: 0.8rem;
-    }
-
-    .monto-positivo {
-      color: #2c5a2c;
-      font-weight: 500;
-    }
-
-    .monto-negativo {
-      color: #8b3a3a;
-      font-weight: 500;
-    }
-
-    .fecha-registro {
-      color: #95a5a6;
-      font-size: 0.75rem;
-      margin-left: 0.3rem;
-    }
-
     /* Mensajes */
     .mensaje {
       margin: 1rem 0;
@@ -551,14 +440,6 @@
       color: #95a5a6;
       padding: 2rem 0;
       font-size: 0.9rem;
-    }
-
-    /* Indicador de carga */
-    .loading {
-      text-align: center;
-      color: #95a5a6;
-      padding: 1rem;
-      font-style: italic;
     }
 
     /* Ajustes para móvil pequeño */
@@ -594,16 +475,6 @@
       }
       
       .btn-registro {
-        width: 100%;
-      }
-      
-      .registro-item {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .registro-item > div:last-child {
-        text-align: left;
         width: 100%;
       }
       
@@ -754,29 +625,13 @@
     <!-- Mensajes -->
     <div id="mensaje" class="mensaje"></div>
 
-    <!-- HISTÓRICO DE MOVIMIENTOS (NUEVO) -->
-    <div class="card">
-      <h2>📋 HISTÓRICO DE MOVIMIENTOS</h2>
-      
-      <div class="registros-tabs">
-        <button class="registro-tab active" id="tabTodos" onclick="cambiarFiltroHistorico('todos')">Todos</button>
-        <button class="registro-tab" id="tabIngresos" onclick="cambiarFiltroHistorico('ingresos')">Ingresos</button>
-        <button class="registro-tab" id="tabGastos" onclick="cambiarFiltroHistorico('gastos')">Gastos</button>
-      </div>
-
-      <div class="registros-lista" id="historicoMovimientos">
-        <div class="loading">Cargando histórico...</div>
-      </div>
-      
-      <div style="margin-top: 0.5rem; text-align: right; font-size: 0.75rem; color: #95a5a6;">
-        Actualizado en tiempo real
-      </div>
-    </div>
+    <!-- Espacio adicional al final -->
+    <div style="height: 1rem;"></div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -803,9 +658,7 @@
     avatar.innerText = perfil === 'Maria' ? '' : '';
 
     let tipoMovimientoActual = 'gasto';
-    let filtroHistorico = 'todos'; // 'todos', 'ingresos', 'gastos'
     let metodoPagoActual = 'debito';
-    let unsubscribeHistorico = null; // Para limpiar el listener
 
     // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
     const subcategoriasGasto = {
@@ -870,148 +723,6 @@
         formGasto.style.display = 'block';
       }
     };
-
-    // NUEVA FUNCIÓN: Cambiar filtro del histórico
-    window.cambiarFiltroHistorico = function(filtro) {
-      filtroHistorico = filtro;
-      
-      // Actualizar tabs
-      document.getElementById('tabTodos').classList.remove('active');
-      document.getElementById('tabIngresos').classList.remove('active');
-      document.getElementById('tabGastos').classList.remove('active');
-      
-      if (filtro === 'todos') {
-        document.getElementById('tabTodos').classList.add('active');
-      } else if (filtro === 'ingresos') {
-        document.getElementById('tabIngresos').classList.add('active');
-      } else if (filtro === 'gastos') {
-        document.getElementById('tabGastos').classList.add('active');
-      }
-      
-      // Reiniciar el listener con el nuevo filtro
-      iniciarListenerHistorico();
-    };
-
-    // NUEVA FUNCIÓN: Iniciar listener en tiempo real para el histórico
-    function iniciarListenerHistorico() {
-      // Limpiar listener anterior si existe
-      if (unsubscribeHistorico) {
-        unsubscribeHistorico();
-      }
-      
-      const container = document.getElementById('historicoMovimientos');
-      container.innerHTML = '<div class="loading">Cargando histórico...</div>';
-      
-      const mesActual = new Date().getMonth() + 1;
-      const añoActual = new Date().getFullYear();
-      
-      // Crear queries según el filtro
-      let gastosQuery, ingresosQuery;
-      
-      if (filtroHistorico === 'todos' || filtroHistorico === 'gastos') {
-        gastosQuery = query(
-          collection(db, "gastos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual),
-          orderBy("fecha", "desc")
-        );
-      }
-      
-      if (filtroHistorico === 'todos' || filtroHistorico === 'ingresos') {
-        ingresosQuery = query(
-          collection(db, "ingresos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual),
-          orderBy("fecha", "desc")
-        );
-      }
-      
-      // Array para acumular movimientos
-      let movimientos = [];
-      
-      // Función para actualizar la UI
-      const actualizarUI = () => {
-        if (movimientos.length === 0) {
-          container.innerHTML = '<div class="empty-state">No hay movimientos este mes</div>';
-          return;
-        }
-        
-        // Ordenar por fecha descendente
-        movimientos.sort((a, b) => b.fechaObj - a.fechaObj);
-        
-        // Mostrar primeros 50 movimientos
-        mostrarMovimientos(movimientos.slice(0, 50));
-      };
-      
-      // Escuchar gastos si aplica
-      if (gastosQuery) {
-        unsubscribeHistorico = onSnapshot(gastosQuery, (snapshot) => {
-          // Actualizar movimientos
-          movimientos = movimientos.filter(m => m.tipo !== 'gasto');
-          
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            let fechaObj = new Date();
-            if (data.fecha) {
-              fechaObj = data.fecha.toDate ? data.fecha.toDate() : new Date(data.fecha);
-            }
-            
-            movimientos.push({
-              ...data,
-              id: doc.id,
-              tipo: 'gasto',
-              fechaObj: fechaObj
-            });
-          });
-          
-          actualizarUI();
-        }, (error) => {
-          console.error("Error en listener de gastos:", error);
-          container.innerHTML = '<div class="empty-state">Error al cargar gastos</div>';
-        });
-      }
-      
-      // Escuchar ingresos si aplica
-      if (ingresosQuery) {
-        // Si ya hay un listener, combinamos
-        const unsubscribeIngresos = onSnapshot(ingresosQuery, (snapshot) => {
-          // Actualizar movimientos
-          movimientos = movimientos.filter(m => m.tipo !== 'ingreso');
-          
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            let fechaObj = new Date();
-            if (data.fecha) {
-              fechaObj = data.fecha.toDate ? data.fecha.toDate() : new Date(data.fecha);
-            }
-            
-            movimientos.push({
-              ...data,
-              id: doc.id,
-              tipo: 'ingreso',
-              fechaObj: fechaObj
-            });
-          });
-          
-          actualizarUI();
-        }, (error) => {
-          console.error("Error en listener de ingresos:", error);
-        });
-        
-        // Combinar listeners si ya existe uno
-        if (unsubscribeHistorico) {
-          const oldUnsubscribe = unsubscribeHistorico;
-          unsubscribeHistorico = () => {
-            oldUnsubscribe();
-            unsubscribeIngresos();
-          };
-        } else {
-          unsubscribeHistorico = unsubscribeIngresos;
-        }
-      }
-    }
 
     window.registrarMovimiento = async function(tipo) {
       if (tipo === 'gasto') {
@@ -1112,6 +823,7 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // CORREGIDO: Filtrar ingresos por usuario
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("usuario", "==", perfil),
@@ -1160,55 +872,9 @@
       }
     }
 
-    function mostrarMovimientos(movimientos) {
-      const container = document.getElementById('historicoMovimientos');
-      
-      if (movimientos.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay movimientos este mes</div>';
-        return;
-      }
-
-      container.innerHTML = '';
-      movimientos.forEach(mov => {
-        const div = document.createElement('div');
-        div.className = 'registro-item';
-        
-        if (mov.tipo === 'ingreso') {
-          div.innerHTML = `
-            <div>
-              <span class="tipo-badge badge-ingreso">INGRESO</span>
-              <span class="categoria-text">${mov.tipoIngreso || ''}</span>
-              <span>${mov.descripcion || ''}</span>
-            </div>
-            <div>
-              <span class="monto-positivo">+$${mov.monto}</span>
-              <span class="fecha-registro">${mov.fechaObj.toLocaleDateString()}</span>
-            </div>
-          `;
-        } else {
-          const metodoTexto = mov.metodoPago === 'credito' ? '<span class="badge-credito">Crédito</span>' : '';
-          div.innerHTML = `
-            <div>
-              <span class="tipo-badge badge-gasto">GASTO</span>
-              <span class="categoria-text">${mov.categoria || ''} - ${mov.subcategoria || ''}</span>
-              ${metodoTexto}
-              <span>${mov.descripcion || ''}</span>
-            </div>
-            <div>
-              <span class="monto-negativo">-$${mov.monto}</span>
-              <span class="fecha-registro">${mov.fechaObj.toLocaleDateString()}</span>
-            </div>
-          `;
-        }
-        
-        container.appendChild(div);
-      });
-    }
-
     // Inicializar
     actualizarSubcategoriasGasto();
     calcularSaldo();
-    iniciarListenerHistorico();
   </script>
 </body>
 </html>
