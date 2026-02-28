@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Resumen General</title>
   <style>
     * {
@@ -19,23 +20,26 @@
 
     .container {
       max-width: 1000px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 100%;
     }
 
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
-      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
+      flex-wrap: wrap;
+      gap: 0.8rem;
     }
 
     .header h1 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 400;
       letter-spacing: 1px;
       color: #2c3e50;
@@ -44,25 +48,26 @@
     .perfil-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.8rem;
+      flex-wrap: wrap;
     }
 
     .perfil-badge {
       background: #f0f0f0;
-      padding: 0.4rem 1rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 20px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #2c3e50;
       border: 1px solid #d0d0d0;
     }
 
     .btn-outline {
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 0.8rem;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
@@ -80,7 +85,7 @@
       padding: 0.8rem;
       margin-bottom: 1.5rem;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #5a6a7a;
     }
 
@@ -92,77 +97,52 @@
       padding: 0.8rem;
       margin-bottom: 1.5rem;
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .btn-periodo {
-      padding: 0.5rem 1.2rem;
+      padding: 0.5rem 1rem;
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       color: #5a6a7a;
-    }
-
-    .btn-periodo.active {
-      background: #f0f0f0;
-      border-color: #a0a0a0;
-      color: #2c3e50;
-      font-weight: 500;
+      flex: 1 1 auto;
+      min-width: 80px;
     }
 
     /* Cards resumen global */
     .finanzas-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
     }
 
     .finanza-card {
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1rem 0.8rem;
       text-align: center;
     }
 
     .finanza-card .label {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: #7f8c8d;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
     }
 
     .finanza-card .valor {
-      font-size: 2.2rem;
+      font-size: 1.4rem;
       font-weight: 300;
       line-height: 1.2;
-    }
-
-    .finanza-card.ingresos .valor {
-      color: #2c5a2c;
-    }
-
-    .finanza-card.gastos .valor {
-      color: #8b3a3a;
-    }
-
-    .finanza-card.saldo .valor {
-      color: #2c3e50;
-      font-weight: 400;
-    }
-
-    .finanza-card.saldo.positivo .valor {
-      color: #2c5a2c;
-    }
-
-    .finanza-card.saldo.negativo .valor {
-      color: #8b3a3a;
+      word-break: break-word;
     }
 
     /* Gráfico de barras comparativo */
@@ -170,15 +150,16 @@
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
     }
 
     .comparativa-global h2 {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 400;
       color: #7f8c8d;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       letter-spacing: 0.5px;
     }
 
@@ -188,17 +169,20 @@
       align-items: flex-end;
       height: 200px;
       margin-bottom: 1rem;
+      min-width: 300px;
+      gap: 0.5rem;
     }
 
     .barra-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 80px;
+      width: 60px;
+      flex-shrink: 0;
     }
 
     .barra {
-      width: 40px;
+      width: 30px;
       background: #eaeaea;
       border-radius: 6px 6px 0 0;
       transition: height 0.3s;
@@ -215,7 +199,7 @@
 
     .barra-label {
       margin-top: 0.5rem;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #5a6a7a;
     }
 
@@ -224,7 +208,7 @@
       top: -25px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: 500;
       white-space: nowrap;
     }
@@ -232,18 +216,19 @@
     .detalle-mensual {
       display: flex;
       justify-content: center;
-      gap: 2rem;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
+      gap: 1rem;
+      margin-top: 1.2rem;
+      padding-top: 1.2rem;
       border-top: 1px solid #eaeaea;
+      flex-wrap: wrap;
     }
 
     /* Cards dobles */
     .cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .card {
@@ -255,9 +240,9 @@
 
     .card-header {
       background: #f8f9fa;
-      padding: 1rem 1.5rem;
+      padding: 0.8rem 1rem;
       border-bottom: 1px solid #eaeaea;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 400;
       color: #2c3e50;
       display: flex;
@@ -266,7 +251,7 @@
     }
 
     .card-content {
-      padding: 1.5rem;
+      padding: 1rem;
       max-height: 300px;
       overflow-y: auto;
     }
@@ -275,12 +260,12 @@
     .tabla {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
 
     .tabla th {
       text-align: left;
-      padding: 0.6rem;
+      padding: 0.5rem;
       background: #fafafa;
       font-weight: 500;
       color: #4a5568;
@@ -288,33 +273,20 @@
     }
 
     .tabla td {
-      padding: 0.6rem;
+      padding: 0.5rem;
       border-bottom: 1px solid #f0f0f0;
-    }
-
-    .tabla tr:last-child td {
-      border-bottom: none;
+      word-break: break-word;
     }
 
     .text-right {
       text-align: right;
     }
 
-    .monto-positivo {
-      color: #2c5a2c;
-      font-weight: 500;
-    }
-
-    .monto-negativo {
-      color: #8b3a3a;
-      font-weight: 500;
-    }
-
     /* Perfiles */
     .perfiles-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      gap: 1rem;
     }
 
     .perfil-card {
@@ -324,42 +296,38 @@
     }
 
     .perfil-header {
-      padding: 1rem;
+      padding: 0.8rem;
       font-weight: 500;
       border-bottom: 1px solid #eaeaea;
       background: #fafafa;
       display: flex;
       justify-content: space-between;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .perfil-items {
-      padding: 1rem;
+      padding: 0.8rem;
     }
 
     .gasto-item {
       display: flex;
       justify-content: space-between;
-      padding: 0.5rem 0;
+      padding: 0.4rem 0;
       border-bottom: 1px solid #f5f5f5;
-      font-size: 0.9rem;
-    }
-
-    .gasto-item:last-child {
-      border-bottom: none;
+      font-size: 0.8rem;
+      flex-wrap: wrap;
+      gap: 0.3rem;
     }
 
     .badge {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       background: #f0f0f0;
       color: #4a5568;
-    }
-
-    .badge-familiar {
-      background: #e8e8f0;
-      color: #3a3a5a;
     }
 
     .empty-state {
@@ -373,7 +341,93 @@
       text-align: center;
       margin: 1rem 0;
       color: #95a5a6;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+    }
+
+    /* Ajustes para móvil */
+    @media (max-width: 768px) {
+      .finanzas-grid {
+        gap: 0.5rem;
+      }
+      
+      .finanza-card .valor {
+        font-size: 1.2rem;
+      }
+      
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .perfiles-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0.8rem;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .perfil-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .periodo-selector {
+        flex-direction: column;
+      }
+      
+      .btn-periodo {
+        width: 100%;
+      }
+      
+      .finanzas-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .finanza-card {
+        padding: 0.8rem;
+      }
+      
+      .finanza-card .valor {
+        font-size: 1.5rem;
+      }
+      
+      .comparativa-global {
+        padding: 1rem;
+      }
+      
+      .barras-container {
+        gap: 0.3rem;
+      }
+      
+      .barra-item {
+        width: 50px;
+      }
+      
+      .barra {
+        width: 25px;
+      }
+      
+      .detalle-mensual {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .tabla {
+        font-size: 0.75rem;
+      }
+      
+      .tabla th, .tabla td {
+        padding: 0.4rem 0.3rem;
+      }
     }
   </style>
 </head>
@@ -464,23 +518,24 @@
     </div>
 
     <!-- Presupuesto vs Gastos -->
-    <div class="card" style="margin-bottom: 2rem;">
+    <div class="card" style="margin-bottom: 1.5rem;">
       <div class="card-header">
         📊 PRESUPUESTO GENERAL vs GASTOS COMBINADOS
       </div>
-      <div class="card-content" id="resumenConjunto">
+      <div class="card-content" id="resumenConjunto" style="overflow-x: auto;">
         <div class="empty-state">Cargando...</div>
       </div>
     </div>
 
     <!-- Gastos por persona -->
-    <h2 style="font-weight: 400; margin: 2rem 0 1rem; color: #2c3e50;">GASTOS POR PERSONA</h2>
+    <h2 style="font-weight: 400; margin: 1.5rem 0 1rem; color: #2c3e50; font-size: 1.1rem;">GASTOS POR PERSONA</h2>
     <div class="perfiles-grid" id="perfilesContainer">
       <div class="empty-state">Cargando...</div>
     </div>
   </div>
 
   <script type="module">
+    // [MISMO CÓDIGO JAVASCRIPT EXISTENTE - SIN CAMBIOS]
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -618,14 +673,12 @@
       try {
         const filtros = obtenerFiltrosPeriodo();
         
-        // Obtener ingresos
         const ingresos = await obtenerIngresosPeriodo(filtros);
         let totalIngresos = 0;
         ingresos.forEach(data => {
           totalIngresos += data.monto;
         });
 
-        // Obtener gastos
         const gastos = await obtenerGastosPeriodo(filtros);
         let totalGastos = 0;
         const gastosPorPerfil = {
@@ -643,7 +696,6 @@
 
         const saldo = totalIngresos - totalGastos;
         
-        // Actualizar cards
         document.getElementById('totalIngresosGlobal').innerText = `$${totalIngresos}`;
         document.getElementById('totalGastosGlobal').innerText = `$${totalGastos}`;
         document.getElementById('saldoGlobal').innerText = `$${saldo}`;
@@ -651,11 +703,9 @@
         const saldoCard = document.getElementById('saldoGlobalCard');
         saldoCard.className = `finanza-card saldo ${saldo >= 0 ? 'positivo' : 'negativo'}`;
 
-        // Mostrar listas
         mostrarListaIngresos(ingresos);
         mostrarListaGastos(gastos);
 
-        // Obtener presupuesto
         const presupuestoQuery = query(
           collection(db, "presupuestos"),
           where("usuario", "==", 'GENERAL')
@@ -668,13 +718,8 @@
           presupuestos[key] = (presupuestos[key] || 0) + data.monto;
         });
 
-        // Mostrar resumen conjunto
         mostrarResumenConjunto(presupuestos, gastosPorPerfil);
-        
-        // Mostrar gastos individuales
         mostrarGastosIndividuales(gastosPorPerfil);
-
-        // Mostrar gráfico de barras mensual
         mostrarGraficoBarras(ingresos, gastos, filtros);
 
       } catch (error) {
@@ -741,7 +786,6 @@
     }
 
     function mostrarGraficoBarras(ingresos, gastos, filtros) {
-      // Agrupar por mes
       const meses = {};
       
       ingresos.forEach(data => {
@@ -758,14 +802,12 @@
         meses[key].gastos += data.monto;
       });
 
-      // Ordenar por fecha
       const mesesOrdenados = Object.entries(meses).sort((a, b) => {
         const [m1, y1] = a[0].split('/').map(Number);
         const [m2, y2] = b[0].split('/').map(Number);
         return y1 - y2 || m1 - m2;
       });
 
-      // Calcular valores máximos para escala
       let maxValor = 0;
       mesesOrdenados.forEach(([_, datos]) => {
         maxValor = Math.max(maxValor, datos.ingresos, datos.gastos);
@@ -774,7 +816,7 @@
       const container = document.getElementById('barrasMensuales');
       container.innerHTML = '';
 
-      mesesOrdenados.slice(-6).forEach(([mes, datos]) => { // Últimos 6 meses máximo
+      mesesOrdenados.slice(-6).forEach(([mes, datos]) => {
         const alturaIngresos = maxValor > 0 ? (datos.ingresos / maxValor) * 180 : 0;
         const alturaGastos = maxValor > 0 ? (datos.gastos / maxValor) * 180 : 0;
 
@@ -794,7 +836,6 @@
         container.appendChild(barraDiv);
       });
 
-      // Calcular promedios
       const totalMeses = mesesOrdenados.length;
       const sumaIngresos = Object.values(meses).reduce((sum, d) => sum + d.ingresos, 0);
       const sumaGastos = Object.values(meses).reduce((sum, d) => sum + d.gastos, 0);
@@ -807,7 +848,6 @@
     function mostrarResumenConjunto(presupuesto, gastosPorPerfil) {
       const container = document.getElementById('resumenConjunto');
       
-      // Calcular gastos combinados
       const gastosCombinados = {};
       
       for (const perfil of ['Maria', 'Andres']) {
