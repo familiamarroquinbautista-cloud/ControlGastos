@@ -225,20 +225,34 @@
       border-color: #909090;
     }
 
+    /* Mensajes */
+    .mensaje {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      border: 1px solid;
+      display: none;
+    }
+
+    .mensaje.exito {
+      background: #f8f9fa;
+      border-color: #c0c0c0;
+      color: #2c3e50;
+    }
+
+    .mensaje.error {
+      background: #fef5f5;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
     /* Empty state */
     .empty-state {
       text-align: center;
       color: #95a5a6;
       padding: 2rem 0;
       font-size: 0.9rem;
-    }
-
-    /* Contador simple */
-    .contador-simple {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #5a6a7a;
-      margin-top: 0.5rem;
     }
   </style>
 </head>
@@ -252,6 +266,9 @@
         <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
       </div>
     </div>
+
+    <!-- Mensajes -->
+    <div id="mensaje" class="mensaje"></div>
 
     <!-- Progreso mensual -->
     <div class="card">
@@ -302,26 +319,48 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const db = getFirestore(initializeApp({
+    // Configuración de Firebase
+    const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
       projectId: "controlgastosprueba",
       storageBucket: "controlgastosprueba.firebasestorage.app",
       messagingSenderId: "679682152121",
       appId: "1:679682152121:web:d3981591d952df1333ed68"
-    }));
+    };
 
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Obtener perfil de sessionStorage
     const perfil = sessionStorage.getItem('perfil');
     
     if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
 
+    // Mostrar perfil
     document.getElementById('perfilDisplay').innerText = perfil;
 
+    // Función para mostrar mensajes
+    function mostrarMensaje(texto, tipo) {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.style.display = 'block';
+      mensaje.innerText = texto;
+      mensaje.className = `mensaje ${tipo}`;
+      setTimeout(() => {
+        mensaje.style.display = 'none';
+      }, 3000);
+    }
+
+    // Agregar nuevo gasto al checklist
     window.agregarGasto = async () => {
       const nombreGasto = document.getElementById("nuevo-gasto").value.trim();
-      if (!nombreGasto) return;
+      if (!nombreGasto) {
+        mostrarMensaje("Escribe un nombre para el gasto", "error");
+        return;
+      }
 
       try {
         await addDoc(collection(db, "checklist"), {
@@ -332,26 +371,30 @@
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear()
         });
+        
+        mostrarMensaje(`Gasto "${nombreGasto}" agregado`, "exito");
         document.getElementById("nuevo-gasto").value = "";
-        cargarGastos();
+        await cargarGastos();
       } catch (error) {
-        console.error(error);
-        alert("Error al agregar");
+        console.error("Error al agregar gasto:", error);
+        mostrarMensaje("Error al agregar", "error");
       }
     };
 
+    // Cambiar estado de un gasto (pagado/no pagado)
     window.toggleGasto = async (id, pagadoActual) => {
       try {
         await updateDoc(doc(db, "checklist", id), {
           pagado: !pagadoActual
         });
-        cargarGastos();
+        await cargarGastos();
       } catch (error) {
-        console.error(error);
-        alert("Error al actualizar");
+        console.error("Error al actualizar gasto:", error);
+        mostrarMensaje("Error al actualizar", "error");
       }
     };
 
+    // Cargar todos los gastos del checklist
     async function cargarGastos() {
       try {
         const mesActual = new Date().getMonth() + 1;
@@ -408,11 +451,13 @@
         document.getElementById("barra-progreso").style.width = `${porcentaje}%`;
         
       } catch (error) {
-        console.error(error);
+        console.error("Error al cargar gastos:", error);
         document.getElementById("lista-gastos").innerHTML = '<div class="empty-state">Error al cargar</div>';
+        mostrarMensaje("Error al cargar los gastos", "error");
       }
     }
 
+    // Inicializar
     cargarGastos();
   </script>
 </body>
