@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Checklist de Gastos</title>
   <style>
-    /* (Mantén todos los estilos igual que antes) */
     * {
       margin: 0;
       padding: 0;
@@ -65,6 +64,7 @@
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
+      display: inline-block;
     }
 
     .btn-volver:hover {
@@ -223,7 +223,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header">
       <h1>CHECKLIST</h1>
       <div class="perfil-info">
@@ -232,24 +231,19 @@
       </div>
     </div>
 
-    <!-- Mensaje -->
     <div id="mensaje" class="mensaje"></div>
 
-    <!-- Card principal -->
     <div class="card">
       <h2>LISTA DE GASTOS PENDIENTES</h2>
       
-      <!-- Contador -->
       <div class="contador" id="contador">
         <span>Completados: <span id="completados">0</span>/<span id="total">0</span></span>
       </div>
       
-      <!-- Lista de items -->
       <div class="lista-container" id="listaContainer">
         <div class="empty-state">Cargando...</div>
       </div>
 
-      <!-- Agregar nuevo -->
       <div class="agregar-item">
         <input type="text" id="nuevoItem" placeholder="Escribe un item..." onkeypress="if(event.key==='Enter') agregarItem()">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
@@ -260,32 +254,31 @@
   <script>
     // Verificar perfil
     const perfil = sessionStorage.getItem('perfil');
-    if (!perfil || perfil === 'Admin') {
+    if (!perfil) {
       window.location.href = "index.html";
     }
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // Configuración de Firebase (REEMPLAZA CON TUS DATOS)
+    // Configuración de Firebase - REEMPLAZA CON TUS DATOS
     const firebaseConfig = {
-      apiKey: "TU_API_KEY",
-      authDomain: "TU_AUTH_DOMAIN",
-      projectId: "TU_PROJECT_ID",
-      storageBucket: "TU_STORAGE_BUCKET",
-      messagingSenderId: "TU_MESSAGING_SENDER_ID",
-      appId: "TU_APP_ID"
+      apiKey: "AIzaSyBQ9Z5K7JX7X7X7X7X7X7X7X7X7X7X7X7X",
+      authDomain: "tu-proyecto.firebaseapp.com",
+      projectId: "tu-proyecto",
+      storageBucket: "tu-proyecto.appspot.com",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:abcdef1234567890"
     };
 
     // Inicializar Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // REFERENCIA ÚNICA para TODOS los perfiles (lista compartida)
+    // Referencia ÚNICA para TODOS los perfiles (lista compartida)
     const itemsRef = db.collection('checklist_compartido').doc('lista_principal').collection('items');
 
-    // Array de items (se mantiene en memoria para la UI)
+    // Array de items
     let items = [];
 
-    // Mostrar mensaje
     function mostrarMensaje(texto, esError = false) {
       const mensaje = document.getElementById('mensaje');
       mensaje.style.display = 'block';
@@ -296,7 +289,6 @@
       }, 2000);
     }
 
-    // Cargar items desde Firestore en tiempo real
     function cargarItems() {
       itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         items = [];
@@ -309,7 +301,6 @@
         
         actualizarLista();
         
-        // Si no hay items, crear algunos de ejemplo (solo una vez)
         if (items.length === 0) {
           crearItemsEjemplo();
         }
@@ -320,7 +311,6 @@
       });
     }
 
-    // Crear items de ejemplo
     async function crearItemsEjemplo() {
       const ejemplos = [
         {
@@ -328,7 +318,7 @@
           completado: false,
           fecha: new Date().toLocaleDateString(),
           timestamp: Date.now() - 100000,
-          creadoPor: 'Sistema' // Quién creó el item
+          creadoPor: 'Sistema'
         },
         {
           texto: 'Comprar mercado',
@@ -348,7 +338,6 @@
       }
     }
 
-    // Actualizar la lista en pantalla
     function actualizarLista() {
       const container = document.getElementById('listaContainer');
       const completadosSpan = document.getElementById('completados');
@@ -364,7 +353,6 @@
       let completados = 0;
       let html = '';
 
-      // Ordenar por timestamp (más nuevos primero)
       const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
 
       itemsOrdenados.forEach(item => {
@@ -387,7 +375,6 @@
       totalSpan.innerText = items.length;
     }
 
-    // Agregar nuevo item
     window.agregarItem = async function() {
       const input = document.getElementById('nuevoItem');
       const texto = input.value.trim();
@@ -402,7 +389,7 @@
         completado: false,
         fecha: new Date().toLocaleDateString(),
         timestamp: Date.now(),
-        creadoPor: perfil // Guardamos quién creó el item
+        creadoPor: perfil
       };
 
       try {
@@ -415,7 +402,6 @@
       }
     };
 
-    // Cambiar estado del checkbox
     window.toggleItem = async function(id) {
       const item = items.find(i => i.id === id);
       if (item) {
@@ -432,7 +418,6 @@
       }
     };
 
-    // Eliminar item
     window.eliminarItem = async function(id) {
       if (confirm('¿Eliminar este item?')) {
         try {
@@ -445,7 +430,6 @@
       }
     };
 
-    // Cargar items al iniciar
     cargarItems();
   </script>
 </body>
