@@ -91,57 +91,112 @@
       color: #2c3e50;
     }
 
-    /* Lista de items */
-    .lista-items {
-      margin: 1rem 0;
+    /* Tabla estilo Excel */
+    .tabla-container {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .tabla-header {
+      display: grid;
+      grid-template-columns: 50px 1fr 100px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e0e0e0;
+      font-weight: 500;
+      color: #4a5568;
+    }
+
+    .tabla-header div {
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    .tabla-header div:first-child {
+      text-align: center;
+    }
+
+    .tabla-header div:last-child {
+      text-align: center;
+    }
+
+    .tabla-body {
       max-height: 400px;
       overflow-y: auto;
     }
 
-    .item-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.8rem 0;
+    .tabla-fila {
+      display: grid;
+      grid-template-columns: 50px 1fr 100px;
       border-bottom: 1px solid #f0f0f0;
+      align-items: center;
     }
 
-    .item-row:last-child {
+    .tabla-fila:last-child {
       border-bottom: none;
     }
 
-    .item-checkbox {
-      width: 20px;
-      height: 20px;
+    .tabla-fila div {
+      padding: 0.8rem;
+    }
+
+    .col-checkbox {
+      text-align: center;
+    }
+
+    .col-checkbox input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
       cursor: pointer;
       accent-color: #2c3e50;
     }
 
-    .item-text {
-      flex: 1;
-      font-size: 0.95rem;
+    .col-texto {
       color: #2c3e50;
     }
 
-    .item-text.checked {
+    .col-texto.completado {
       text-decoration: line-through;
       color: #95a5a6;
     }
 
-    .item-fecha {
+    .col-fecha {
+      text-align: center;
       color: #95a5a6;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
 
-    /* Barra de progreso simple */
-    .progreso-simple {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid #eaeaea;
-      font-size: 0.9rem;
-      color: #5a6a7a;
+    /* Barra de progreso */
+    .progreso-container {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+
+    .progreso-info {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+    }
+
+    .progreso-barra {
+      height: 6px;
+      background: #eaeaea;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progreso-llenado {
+      height: 6px;
+      background: #2c3e50;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.3s;
     }
 
     /* Agregar nuevo item */
@@ -230,15 +285,27 @@
     <div class="card">
       <h2>LISTA DE GASTOS PENDIENTES</h2>
       
-      <!-- Lista de items -->
-      <div class="lista-items" id="listaItems">
-        <div class="empty-state">No hay items. Agrega uno nuevo.</div>
+      <!-- Progreso -->
+      <div class="progreso-container">
+        <div class="progreso-info">
+          <span>Progreso: <span id="itemsCompletados">0</span>/<span id="itemsTotales">0</span></span>
+          <span id="porcentaje">0%</span>
+        </div>
+        <div class="progreso-barra">
+          <div class="progreso-llenado" id="barraProgreso"></div>
+        </div>
       </div>
-
-      <!-- Barra de progreso simple -->
-      <div class="progreso-simple" id="progreso">
-        <span>Progreso: <span id="itemsCompletados">0</span>/<span id="itemsTotales">0</span></span>
-        <span id="porcentaje">0%</span>
+      
+      <!-- Tabla estilo Excel -->
+      <div class="tabla-container">
+        <div class="tabla-header">
+          <div>✓</div>
+          <div>Descripción</div>
+          <div>Fecha</div>
+        </div>
+        <div class="tabla-body" id="tablaBody">
+          <div class="empty-state">No hay items. Agrega uno nuevo.</div>
+        </div>
       </div>
 
       <!-- Agregar nuevo item -->
@@ -251,7 +318,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // Configuración de Firebase
     const firebaseConfig = {
@@ -292,23 +359,25 @@
     window.agregarItem = async () => {
       const texto = document.getElementById('nuevoItem').value.trim();
       if (!texto) {
-        mostrarMensaje("Escribe un texto para el item", "error");
+        mostrarMensaje("Escribe una descripción", "error");
         return;
       }
 
       try {
+        const fecha = new Date();
         await addDoc(collection(db, "checklist"), {
           usuario: perfil,
           texto: texto,
           completado: false,
-          fecha: new Date().toISOString()
+          fecha: fecha.toISOString(),
+          timestamp: fecha.getTime()
         });
         
         mostrarMensaje("Item agregado", "exito");
         document.getElementById('nuevoItem').value = '';
-        cargarItems();
+        await cargarItems();
       } catch (error) {
-        console.error(error);
+        console.error("Error al agregar:", error);
         mostrarMensaje("Error al agregar", "error");
       }
     };
@@ -319,9 +388,9 @@
         await updateDoc(doc(db, "checklist", id), {
           completado: !completadoActual
         });
-        cargarItems();
+        await cargarItems();
       } catch (error) {
-        console.error(error);
+        console.error("Error al actualizar:", error);
         mostrarMensaje("Error al actualizar", "error");
       }
     };
@@ -343,17 +412,17 @@
 
         // Ordenar por fecha (más recientes primero)
         items.sort((a, b) => {
-          return (b.fecha || '').localeCompare(a.fecha || '');
+          const fechaA = a.timestamp || 0;
+          const fechaB = b.timestamp || 0;
+          return fechaB - fechaA;
         });
 
-        const lista = document.getElementById('listaItems');
-        lista.innerHTML = '';
+        const tablaBody = document.getElementById('tablaBody');
+        tablaBody.innerHTML = '';
 
         if (items.length === 0) {
-          lista.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
-          document.getElementById('itemsCompletados').innerText = '0';
-          document.getElementById('itemsTotales').innerText = '0';
-          document.getElementById('porcentaje').innerText = '0%';
+          tablaBody.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
+          actualizarProgreso(0, 0);
           return;
         }
 
@@ -362,8 +431,8 @@
         items.forEach(item => {
           if (item.completado) completados++;
           
-          const div = document.createElement('div');
-          div.className = 'item-row';
+          const fila = document.createElement('div');
+          fila.className = 'tabla-fila';
           
           let fechaTexto = '';
           if (item.fecha) {
@@ -375,26 +444,33 @@
             }
           }
           
-          div.innerHTML = `
-            <input type="checkbox" class="item-checkbox" ${item.completado ? 'checked' : ''} onchange="toggleItem('${item.id}', ${item.completado})">
-            <span class="item-text ${item.completado ? 'checked' : ''}">${item.texto || 'Sin texto'}</span>
-            <span class="item-fecha">${fechaTexto}</span>
+          fila.innerHTML = `
+            <div class="col-checkbox">
+              <input type="checkbox" ${item.completado ? 'checked' : ''} onchange="toggleItem('${item.id}', ${item.completado})">
+            </div>
+            <div class="col-texto ${item.completado ? 'completado' : ''}">${item.texto || ''}</div>
+            <div class="col-fecha">${fechaTexto}</div>
           `;
           
-          lista.appendChild(div);
+          tablaBody.appendChild(fila);
         });
 
-        const total = items.length;
-        const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
-        
-        document.getElementById('itemsCompletados').innerText = completados;
-        document.getElementById('itemsTotales').innerText = total;
-        document.getElementById('porcentaje').innerText = porcentaje + '%';
+        actualizarProgreso(completados, items.length);
 
       } catch (error) {
-        console.error(error);
-        document.getElementById('listaItems').innerHTML = '<div class="empty-state">Error al cargar items</div>';
+        console.error("Error al cargar items:", error);
+        document.getElementById('tablaBody').innerHTML = '<div class="empty-state">Error al cargar items</div>';
+        mostrarMensaje("Error al cargar los items", "error");
       }
+    }
+
+    function actualizarProgreso(completados, total) {
+      document.getElementById('itemsCompletados').innerText = completados;
+      document.getElementById('itemsTotales').innerText = total;
+      
+      const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
+      document.getElementById('porcentaje').innerText = porcentaje + '%';
+      document.getElementById('barraProgreso').style.width = porcentaje + '%';
     }
 
     // Cargar items al inicio
