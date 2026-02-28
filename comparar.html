@@ -149,7 +149,6 @@
       word-break: break-word;
     }
 
-    /* COLORES RESTAURADOS PARA CARDS */
     .finanza-card.ingresos .valor {
       color: #2c5a2c;
     }
@@ -212,7 +211,6 @@
       width: 0%;
     }
 
-    /* COLORES RESTAURADOS PARA BARRAS */
     .barra-llenado.barra-positiva {
       background: #2c5a2c;
     }
@@ -278,7 +276,6 @@
       border: 1px solid #e0e0e0;
     }
 
-    /* COLORES RESTAURADOS PARA DIFERENCIA */
     .diferencia.positivo {
       background: #f0f7f0;
       border-color: #c0d0c0;
@@ -352,7 +349,6 @@
       white-space: nowrap;
     }
 
-    /* COLORES RESTAURADOS PARA BADGES */
     .diferencia-badge.positivo {
       background: #f0f7f0;
       border-color: #c0d0c0;
@@ -372,7 +368,6 @@
       flex-wrap: wrap;
     }
 
-    /* COLORES RESTAURADOS PARA TEXTOS */
     .presupuesto {
       color: #7f8c8d;
     }
@@ -582,9 +577,15 @@
 
     document.getElementById('perfilDisplay').innerText = perfil;
 
+    // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
     const categorias = {
-      'Mercado': ['Carnes', 'Verduras', 'Lacteos', 'Abarrotes', 'Frutas', 'Limpieza'],
-      'Servicios': ['Luz', 'Gas', 'Agua', 'Internet', 'Telefono', 'Gasolina']
+      'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
+      'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
+      'Hogar': ['Arriendo', 'Couta inicial apto'],
+      'Finanzas': ['Couta FNA', 'Couta Coasmedas'],
+      'Transporte': ['Gasolina', 'Transporte Publico', 'Apps', 'Mantenimientos'],
+      'Ocio': ['Plataformas', 'Cine', 'Viajes', 'Restaurantes'],
+      'Otros': ['Otros']
     };
 
     let periodoActual = 'mes';
