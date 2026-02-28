@@ -23,7 +23,6 @@
       padding: 0 1.5rem;
     }
 
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -72,7 +71,6 @@
       border-color: #a0a0a0;
     }
 
-    /* Card principal */
     .card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -91,7 +89,7 @@
       color: #2c3e50;
     }
 
-    /* Lista simple */
+    /* Lista */
     .lista-container {
       margin: 1rem 0;
       max-height: 400px;
@@ -133,7 +131,6 @@
       font-size: 0.85rem;
     }
 
-    /* Botón eliminar */
     .btn-eliminar {
       color: #8b3a3a;
       cursor: pointer;
@@ -147,7 +144,6 @@
       opacity: 1;
     }
 
-    /* Contador */
     .contador {
       margin: 1rem 0;
       padding: 0.8rem;
@@ -160,7 +156,6 @@
       justify-content: space-between;
     }
 
-    /* Agregar nuevo */
     .agregar-item {
       display: flex;
       gap: 0.8rem;
@@ -194,7 +189,6 @@
       background: #f5f5f5;
     }
 
-    /* Mensaje */
     .mensaje {
       margin: 1rem 0;
       padding: 0.8rem;
@@ -220,7 +214,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header">
       <h1>CHECKLIST</h1>
       <div class="perfil-info">
@@ -229,24 +222,19 @@
       </div>
     </div>
 
-    <!-- Mensaje -->
     <div id="mensaje" class="mensaje"></div>
 
-    <!-- Card principal -->
     <div class="card">
       <h2>LISTA DE GASTOS PENDIENTES</h2>
       
-      <!-- Contador -->
       <div class="contador" id="contador">
         <span>Completados: <span id="completados">0</span>/<span id="total">0</span></span>
       </div>
       
-      <!-- Lista de items -->
       <div class="lista-container" id="listaContainer">
         <div class="empty-state">Cargando...</div>
       </div>
 
-      <!-- Agregar nuevo -->
       <div class="agregar-item">
         <input type="text" id="nuevoItem" placeholder="Escribe un item..." onkeypress="if(event.key==='Enter') agregarItem()">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
@@ -262,8 +250,8 @@
     }
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // Clave única para localStorage por perfil
-    const STORAGE_KEY = `checklist_${perfil}`;
+    // Clave para storage
+    const STORAGE_KEY = `checklist_simple_${perfil}`;
 
     // Array de items
     let items = [];
@@ -279,40 +267,53 @@
       }, 1500);
     }
 
-    // Guardar en localStorage
+    // Guardar en sessionStorage
     function guardarItems() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    }
-
-    // Cargar de localStorage
-    function cargarItems() {
-      const guardados = localStorage.getItem(STORAGE_KEY);
-      if (guardados) {
-        items = JSON.parse(guardados);
-      } else {
-        // Si no hay datos guardados, crear ejemplos
-        items = [
-          {
-            id: Date.now() - 100000,
-            texto: 'Pagar agua',
-            completado: false,
-            fecha: new Date().toLocaleDateString(),
-            timestamp: Date.now() - 100000
-          },
-          {
-            id: Date.now() - 200000,
-            texto: 'Comprar mercado',
-            completado: true,
-            fecha: new Date().toLocaleDateString(),
-            timestamp: Date.now() - 200000
-          }
-        ];
-        guardarItems();
+      try {
+        const itemsString = JSON.stringify(items);
+        sessionStorage.setItem(STORAGE_KEY, itemsString);
+        console.log('Guardados:', items.length, 'items');
+      } catch (e) {
+        console.error('Error al guardar:', e);
       }
-      actualizarLista();
     }
 
-    // Actualizar la lista en pantalla
+    // Cargar de sessionStorage
+    function cargarItems() {
+      try {
+        const guardados = sessionStorage.getItem(STORAGE_KEY);
+        console.log('Cargando storage:', guardados);
+        
+        if (guardados) {
+          items = JSON.parse(guardados);
+          console.log('Items cargados:', items.length);
+        } else {
+          console.log('No hay datos, creando ejemplos');
+          items = [
+            {
+              id: '1',
+              texto: 'Pagar agua',
+              completado: false,
+              fecha: new Date().toLocaleDateString()
+            },
+            {
+              id: '2',
+              texto: 'Comprar mercado',
+              completado: true,
+              fecha: new Date().toLocaleDateString()
+            }
+          ];
+          guardarItems();
+        }
+        actualizarLista();
+      } catch (e) {
+        console.error('Error al cargar:', e);
+        items = [];
+        actualizarLista();
+      }
+    }
+
+    // Actualizar la lista
     function actualizarLista() {
       const container = document.getElementById('listaContainer');
       const completadosSpan = document.getElementById('completados');
@@ -328,10 +329,7 @@
       let completados = 0;
       let html = '';
 
-      // Ordenar por timestamp (más nuevos primero)
-      const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
-
-      itemsOrdenados.forEach(item => {
+      items.forEach(item => {
         if (item.completado) completados++;
         
         html += `
@@ -360,25 +358,24 @@
         return;
       }
 
-      const ahora = Date.now();
-      const fecha = new Date();
-      const fechaStr = fecha.toLocaleDateString();
-
-      items.push({
-        id: ahora.toString(),
+      const nuevoItem = {
+        id: Date.now().toString(),
         texto: texto,
         completado: false,
-        fecha: fechaStr,
-        timestamp: ahora
-      });
+        fecha: new Date().toLocaleDateString()
+      };
 
+      items.push(nuevoItem);
       input.value = '';
+      
       guardarItems();
       actualizarLista();
       mostrarMensaje('Item agregado');
+      
+      console.log('Item agregado, total:', items.length);
     };
 
-    // Cambiar estado del checkbox
+    // Toggle checkbox
     window.toggleItem = function(id) {
       const item = items.find(i => i.id === id);
       if (item) {
@@ -396,8 +393,14 @@
       mostrarMensaje('Item eliminado');
     };
 
-    // Cargar items al iniciar
+    // Cargar al iniciar
+    console.log('Iniciando checklist para:', perfil);
     cargarItems();
+
+    // Guardar antes de salir
+    window.addEventListener('beforeunload', function() {
+      guardarItems();
+    });
   </script>
 </body>
 </html>
