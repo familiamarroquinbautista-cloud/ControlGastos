@@ -912,8 +912,7 @@
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear(),
-          tipoMov: 'ingreso',
-          destino: 'familiar'
+          tipoMov: 'ingreso'
         });
         
         mostrarMensaje(`Ingreso registrado: $${monto} (${tipo})`, "exito");
@@ -944,8 +943,10 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // CORREGIDO: Filtrar ingresos por usuario también
         const ingresosQuery = query(
           collection(db, "ingresos"),
+          where("usuario", "==", perfil),
           where("mes", "==", mesActual),
           where("año", "==", añoActual)
         );
@@ -999,6 +1000,7 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // CORREGIDO: Filtrar gastos por usuario
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -1009,8 +1011,10 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
+        // CORREGIDO: Filtrar ingresos por usuario
         const ingresosQuery = query(
           collection(db, "ingresos"),
+          where("usuario", "==", perfil),
           where("mes", "==", mesActual),
           where("año", "==", añoActual),
           orderBy("fecha", "desc"),
@@ -1022,24 +1026,37 @@
         
         gastosSnap.forEach(doc => {
           const data = doc.data();
+          // Asegurar que la fecha existe
+          let fechaObj = new Date();
+          if (data.fecha) {
+            fechaObj = data.fecha.toDate ? data.fecha.toDate() : new Date(data.fecha);
+          }
+          
           movimientos.push({
             ...data,
             id: doc.id,
             tipo: 'gasto',
-            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+            fechaObj: fechaObj
           });
         });
         
         ingresosSnap.forEach(doc => {
           const data = doc.data();
+          // Asegurar que la fecha existe
+          let fechaObj = new Date();
+          if (data.fecha) {
+            fechaObj = data.fecha.toDate ? data.fecha.toDate() : new Date(data.fecha);
+          }
+          
           movimientos.push({
             ...data,
             id: doc.id,
             tipo: 'ingreso',
-            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+            fechaObj: fechaObj
           });
         });
         
+        // Ordenar por fecha descendente
         movimientos.sort((a, b) => b.fechaObj - a.fechaObj);
         mostrarMovimientos(movimientos.slice(0, 15));
 
@@ -1057,8 +1074,10 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
+        // CORREGIDO: Filtrar ingresos por usuario
         const ingresosQuery = query(
           collection(db, "ingresos"),
+          where("usuario", "==", perfil),
           where("mes", "==", mesActual),
           where("año", "==", añoActual),
           orderBy("fecha", "desc"),
@@ -1069,11 +1088,16 @@
         const movimientos = [];
         ingresosSnap.forEach(doc => {
           const data = doc.data();
+          let fechaObj = new Date();
+          if (data.fecha) {
+            fechaObj = data.fecha.toDate ? data.fecha.toDate() : new Date(data.fecha);
+          }
+          
           movimientos.push({
             ...data,
             id: doc.id,
             tipo: 'ingreso',
-            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+            fechaObj: fechaObj
           });
         });
         
@@ -1106,11 +1130,16 @@
         const movimientos = [];
         gastosSnap.forEach(doc => {
           const data = doc.data();
+          let fechaObj = new Date();
+          if (data.fecha) {
+            fechaObj = data.fecha.toDate ? data.fecha.toDate() : new Date(data.fecha);
+          }
+          
           movimientos.push({
             ...data,
             id: doc.id,
             tipo: 'gasto',
-            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+            fechaObj: fechaObj
           });
         });
         
@@ -1153,8 +1182,8 @@
           div.innerHTML = `
             <div>
               <span class="tipo-badge badge-ingreso">INGRESO</span>
-              <span class="categoria-text">${mov.tipoIngreso}</span>
-              <span>${mov.descripcion}</span>
+              <span class="categoria-text">${mov.tipoIngreso || ''}</span>
+              <span>${mov.descripcion || ''}</span>
             </div>
             <div>
               <span class="monto-positivo">+$${mov.monto}</span>
@@ -1166,9 +1195,9 @@
           div.innerHTML = `
             <div>
               <span class="tipo-badge badge-gasto">GASTO</span>
-              <span class="categoria-text">${mov.categoria} - ${mov.subcategoria}</span>
+              <span class="categoria-text">${mov.categoria || ''} - ${mov.subcategoria || ''}</span>
               ${metodoTexto}
-              <span>${mov.descripcion}</span>
+              <span>${mov.descripcion || ''}</span>
             </div>
             <div>
               <span class="monto-negativo">-$${mov.monto}</span>
@@ -1181,6 +1210,7 @@
       });
     }
 
+    // Inicializar
     actualizarSubcategoriasGasto();
     cargarTodosMovimientos();
     calcularSaldo();
