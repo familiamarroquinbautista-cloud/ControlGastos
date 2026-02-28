@@ -131,9 +131,15 @@
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+    }
+
+    .saldo-principal {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eaeaea;
     }
 
     .saldo-info {
@@ -163,9 +169,30 @@
     }
 
     .saldo-detalle {
-      text-align: right;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      text-align: center;
       font-size: 0.85rem;
+    }
+
+    .detalle-item {
+      padding: 0.3rem;
+    }
+
+    .detalle-item .label {
       color: #95a5a6;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .detalle-item .valor {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    .detalle-item .valor.tarjeta {
+      color: #8b4a4a;
     }
 
     /* Switch Ingreso/Gasto */
@@ -281,6 +308,44 @@
       border-color: #2c3e50;
     }
 
+    /* Método de pago */
+    .metodo-pago {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+
+    .metodo-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #f5f5f5;
+      color: #5a6a7a;
+    }
+
+    .metodo-option.selected {
+      background: #2c3e50;
+      color: white;
+    }
+
+    .metodo-option.debito.selected {
+      background: #2c5a2c;
+    }
+
+    .metodo-option.credito.selected {
+      background: #8b3a3a;
+    }
+
     .campo-row {
       display: flex;
       gap: 1rem;
@@ -386,6 +451,15 @@
       color: #8b3a3a;
     }
 
+    .badge-credito {
+      background: #f0e0e0;
+      color: #8b4a4a;
+      font-size: 0.7rem;
+      margin-left: 0.3rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+    }
+
     .categoria-text {
       color: #5a6a7a;
       font-size: 0.8rem;
@@ -462,13 +536,25 @@
 
     <!-- Saldo disponible -->
     <div class="saldo-card">
-      <div class="saldo-info">
-        <span class="saldo-label">SALDO DISPONIBLE</span>
-        <span class="saldo-valor" id="saldoDisponible">$0</span>
+      <div class="saldo-principal">
+        <div class="saldo-info">
+          <span class="saldo-label">SALDO DISPONIBLE</span>
+          <span class="saldo-valor" id="saldoDisponible">$0</span>
+        </div>
       </div>
       <div class="saldo-detalle">
-        <div>Ingresos: <span id="totalIngresos">$0</span></div>
-        <div>Gastos: <span id="totalGastos">$0</span></div>
+        <div class="detalle-item">
+          <div class="label">Ingresos</div>
+          <div class="valor" id="totalIngresos">$0</div>
+        </div>
+        <div class="detalle-item">
+          <div class="label">Gastos (E/D)</div>
+          <div class="valor" id="totalGastosDebito">$0</div>
+        </div>
+        <div class="detalle-item">
+          <div class="label">Gastos Tarjeta</div>
+          <div class="valor tarjeta" id="totalGastosTarjeta">$0</div>
+        </div>
       </div>
     </div>
 
@@ -501,6 +587,19 @@
             <select id="subcategoriaGasto">
               <!-- Se llena dinámicamente -->
             </select>
+          </div>
+        </div>
+
+        <!-- Método de pago -->
+        <div class="campo">
+          <label>Método de pago</label>
+          <div class="metodo-pago">
+            <div class="metodo-option debito selected" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">
+              <span>💳</span> Débito/Efectivo
+            </div>
+            <div class="metodo-option credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">
+              <span>💳</span> Crédito
+            </div>
           </div>
         </div>
         
@@ -537,7 +636,7 @@
         
         <div class="campo">
           <label>Descripción</label>
-          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual, Prima de servicios">
+          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual">
         </div>
         
         <div class="campo-row">
@@ -596,6 +695,7 @@
 
     let tipoMovimientoActual = 'gasto';
     let filtroActual = 'todos';
+    let metodoPagoActual = 'debito'; // debito o credito
 
     // Definir subcategorías para gastos
     const subcategoriasGasto = {
@@ -619,6 +719,22 @@
 
     window.cambiarCategoriaGasto = function() {
       actualizarSubcategoriasGasto();
+    };
+
+    // Seleccionar método de pago
+    window.seleccionarMetodoPago = function(metodo) {
+      metodoPagoActual = metodo;
+      
+      const debitoOption = document.getElementById('metodoDebito');
+      const creditoOption = document.getElementById('metodoCredito');
+      
+      if (metodo === 'debito') {
+        debitoOption.classList.add('selected');
+        creditoOption.classList.remove('selected');
+      } else {
+        debitoOption.classList.remove('selected');
+        creditoOption.classList.add('selected');
+      }
     };
 
     // Cambiar entre ingreso y gasto
@@ -675,13 +791,15 @@
           subcategoria: subcategoria,
           descripcion: descripcion,
           monto: monto,
+          metodoPago: metodoPagoActual, // 'debito' o 'credito'
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear(),
           tipoMov: 'gasto'
         });
         
-        mostrarMensaje(`Gasto registrado: $${monto} en ${categoria} - ${subcategoria}`, "exito");
+        const metodoTexto = metodoPagoActual === 'debito' ? 'Débito/Efectivo' : 'Crédito';
+        mostrarMensaje(`Gasto registrado: $${monto} en ${categoria} - ${subcategoria} (${metodoTexto})`, "exito");
         
         document.getElementById('descripcionGasto').value = '';
         document.getElementById('montoGasto').value = '';
@@ -719,7 +837,7 @@
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear(),
           tipoMov: 'ingreso',
-          destino: 'familiar'  // Siempre familiar
+          destino: 'familiar'
         });
         
         mostrarMensaje(`Ingreso registrado: $${monto} (${tipo})`, "exito");
@@ -745,13 +863,13 @@
       }, 3000);
     }
 
-    // Calcular saldo disponible
+    // Calcular saldo disponible (excluye gastos de tarjeta)
     async function calcularSaldo() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener ingresos (todos son familiares ahora)
+        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -773,15 +891,24 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
-        let totalGastos = 0;
+        let totalGastosDebito = 0;
+        let totalGastosTarjeta = 0;
+        
         gastosSnap.forEach(doc => {
-          totalGastos += doc.data().monto;
+          const data = doc.data();
+          if (data.metodoPago === 'credito') {
+            totalGastosTarjeta += data.monto;
+          } else {
+            totalGastosDebito += data.monto;
+          }
         });
 
-        const saldo = totalIngresos - totalGastos;
+        // Saldo disponible = ingresos - gastos débito (los de crédito no afectan hasta pagar)
+        const saldo = totalIngresos - totalGastosDebito;
         
         document.getElementById('totalIngresos').innerText = `$${totalIngresos}`;
-        document.getElementById('totalGastos').innerText = `$${totalGastos}`;
+        document.getElementById('totalGastosDebito').innerText = `$${totalGastosDebito}`;
+        document.getElementById('totalGastosTarjeta').innerText = `$${totalGastosTarjeta}`;
         
         const saldoElement = document.getElementById('saldoDisponible');
         saldoElement.innerText = `$${saldo}`;
@@ -812,7 +939,7 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
-        // Obtener ingresos (todos son familiares ahora)
+        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -963,10 +1090,12 @@
             </div>
           `;
         } else {
+          const metodoTexto = mov.metodoPago === 'credito' ? '<span class="badge-credito">Crédito</span>' : '';
           div.innerHTML = `
             <div>
               <span class="tipo-badge badge-gasto"> GASTO</span>
               <span class="categoria-text">${mov.categoria} - ${mov.subcategoria}</span>
+              ${metodoTexto}
               <span>${mov.descripcion}</span>
             </div>
             <div>
