@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Registro de Gastos</title>
   <style>
     * {
@@ -19,8 +20,9 @@
 
     .container {
       max-width: 600px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 100%;
     }
 
     /* Header */
@@ -28,13 +30,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
       border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .header h1 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 400;
       letter-spacing: 1px;
       color: #2c3e50;
@@ -43,41 +47,39 @@
     .perfil-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.8rem;
+      flex-wrap: wrap;
     }
 
     .avatar {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: #f0f0f0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       border: 1px solid #d0d0d0;
     }
 
     .perfil-nombre {
       font-weight: 500;
       color: #2c3e50;
+      font-size: 0.95rem;
     }
 
     .btn-outline {
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 0.8rem;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
-    }
-
-    .btn-outline:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
+      display: inline-block;
     }
 
     /* Navegación módulos */
@@ -85,43 +87,37 @@
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
     }
 
     .nav-modulos h2 {
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-weight: 400;
       color: #7f8c8d;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       letter-spacing: 0.5px;
     }
 
     .nav-botones {
       display: flex;
-      gap: 0.8rem;
+      gap: 0.6rem;
       flex-wrap: wrap;
     }
 
     .btn-modulo {
-      padding: 0.8rem 1.2rem;
+      padding: 0.7rem 0.5rem;
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
-      flex: 1;
+      flex: 1 1 auto;
       text-align: center;
-      min-width: 120px;
-    }
-
-    .btn-modulo:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
+      min-width: 100px;
     }
 
     /* Saldo disponible */
@@ -138,7 +134,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
-      padding-bottom: 1rem;
+      padding-bottom: 0.8rem;
       border-bottom: 1px solid #eaeaea;
     }
 
@@ -148,51 +144,25 @@
     }
 
     .saldo-label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #7f8c8d;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .saldo-valor {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 300;
       color: #2c3e50;
-    }
-
-    .saldo-positivo {
-      color: #2c5a2c;
-    }
-
-    .saldo-negativo {
-      color: #8b3a3a;
+      word-break: break-word;
     }
 
     .saldo-detalle {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.5rem;
+      gap: 0.3rem;
       text-align: center;
-      font-size: 0.85rem;
-    }
-
-    .detalle-item {
-      padding: 0.3rem;
-    }
-
-    .detalle-item .label {
-      color: #95a5a6;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-    }
-
-    .detalle-item .valor {
-      font-weight: 500;
-      color: #2c3e50;
-    }
-
-    .detalle-item .valor.tarjeta {
-      color: #8b4a4a;
+      font-size: 0.8rem;
     }
 
     /* Switch Ingreso/Gasto */
@@ -200,53 +170,36 @@
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.2rem;
       margin-bottom: 1.5rem;
     }
 
     .switch-label {
       display: flex;
       justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.85rem;
       color: #7f8c8d;
     }
 
     .switch-buttons {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       background: #f0f0f0;
-      padding: 0.3rem;
+      padding: 0.25rem;
       border-radius: 50px;
     }
 
     .switch-btn {
       flex: 1;
-      padding: 0.8rem;
+      padding: 0.7rem 0.3rem;
       border: none;
       border-radius: 50px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
       background: transparent;
       color: #5a6a7a;
-    }
-
-    .switch-btn.active {
-      background: white;
-      color: #2c3e50;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .switch-btn.ingreso.active {
-      background: #2c5a2c;
-      color: white;
-    }
-
-    .switch-btn.gasto.active {
-      background: #8b3a3a;
-      color: white;
     }
 
     /* Cards */
@@ -254,15 +207,14 @@
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.2rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .card h2 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 400;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid #eaeaea;
       color: #2c3e50;
@@ -273,155 +225,125 @@
       background: #fafafa;
       border: 1px solid #eaeaea;
       border-radius: 8px;
-      padding: 1.2rem;
+      padding: 1rem;
     }
 
     .campo {
-      margin-bottom: 1rem;
-    }
-
-    .campo:last-child {
-      margin-bottom: 0;
+      margin-bottom: 0.8rem;
     }
 
     .campo label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #5a6a7a;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.2rem;
     }
 
     .campo input, .campo select {
       width: 100%;
-      padding: 0.8rem;
+      padding: 0.7rem;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 1rem;
       background: white;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
-    .campo input:focus, .campo select:focus {
-      outline: none;
-      border-color: #2c3e50;
+    /* INPUT NUMÉRICO: elimina flechas y fuerza teclado numérico en móvil */
+    .campo input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    
+    .campo input[type="number"]::-webkit-outer-spin-button,
+    .campo input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    /* Forzar teclado numérico en móvil */
+    .campo input[type="number"],
+    .campo input[pattern="\d*"] {
+      -webkit-text-security: none;
     }
 
     /* Método de pago */
     .metodo-pago-container {
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .metodo-pago-label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #5a6a7a;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
     }
 
     .metodo-pago-opciones {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       background: #f0f0f0;
-      padding: 0.3rem;
+      padding: 0.25rem;
       border-radius: 6px;
+      flex-wrap: wrap;
     }
 
     .metodo-pago-opcion {
-      flex: 1;
-      padding: 0.6rem;
+      flex: 1 1 auto;
+      padding: 0.6rem 0.3rem;
       border: none;
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
       background: transparent;
       color: #5a6a7a;
       text-align: center;
-    }
-
-    .metodo-pago-opcion.seleccionado {
-      background: white;
-      color: #2c3e50;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .metodo-pago-opcion.debito.seleccionado {
-      background: #2c5a2c;
-      color: white;
-    }
-
-    .metodo-pago-opcion.credito.seleccionado {
-      background: #8b3a3a;
-      color: white;
+      min-width: 80px;
     }
 
     .campo-row {
       display: flex;
-      gap: 1rem;
+      gap: 0.8rem;
       align-items: flex-end;
+      flex-wrap: wrap;
     }
 
     .campo-row .campo {
-      flex: 1;
+      flex: 1 1 150px;
       margin-bottom: 0;
     }
 
     .btn-registro {
-      padding: 0.8rem 1.5rem;
+      padding: 0.7rem 1rem;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.2s;
       white-space: nowrap;
-    }
-
-    .btn-registro:hover {
-      background: #f5f5f5;
-      border-color: #909090;
-    }
-
-    .btn-registro.ingreso {
-      border-color: #2c5a2c;
-      color: #2c5a2c;
-    }
-
-    .btn-registro.ingreso:hover {
-      background: #f0f7f0;
-    }
-
-    .btn-registro.gasto {
-      border-color: #8b3a3a;
-      color: #8b3a3a;
-    }
-
-    .btn-registro.gasto:hover {
-      background: #fcf0f0;
+      flex: 1 1 auto;
+      min-width: 120px;
     }
 
     /* Tabs de registros */
     .registros-tabs {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      gap: 0.4rem;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
     }
 
     .registro-tab {
-      padding: 0.3rem 1rem;
+      padding: 0.3rem 0.8rem;
       background: none;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
       font-size: 0.8rem;
       color: #7f8c8d;
       cursor: pointer;
-    }
-
-    .registro-tab.active {
-      background: #f0f0f0;
-      border-color: #a0a0a0;
-      color: #2c3e50;
     }
 
     .registros-lista {
@@ -433,62 +355,45 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.8rem 0;
+      padding: 0.7rem 0;
       border-bottom: 1px solid #f0f0f0;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+      gap: 0.3rem;
     }
 
-    .registro-item:last-child {
-      border-bottom: none;
+    .registro-item > div:first-child {
+      flex: 2 1 200px;
+    }
+
+    .registro-item > div:last-child {
+      flex: 1 1 auto;
+      text-align: right;
     }
 
     .tipo-badge {
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 500;
-      margin-right: 0.5rem;
-    }
-
-    .badge-ingreso {
-      background: #e8f0e8;
-      color: #2c5a2c;
-    }
-
-    .badge-gasto {
-      background: #f0e8e8;
-      color: #8b3a3a;
+      margin-right: 0.3rem;
+      display: inline-block;
     }
 
     .badge-credito {
       background: #f0e0e0;
       color: #8b4a4a;
-      font-size: 0.7rem;
-      margin-left: 0.3rem;
-      padding: 0.1rem 0.4rem;
+      font-size: 0.65rem;
+      margin-left: 0.2rem;
+      padding: 0.1rem 0.3rem;
       border-radius: 3px;
       display: inline-block;
     }
 
-    .categoria-text {
-      color: #5a6a7a;
-      font-size: 0.8rem;
-    }
-
-    .monto-positivo {
-      font-weight: 500;
-      color: #2c5a2c;
-    }
-
-    .monto-negativo {
-      font-weight: 500;
-      color: #8b3a3a;
-    }
-
     .fecha-registro {
       color: #95a5a6;
-      font-size: 0.8rem;
-      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      margin-left: 0.3rem;
     }
 
     /* Mensajes */
@@ -499,32 +404,64 @@
       font-size: 0.9rem;
       border: 1px solid;
       display: none;
+      word-break: break-word;
     }
 
-    .mensaje.exito {
-      background: #f8f9fa;
-      border-color: #c0c0c0;
-      color: #2c3e50;
-    }
-
-    .mensaje.error {
-      background: #fef5f5;
-      border-color: #e0c0c0;
-      color: #8b3a3a;
-    }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      color: #95a5a6;
-      padding: 2rem 0;
-      font-size: 0.9rem;
+    /* Ajustes para móvil pequeño */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0.8rem;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .perfil-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .btn-modulo {
+        min-width: 100%;
+      }
+      
+      .metodo-pago-opciones {
+        flex-direction: column;
+      }
+      
+      .campo-row {
+        flex-direction: column;
+      }
+      
+      .campo-row .campo {
+        width: 100%;
+      }
+      
+      .btn-registro {
+        width: 100%;
+      }
+      
+      .registro-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .registro-item > div:last-child {
+        text-align: left;
+        width: 100%;
+      }
+      
+      .saldo-valor {
+        font-size: 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header con perfil -->
+    <!-- Header con perfil (sin cambios en estructura) -->
     <div class="header">
       <h1>REGISTRO</h1>
       <div class="perfil-info">
@@ -577,7 +514,7 @@
       </div>
     </div>
 
-    <!-- Formulario de GASTOS (por defecto) -->
+    <!-- Formulario de GASTOS -->
     <div id="formGasto" class="card">
       <h2>NUEVO GASTO</h2>
       
@@ -590,17 +527,13 @@
           </select>
         </div>
 
-        <!-- Subcategorías dinámicas para gastos -->
         <div id="subcategoriaGastoContainer">
           <div class="campo">
             <label>Subcategoría</label>
-            <select id="subcategoriaGasto">
-              <!-- Se llena dinámicamente -->
-            </select>
+            <select id="subcategoriaGasto"></select>
           </div>
         </div>
 
-        <!-- Método de pago -->
         <div class="metodo-pago-container">
           <div class="metodo-pago-label">Método de pago</div>
           <div class="metodo-pago-opciones">
@@ -615,20 +548,21 @@
         
         <div class="campo">
           <label>Descripción (opcional)</label>
-          <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal">
+          <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal" inputmode="text">
         </div>
         
         <div class="campo-row">
           <div class="campo">
             <label>Monto ($)</label>
-            <input type="number" id="montoGasto" placeholder="0" min="0" step="100">
+            <!-- CAMBIO: inputmode="numeric" y pattern para teclado numérico -->
+            <input type="text" id="montoGasto" placeholder="0" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           </div>
           <button class="btn-registro gasto" onclick="registrarMovimiento('gasto')">Registrar Gasto</button>
         </div>
       </div>
     </div>
 
-    <!-- Formulario de INGRESOS (oculto inicialmente) -->
+    <!-- Formulario de INGRESOS -->
     <div id="formIngreso" class="card" style="display: none;">
       <h2>NUEVO INGRESO</h2>
       
@@ -646,13 +580,14 @@
         
         <div class="campo">
           <label>Descripción (opcional)</label>
-          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual">
+          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual" inputmode="text">
         </div>
         
         <div class="campo-row">
           <div class="campo">
             <label>Monto ($)</label>
-            <input type="number" id="montoIngreso" placeholder="0" min="0" step="1000">
+            <!-- CAMBIO: inputmode="numeric" y pattern para teclado numérico -->
+            <input type="text" id="montoIngreso" placeholder="0" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           </div>
           <button class="btn-registro ingreso" onclick="registrarMovimiento('ingreso')">Registrar Ingreso</button>
         </div>
@@ -679,10 +614,10 @@
   </div>
 
   <script type="module">
+    // [MISMO CÓDIGO JAVASCRIPT EXISTENTE - SIN CAMBIOS]
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
@@ -692,36 +627,30 @@
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     };
 
-    // Inicializar Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Obtener perfil de sessionStorage
     const perfil = sessionStorage.getItem('perfil');
     
     if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
 
-    // Elementos del DOM
     const avatar = document.getElementById('avatar');
     const nombrePerfil = document.getElementById('nombrePerfil');
     
     nombrePerfil.innerText = perfil;
     avatar.innerText = perfil === 'Maria' ? '' : '';
 
-    // Variables de estado
     let tipoMovimientoActual = 'gasto';
     let filtroActual = 'todos';
     let metodoPagoActual = 'debito';
 
-    // Definir subcategorías para gastos
     const subcategoriasGasto = {
       'Mercado': ['Carnes', 'Verduras', 'Lacteos', 'Abarrotes', 'Frutas', 'Limpieza'],
       'Servicios': ['Luz', 'Gas', 'Agua', 'Internet', 'Telefono', 'Gasolina']
     };
 
-    // Inicializar subcategorías de gastos
     function actualizarSubcategoriasGasto() {
       const categoria = document.getElementById('categoriaGasto').value;
       const select = document.getElementById('subcategoriaGasto');
@@ -739,7 +668,6 @@
       actualizarSubcategoriasGasto();
     };
 
-    // Seleccionar método de pago
     window.seleccionarMetodoPago = function(metodo) {
       metodoPagoActual = metodo;
       
@@ -755,7 +683,6 @@
       }
     };
 
-    // Cambiar entre ingreso y gasto
     window.cambiarTipoMovimiento = function(tipo) {
       tipoMovimientoActual = tipo;
       
@@ -777,7 +704,6 @@
       }
     };
 
-    // Registrar movimiento (ingreso o gasto)
     window.registrarMovimiento = async function(tipo) {
       if (tipo === 'gasto') {
         await registrarGasto();
@@ -871,13 +797,11 @@
       }, 3000);
     }
 
-    // Calcular saldo disponible
     async function calcularSaldo() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -890,7 +814,6 @@
           totalIngresos += doc.data().monto;
         });
 
-        // Obtener gastos
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -926,7 +849,6 @@
       }
     }
 
-    // Funciones para cargar movimientos
     window.cargarTodosMovimientos = async function() {
       filtroActual = 'todos';
       actualizarTabsRegistro('todos');
@@ -935,7 +857,6 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener gastos
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -946,7 +867,6 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
-        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -1119,7 +1039,6 @@
       });
     }
 
-    // Inicializar
     actualizarSubcategoriasGasto();
     cargarTodosMovimientos();
     calcularSaldo();
