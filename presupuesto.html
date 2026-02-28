@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Configurar Presupuesto</title>
   <style>
     * {
@@ -19,8 +20,9 @@
 
     .container {
       max-width: 600px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 100%;
     }
 
     /* Header */
@@ -28,13 +30,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
       border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .header h1 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 400;
       letter-spacing: 1px;
       color: #2c3e50;
@@ -43,25 +47,26 @@
     .perfil-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.8rem;
+      flex-wrap: wrap;
     }
 
     .perfil-badge {
       background: #f0f0f0;
-      padding: 0.4rem 1rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 20px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #2c3e50;
       border: 1px solid #d0d0d0;
     }
 
     .btn-volver {
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 0.8rem;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
@@ -80,7 +85,7 @@
       padding: 0.8rem;
       margin-bottom: 1.5rem;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #5a6a7a;
     }
 
@@ -89,29 +94,29 @@
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.2rem;
       margin-bottom: 1.5rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .card h2 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 400;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       color: #4a5568;
       letter-spacing: 0.3px;
     }
 
     .card h3 {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 500;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       color: #2c3e50;
     }
 
     /* Categorías */
     .categoria {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       padding: 1rem;
       background: #fafafa;
       border: 1px solid #eaeaea;
@@ -122,13 +127,13 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid #e0e0e0;
     }
 
     .categoria-header span {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 500;
       color: #2c3e50;
     }
@@ -143,18 +148,26 @@
 
     .subcategoria label {
       width: 80px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #5a6a7a;
     }
 
     .subcategoria input {
       flex: 1;
       min-width: 150px;
-      padding: 0.8rem;
+      padding: 0.7rem;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       transition: border 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    /* INPUT NUMÉRICO: elimina flechas y fuerza teclado numérico en móvil */
+    .subcategoria input[type="text"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
     }
 
     .subcategoria input:focus {
@@ -162,20 +175,16 @@
       border-color: #2c3e50;
     }
 
-    .subcategoria input[type="number"] {
-      width: 120px;
-      flex: 0 1 auto;
-    }
-
     .btn-guardar {
-      padding: 0.8rem 1.2rem;
+      padding: 0.7rem 1.2rem;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .btn-guardar:hover {
@@ -188,21 +197,22 @@
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
-      padding: 1.2rem;
+      padding: 1rem;
       text-align: center;
       margin-top: 1.5rem;
     }
 
     .total-presupuesto .label {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #7f8c8d;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
     }
 
     .total-presupuesto .valor {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 300;
       color: #2c3e50;
+      word-break: break-word;
     }
 
     /* Historial */
@@ -212,7 +222,9 @@
       align-items: center;
       padding: 0.8rem 0;
       border-bottom: 1px solid #f0f0f0;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .historial-item:last-child {
@@ -221,7 +233,8 @@
 
     .historial-item .fecha {
       color: #95a5a6;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      white-space: nowrap;
     }
 
     /* Mensajes */
@@ -232,6 +245,7 @@
       font-size: 0.9rem;
       border: 1px solid;
       display: none;
+      word-break: break-word;
     }
 
     .mensaje.exito {
@@ -250,7 +264,7 @@
     .empty-state {
       text-align: center;
       color: #95a5a6;
-      padding: 2rem 0;
+      padding: 1.5rem 0;
       font-size: 0.9rem;
     }
 
@@ -261,9 +275,57 @@
       background: #f8f9fa;
       border: 1px solid #eaeaea;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #5a6a7a;
       text-align: center;
+    }
+
+    /* Ajustes para móvil pequeño */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0.8rem;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .perfil-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .subcategoria {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .subcategoria label {
+        width: auto;
+        margin-bottom: 0.2rem;
+      }
+      
+      .subcategoria input {
+        width: 100%;
+      }
+      
+      .btn-guardar {
+        width: 100%;
+      }
+      
+      .total-presupuesto .valor {
+        font-size: 1.6rem;
+      }
+      
+      .historial-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .historial-item .fecha {
+        align-self: flex-end;
+      }
     }
   </style>
 </head>
@@ -294,13 +356,14 @@
         
         <div class="subcategoria">
           <label>Carnes</label>
-          <input type="number" id="presupuesto_mercado_carnes" placeholder="Monto" min="0">
+          <!-- CAMBIO: inputmode="numeric" y pattern para teclado numérico -->
+          <input type="text" id="presupuesto_mercado_carnes" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Carnes', 'presupuesto_mercado_carnes')">Guardar</button>
         </div>
         
         <div class="subcategoria">
           <label>Verduras</label>
-          <input type="number" id="presupuesto_mercado_verduras" placeholder="Monto" min="0">
+          <input type="text" id="presupuesto_mercado_verduras" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Verduras', 'presupuesto_mercado_verduras')">Guardar</button>
         </div>
       </div>
@@ -313,13 +376,13 @@
         
         <div class="subcategoria">
           <label>Luz</label>
-          <input type="number" id="presupuesto_servicios_luz" placeholder="Monto" min="0">
+          <input type="text" id="presupuesto_servicios_luz" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Luz', 'presupuesto_servicios_luz')">Guardar</button>
         </div>
         
         <div class="subcategoria">
           <label>Gas</label>
-          <input type="number" id="presupuesto_servicios_gas" placeholder="Monto" min="0">
+          <input type="text" id="presupuesto_servicios_gas" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gas', 'presupuesto_servicios_gas')">Guardar</button>
         </div>
       </div>
