@@ -527,23 +527,17 @@
         <div class="campo">
           <label>Tipo de ingreso</label>
           <select id="tipoIngreso">
-            <option value="credito">Crédito (Tarjeta)</option>
-            <option value="debito"> Débito (Efectivo/Transferencia)</option>
-            <option value="prestamo"> Préstamo (Recibido)</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label>Destino del ingreso</label>
-          <select id="destinoIngreso">
-            <option value="individual">Individual (solo para mí)</option>
-            <option value="familiar">Familiar (para ambos)</option>
+            <option value="Nomina"> Nómina</option>
+            <option value="Prima"> Prima</option>
+            <option value="Prestamo"> Préstamo</option>
+            <option value="Subsidio"> Subsidio</option>
+            <option value="Otros"> Otros</option>
           </select>
         </div>
         
         <div class="campo">
           <label>Descripción</label>
-          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario, Bono, Préstamo">
+          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual, Prima de servicios">
         </div>
         
         <div class="campo-row">
@@ -702,7 +696,6 @@
 
     async function registrarIngreso() {
       const tipo = document.getElementById('tipoIngreso').value;
-      const destino = document.getElementById('destinoIngreso').value;
       const descripcion = document.getElementById('descripcionIngreso').value.trim();
       const monto = parseFloat(document.getElementById('montoIngreso').value);
       
@@ -716,28 +709,20 @@
         return;
       }
 
-      // Mapear tipo a nombre legible
-      const tipoTexto = {
-        'credito': 'Crédito',
-        'debito': 'Débito',
-        'prestamo': 'Préstamo'
-      };
-
       try {
         await addDoc(collection(db, "ingresos"), { 
-          usuario: destino === 'individual' ? perfil : 'GENERAL',
+          usuario: perfil,
           tipoIngreso: tipo,
-          tipoTexto: tipoTexto[tipo],
-          destino: destino,
           descripcion: descripcion,
           monto: monto,
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear(),
-          tipoMov: 'ingreso'
+          tipoMov: 'ingreso',
+          destino: 'familiar'  // Siempre familiar
         });
         
-        mostrarMensaje(`Ingreso registrado: $${monto} (${tipoTexto[tipo]})`, "exito");
+        mostrarMensaje(`Ingreso registrado: $${monto} (${tipo})`, "exito");
         
         document.getElementById('descripcionIngreso').value = '';
         document.getElementById('montoIngreso').value = '';
@@ -766,7 +751,7 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener ingresos
+        // Obtener ingresos (todos son familiares ahora)
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -776,10 +761,7 @@
         
         let totalIngresos = 0;
         ingresosSnap.forEach(doc => {
-          const data = doc.data();
-          if (data.destino === 'familiar' || data.usuario === perfil) {
-            totalIngresos += data.monto;
-          }
+          totalIngresos += doc.data().monto;
         });
 
         // Obtener gastos
@@ -830,7 +812,7 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
-        // Obtener ingresos
+        // Obtener ingresos (todos son familiares ahora)
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
@@ -854,14 +836,12 @@
         
         ingresosSnap.forEach(doc => {
           const data = doc.data();
-          if (data.destino === 'familiar' || data.usuario === perfil) {
-            movimientos.push({
-              ...data,
-              id: doc.id,
-              tipo: 'ingreso',
-              fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
-            });
-          }
+          movimientos.push({
+            ...data,
+            id: doc.id,
+            tipo: 'ingreso',
+            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+          });
         });
         
         movimientos.sort((a, b) => b.fechaObj - a.fechaObj);
@@ -892,14 +872,12 @@
         const movimientos = [];
         ingresosSnap.forEach(doc => {
           const data = doc.data();
-          if (data.destino === 'familiar' || data.usuario === perfil) {
-            movimientos.push({
-              ...data,
-              id: doc.id,
-              tipo: 'ingreso',
-              fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
-            });
-          }
+          movimientos.push({
+            ...data,
+            id: doc.id,
+            tipo: 'ingreso',
+            fechaObj: data.fecha?.toDate ? data.fecha.toDate() : new Date()
+          });
         });
         
         mostrarMovimientos(movimientos);
@@ -973,13 +951,11 @@
         div.className = 'registro-item';
         
         if (mov.tipo === 'ingreso') {
-          const tipoIngresoTexto = mov.tipoTexto || (mov.tipoIngreso === 'credito' ? 'Crédito' : mov.tipoIngreso === 'debito' ? 'Débito' : 'Préstamo');
           div.innerHTML = `
             <div>
               <span class="tipo-badge badge-ingreso"> INGRESO</span>
-              <span class="categoria-text">${tipoIngresoTexto}</span>
+              <span class="categoria-text">${mov.tipoIngreso}</span>
               <span>${mov.descripcion}</span>
-              ${mov.destino === 'familiar' ? '<span style="color:#7f8c8d; font-size:0.75rem;"> (familiar)</span>' : ''}
             </div>
             <div>
               <span class="monto-positivo">+$${mov.monto}</span>
