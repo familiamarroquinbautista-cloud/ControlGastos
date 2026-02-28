@@ -308,42 +308,61 @@
       border-color: #2c3e50;
     }
 
-    /* Método de pago */
-    .metodo-pago {
+    /* Método de pago - Versión mejorada */
+    .metodo-pago-container {
+      margin-bottom: 1rem;
+    }
+
+    .metodo-pago-label {
+      display: block;
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      margin-bottom: 0.5rem;
+    }
+
+    .metodo-pago-opciones {
       display: flex;
       gap: 1rem;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
+      padding: 0.5rem;
     }
 
-    .metodo-option {
+    .metodo-pago-opcion {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.6rem;
+      padding: 0.8rem;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s;
       background: #f5f5f5;
       color: #5a6a7a;
+      font-weight: 500;
+      border: 1px solid transparent;
     }
 
-    .metodo-option.selected {
+    .metodo-pago-opcion:hover {
+      background: #eaeaea;
+    }
+
+    .metodo-pago-opcion.seleccionado {
       background: #2c3e50;
       color: white;
+      border-color: #1a2632;
     }
 
-    .metodo-option.debito.selected {
+    .metodo-pago-opcion.debito.seleccionado {
       background: #2c5a2c;
+      border-color: #1e3e1e;
     }
 
-    .metodo-option.credito.selected {
+    .metodo-pago-opcion.credito.seleccionado {
       background: #8b3a3a;
+      border-color: #5e2727;
     }
 
     .campo-row {
@@ -458,6 +477,7 @@
       margin-left: 0.3rem;
       padding: 0.1rem 0.4rem;
       border-radius: 3px;
+      display: inline-block;
     }
 
     .categoria-text {
@@ -569,14 +589,14 @@
 
     <!-- Formulario de GASTOS (por defecto) -->
     <div id="formGasto" class="card">
-      <h2> NUEVO GASTO</h2>
+      <h2>💰 NUEVO GASTO</h2>
       
       <div class="campos-registro">
         <div class="campo">
           <label>Categoría</label>
           <select id="categoriaGasto" onchange="cambiarCategoriaGasto()">
-            <option value="Mercado"> Mercado</option>
-            <option value="Servicios"> Servicios</option>
+            <option value="Mercado">🛒 Mercado</option>
+            <option value="Servicios">💡 Servicios</option>
           </select>
         </div>
 
@@ -590,14 +610,14 @@
           </div>
         </div>
 
-        <!-- Método de pago -->
-        <div class="campo">
-          <label>Método de pago</label>
-          <div class="metodo-pago">
-            <div class="metodo-option debito selected" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">
+        <!-- Método de pago - Versión mejorada -->
+        <div class="metodo-pago-container">
+          <div class="metodo-pago-label">Método de pago</div>
+          <div class="metodo-pago-opciones">
+            <div class="metodo-pago-opcion debito seleccionado" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">
               <span>💳</span> Débito/Efectivo
             </div>
-            <div class="metodo-option credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">
+            <div class="metodo-pago-opcion credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">
               <span>💳</span> Crédito
             </div>
           </div>
@@ -620,7 +640,7 @@
 
     <!-- Formulario de INGRESOS (oculto inicialmente) -->
     <div id="formIngreso" class="card" style="display: none;">
-      <h2> NUEVO INGRESO</h2>
+      <h2>💰 NUEVO INGRESO</h2>
       
       <div class="campos-registro">
         <div class="campo">
@@ -654,7 +674,7 @@
 
     <!-- Últimos movimientos -->
     <div class="card">
-      <h2> ÚLTIMOS MOVIMIENTOS</h2>
+      <h2>📋 ÚLTIMOS MOVIMIENTOS</h2>
       
       <div class="registros-tabs">
         <button class="registro-tab active" id="tabTodos" onclick="cargarTodosMovimientos()">Todos</button>
@@ -695,7 +715,7 @@
 
     let tipoMovimientoActual = 'gasto';
     let filtroActual = 'todos';
-    let metodoPagoActual = 'debito'; // debito o credito
+    let metodoPagoActual = 'debito';
 
     // Definir subcategorías para gastos
     const subcategoriasGasto = {
@@ -729,11 +749,11 @@
       const creditoOption = document.getElementById('metodoCredito');
       
       if (metodo === 'debito') {
-        debitoOption.classList.add('selected');
-        creditoOption.classList.remove('selected');
+        debitoOption.classList.add('seleccionado');
+        creditoOption.classList.remove('seleccionado');
       } else {
-        debitoOption.classList.remove('selected');
-        creditoOption.classList.add('selected');
+        debitoOption.classList.remove('seleccionado');
+        creditoOption.classList.add('seleccionado');
       }
     };
 
@@ -791,7 +811,7 @@
           subcategoria: subcategoria,
           descripcion: descripcion,
           monto: monto,
-          metodoPago: metodoPagoActual, // 'debito' o 'credito'
+          metodoPago: metodoPagoActual,
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear(),
@@ -863,7 +883,7 @@
       }, 3000);
     }
 
-    // Calcular saldo disponible (excluye gastos de tarjeta)
+    // Calcular saldo disponible
     async function calcularSaldo() {
       try {
         const mesActual = new Date().getMonth() + 1;
@@ -903,7 +923,6 @@
           }
         });
 
-        // Saldo disponible = ingresos - gastos débito (los de crédito no afectan hasta pagar)
         const saldo = totalIngresos - totalGastosDebito;
         
         document.getElementById('totalIngresos').innerText = `$${totalIngresos}`;
@@ -928,7 +947,6 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener gastos
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -939,7 +957,6 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
-        // Obtener ingresos
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("mes", "==", mesActual),
