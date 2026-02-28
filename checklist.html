@@ -329,136 +329,170 @@
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     };
 
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    try {
+      // Inicializar Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
 
-    // Obtener perfil de sessionStorage
-    const perfil = sessionStorage.getItem('perfil');
-    
-    if (!perfil || perfil === 'Admin') {
-      window.location.href = "index.html";
-    }
-
-    // Mostrar perfil
-    document.getElementById('perfilDisplay').innerText = perfil;
-
-    // Función para mostrar mensajes
-    function mostrarMensaje(texto, tipo) {
-      const mensaje = document.getElementById('mensaje');
-      mensaje.style.display = 'block';
-      mensaje.innerText = texto;
-      mensaje.className = `mensaje ${tipo}`;
-      setTimeout(() => {
-        mensaje.style.display = 'none';
-      }, 3000);
-    }
-
-    // Agregar nuevo gasto al checklist
-    window.agregarGasto = async () => {
-      const nombreGasto = document.getElementById("nuevo-gasto").value.trim();
-      if (!nombreGasto) {
-        mostrarMensaje("Escribe un nombre para el gasto", "error");
-        return;
+      // Obtener perfil de sessionStorage
+      const perfil = sessionStorage.getItem('perfil');
+      
+      if (!perfil || perfil === 'Admin') {
+        window.location.href = "index.html";
       }
 
-      try {
-        await addDoc(collection(db, "checklist"), {
-          usuario: perfil,
-          nombre: nombreGasto,
-          pagado: false,
-          fecha: new Date(),
-          mes: new Date().getMonth() + 1,
-          año: new Date().getFullYear()
-        });
-        
-        mostrarMensaje(`Gasto "${nombreGasto}" agregado`, "exito");
-        document.getElementById("nuevo-gasto").value = "";
-        await cargarGastos();
-      } catch (error) {
-        console.error("Error al agregar gasto:", error);
-        mostrarMensaje("Error al agregar", "error");
+      // Mostrar perfil
+      document.getElementById('perfilDisplay').innerText = perfil;
+
+      // Función para mostrar mensajes
+      function mostrarMensaje(texto, tipo) {
+        const mensaje = document.getElementById('mensaje');
+        mensaje.style.display = 'block';
+        mensaje.innerText = texto;
+        mensaje.className = `mensaje ${tipo}`;
+        setTimeout(() => {
+          mensaje.style.display = 'none';
+        }, 3000);
       }
-    };
 
-    // Cambiar estado de un gasto (pagado/no pagado)
-    window.toggleGasto = async (id, pagadoActual) => {
-      try {
-        await updateDoc(doc(db, "checklist", id), {
-          pagado: !pagadoActual
-        });
-        await cargarGastos();
-      } catch (error) {
-        console.error("Error al actualizar gasto:", error);
-        mostrarMensaje("Error al actualizar", "error");
-      }
-    };
-
-    // Cargar todos los gastos del checklist
-    async function cargarGastos() {
-      try {
-        const mesActual = new Date().getMonth() + 1;
-        const añoActual = new Date().getFullYear();
-        
-        const q = query(
-          collection(db, "checklist"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual),
-          orderBy("fecha", "desc")
-        );
-        
-        const querySnapshot = await getDocs(q);
-        const gastos = [];
-        querySnapshot.forEach(doc => {
-          gastos.push({ id: doc.id, ...doc.data() });
-        });
-
-        const lista = document.getElementById("lista-gastos");
-        lista.innerHTML = "";
-
-        if (gastos.length === 0) {
-          lista.innerHTML = '<div class="empty-state">No hay gastos este mes</div>';
+      // Agregar nuevo gasto al checklist
+      window.agregarGasto = async () => {
+        const nombreGasto = document.getElementById("nuevo-gasto").value.trim();
+        if (!nombreGasto) {
+          mostrarMensaje("Escribe un nombre para el gasto", "error");
+          return;
         }
 
-        let pagados = 0;
-        gastos.forEach(gasto => {
-          if (gasto.pagado) pagados++;
+        try {
+          const docRef = await addDoc(collection(db, "checklist"), {
+            usuario: perfil,
+            nombre: nombreGasto,
+            pagado: false,
+            fecha: new Date(),
+            mes: new Date().getMonth() + 1,
+            año: new Date().getFullYear()
+          });
           
-          const div = document.createElement("div");
-          div.className = `gasto-item ${gasto.pagado ? 'pagado' : ''}`;
-          
-          const fecha = gasto.fecha?.toDate ? gasto.fecha.toDate() : new Date();
-          const fechaStr = fecha.toLocaleDateString();
-          
-          div.innerHTML = `
-            <input type="checkbox" ${gasto.pagado ? 'checked' : ''} onchange="toggleGasto('${gasto.id}', ${gasto.pagado})">
-            <label>${gasto.nombre}</label>
-            <span class="fecha-gasto">${fechaStr}</span>
-          `;
-          lista.appendChild(div);
-        });
+          console.log("Gasto agregado con ID:", docRef.id);
+          mostrarMensaje(`Gasto "${nombreGasto}" agregado`, "exito");
+          document.getElementById("nuevo-gasto").value = "";
+          await cargarGastos();
+        } catch (error) {
+          console.error("Error detallado al agregar gasto:", error);
+          mostrarMensaje("Error al agregar: " + error.message, "error");
+        }
+      };
 
-        const total = gastos.length;
-        const pendientes = total - pagados;
-        const porcentaje = total > 0 ? Math.round((pagados / total) * 100) : 0;
-        
-        document.getElementById("total-gastos").innerText = total;
-        document.getElementById("pagados-gastos").innerText = pagados;
-        document.getElementById("pendientes-gastos").innerText = pendientes;
-        document.getElementById("contador").innerText = `${pagados}/${total} gastos`;
-        document.getElementById("porcentaje").innerText = `${porcentaje}%`;
-        document.getElementById("barra-progreso").style.width = `${porcentaje}%`;
-        
-      } catch (error) {
-        console.error("Error al cargar gastos:", error);
-        document.getElementById("lista-gastos").innerHTML = '<div class="empty-state">Error al cargar</div>';
-        mostrarMensaje("Error al cargar los gastos", "error");
+      // Cambiar estado de un gasto (pagado/no pagado)
+      window.toggleGasto = async (id, pagadoActual) => {
+        try {
+          await updateDoc(doc(db, "checklist", id), {
+            pagado: !pagadoActual
+          });
+          await cargarGastos();
+        } catch (error) {
+          console.error("Error detallado al actualizar gasto:", error);
+          mostrarMensaje("Error al actualizar: " + error.message, "error");
+        }
+      };
+
+      // Cargar todos los gastos del checklist
+      async function cargarGastos() {
+        try {
+          const mesActual = new Date().getMonth() + 1;
+          const añoActual = new Date().getFullYear();
+          
+          console.log("Consultando checklist para:", perfil, mesActual, añoActual);
+          
+          // Primero, probar sin filtros para ver si hay datos
+          const pruebaQuery = query(collection(db, "checklist"));
+          const pruebaSnapshot = await getDocs(pruebaQuery);
+          console.log("Total documentos en checklist:", pruebaSnapshot.size);
+          
+          pruebaSnapshot.forEach(doc => {
+            console.log("Documento encontrado:", doc.id, doc.data());
+          });
+
+          // Ahora hacer la consulta con filtros
+          const q = query(
+            collection(db, "checklist"),
+            where("usuario", "==", perfil),
+            where("mes", "==", mesActual),
+            where("año", "==", añoActual)
+          );
+          
+          const querySnapshot = await getDocs(q);
+          console.log("Documentos encontrados con filtros:", querySnapshot.size);
+          
+          const gastos = [];
+          querySnapshot.forEach(doc => {
+            gastos.push({ id: doc.id, ...doc.data() });
+          });
+
+          // Ordenar manualmente por fecha descendente
+          gastos.sort((a, b) => {
+            const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date(0);
+            const fechaB = b.fecha?.toDate ? b.fecha.toDate() : new Date(0);
+            return fechaB - fechaA;
+          });
+
+          const lista = document.getElementById("lista-gastos");
+          lista.innerHTML = "";
+
+          if (gastos.length === 0) {
+            lista.innerHTML = '<div class="empty-state">No hay gastos este mes. ¡Agrega uno!</div>';
+          }
+
+          let pagados = 0;
+          gastos.forEach(gasto => {
+            if (gasto.pagado) pagados++;
+            
+            const div = document.createElement("div");
+            div.className = `gasto-item ${gasto.pagado ? 'pagado' : ''}`;
+            
+            let fechaStr = "Fecha no disponible";
+            if (gasto.fecha) {
+              try {
+                const fecha = gasto.fecha.toDate ? gasto.fecha.toDate() : new Date(gasto.fecha);
+                fechaStr = fecha.toLocaleDateString();
+              } catch (e) {
+                console.error("Error al formatear fecha:", e);
+              }
+            }
+            
+            div.innerHTML = `
+              <input type="checkbox" ${gasto.pagado ? 'checked' : ''} onchange="toggleGasto('${gasto.id}', ${gasto.pagado})">
+              <label>${gasto.nombre || "Sin nombre"}</label>
+              <span class="fecha-gasto">${fechaStr}</span>
+            `;
+            lista.appendChild(div);
+          });
+
+          const total = gastos.length;
+          const pendientes = total - pagados;
+          const porcentaje = total > 0 ? Math.round((pagados / total) * 100) : 0;
+          
+          document.getElementById("total-gastos").innerText = total;
+          document.getElementById("pagados-gastos").innerText = pagados;
+          document.getElementById("pendientes-gastos").innerText = pendientes;
+          document.getElementById("contador").innerText = `${pagados}/${total} gastos`;
+          document.getElementById("porcentaje").innerText = `${porcentaje}%`;
+          document.getElementById("barra-progreso").style.width = `${porcentaje}%`;
+          
+        } catch (error) {
+          console.error("Error detallado al cargar gastos:", error);
+          document.getElementById("lista-gastos").innerHTML = '<div class="empty-state">Error al cargar: ' + error.message + '</div>';
+          mostrarMensaje("Error al cargar los gastos: " + error.message, "error");
+        }
       }
-    }
 
-    // Inicializar
-    cargarGastos();
+      // Inicializar
+      cargarGastos();
+
+    } catch (error) {
+      console.error("Error de inicialización:", error);
+      document.getElementById('perfilDisplay').innerText = "Error de conexión";
+    }
   </script>
 </body>
 </html>
