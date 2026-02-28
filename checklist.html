@@ -91,115 +91,60 @@
       color: #2c3e50;
     }
 
-    /* Tabla estilo Excel */
-    .tabla-container {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
+    /* Lista simple */
+    .lista-container {
+      margin: 1rem 0;
     }
 
-    .tabla-header {
-      display: grid;
-      grid-template-columns: 50px 1fr 100px;
-      background: #f8f9fa;
-      border-bottom: 1px solid #e0e0e0;
-      font-weight: 500;
-      color: #4a5568;
-    }
-
-    .tabla-header div {
-      padding: 0.8rem;
-      text-align: center;
-    }
-
-    .tabla-header div:first-child {
-      text-align: center;
-    }
-
-    .tabla-header div:last-child {
-      text-align: center;
-    }
-
-    .tabla-body {
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .tabla-fila {
-      display: grid;
-      grid-template-columns: 50px 1fr 100px;
-      border-bottom: 1px solid #f0f0f0;
+    .item-row {
+      display: flex;
       align-items: center;
+      gap: 1rem;
+      padding: 0.8rem;
+      border-bottom: 1px solid #f0f0f0;
     }
 
-    .tabla-fila:last-child {
+    .item-row:last-child {
       border-bottom: none;
     }
 
-    .tabla-fila div {
-      padding: 0.8rem;
-    }
-
-    .col-checkbox {
-      text-align: center;
-    }
-
-    .col-checkbox input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+    .item-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
       cursor: pointer;
       accent-color: #2c3e50;
     }
 
-    .col-texto {
+    .item-text {
+      flex: 1;
+      font-size: 1rem;
       color: #2c3e50;
     }
 
-    .col-texto.completado {
+    .item-text.completado {
       text-decoration: line-through;
       color: #95a5a6;
     }
 
-    .col-fecha {
-      text-align: center;
+    .item-fecha {
       color: #95a5a6;
       font-size: 0.85rem;
     }
 
-    /* Barra de progreso */
-    .progreso-container {
-      margin-bottom: 1.5rem;
-      padding: 1rem;
+    /* Contador simple */
+    .contador {
+      margin: 1rem 0;
+      padding: 0.8rem;
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
-      border-radius: 8px;
-    }
-
-    .progreso-info {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
+      border-radius: 6px;
       font-size: 0.9rem;
       color: #5a6a7a;
+      display: flex;
+      justify-content: space-between;
     }
 
-    .progreso-barra {
-      height: 6px;
-      background: #eaeaea;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .progreso-llenado {
-      height: 6px;
-      background: #2c3e50;
-      border-radius: 3px;
-      width: 0%;
-      transition: width 0.3s;
-    }
-
-    /* Agregar nuevo item */
+    /* Agregar nuevo */
     .agregar-item {
       display: flex;
       gap: 0.8rem;
@@ -211,7 +156,7 @@
       padding: 0.8rem;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
     .agregar-item input:focus {
@@ -225,18 +170,15 @@
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.95rem;
+      font-size: 1rem;
       cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
     }
 
     .btn-agregar:hover {
       background: #f5f5f5;
-      border-color: #909090;
     }
 
-    /* Mensajes */
+    /* Mensaje */
     .mensaje {
       margin: 1rem 0;
       padding: 0.8rem;
@@ -252,17 +194,10 @@
       color: #2c3e50;
     }
 
-    .mensaje.error {
-      background: #fef5f5;
-      border-color: #e0c0c0;
-      color: #8b3a3a;
-    }
-
-    /* Empty state */
     .empty-state {
       text-align: center;
       color: #95a5a6;
-      padding: 2rem 0;
+      padding: 2rem;
       font-size: 0.9rem;
     }
   </style>
@@ -273,171 +208,143 @@
     <div class="header">
       <h1>CHECKLIST</h1>
       <div class="perfil-info">
-        <span class="perfil-badge" id="perfilDisplay">Cargando...</span>
+        <span class="perfil-badge" id="perfilDisplay"></span>
         <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
       </div>
     </div>
 
-    <!-- Mensajes -->
+    <!-- Mensaje -->
     <div id="mensaje" class="mensaje"></div>
 
     <!-- Card principal -->
     <div class="card">
       <h2>LISTA DE GASTOS PENDIENTES</h2>
       
-      <!-- Progreso -->
-      <div class="progreso-container">
-        <div class="progreso-info">
-          <span>Progreso: <span id="itemsCompletados">0</span>/<span id="itemsTotales">0</span></span>
-          <span id="porcentaje">0%</span>
-        </div>
-        <div class="progreso-barra">
-          <div class="progreso-llenado" id="barraProgreso"></div>
-        </div>
+      <!-- Contador -->
+      <div class="contador" id="contador">
+        <span>Completados: <span id="completados">0</span>/<span id="total">0</span></span>
       </div>
       
-      <!-- Tabla estilo Excel -->
-      <div class="tabla-container">
-        <div class="tabla-header">
-          <div>✓</div>
-          <div>Descripción</div>
-          <div>Fecha</div>
-        </div>
-        <div class="tabla-body" id="tablaBody">
-          <div class="empty-state">No hay items. Agrega uno nuevo.</div>
-        </div>
+      <!-- Lista de items -->
+      <div class="lista-container" id="listaContainer">
+        <div class="empty-state">No hay items. Agrega uno nuevo.</div>
       </div>
 
-      <!-- Agregar nuevo item -->
+      <!-- Agregar nuevo -->
       <div class="agregar-item">
-        <input type="text" id="nuevoItem" placeholder="Ej: Pagar agua, Comprar mercado...">
+        <input type="text" id="nuevoItem" placeholder="Escribe un item...">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
       </div>
     </div>
   </div>
 
   <script>
-    // Obtener perfil
+    // Verificar perfil
     const perfil = sessionStorage.getItem('perfil');
-    
     if (!perfil || perfil === 'Admin') {
       window.location.href = "index.html";
     }
-
-    // Mostrar perfil
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // Función para mostrar mensajes
-    function mostrarMensaje(texto, tipo) {
+    // Array simple en memoria
+    let items = [];
+
+    // Mostrar mensaje
+    function mostrarMensaje(texto) {
       const mensaje = document.getElementById('mensaje');
       mensaje.style.display = 'block';
       mensaje.innerText = texto;
-      mensaje.className = `mensaje ${tipo}`;
+      mensaje.className = 'mensaje exito';
       setTimeout(() => {
         mensaje.style.display = 'none';
-      }, 2000);
+      }, 1500);
     }
 
-    // Cargar items del localStorage
-    function cargarItems() {
-      const itemsGuardados = localStorage.getItem(`checklist_${perfil}`);
-      const items = itemsGuardados ? JSON.parse(itemsGuardados) : [];
+    // Actualizar la lista en pantalla
+    function actualizarLista() {
+      const container = document.getElementById('listaContainer');
+      const completadosSpan = document.getElementById('completados');
+      const totalSpan = document.getElementById('total');
       
-      const tablaBody = document.getElementById('tablaBody');
-      tablaBody.innerHTML = '';
-
       if (items.length === 0) {
-        tablaBody.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
-        actualizarProgreso(0, 0);
+        container.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
+        completadosSpan.innerText = '0';
+        totalSpan.innerText = '0';
         return;
       }
 
-      // Ordenar por fecha (más recientes primero)
-      items.sort((a, b) => b.timestamp - a.timestamp);
-
       let completados = 0;
-      
-      items.forEach(item => {
+      let html = '';
+
+      // Ordenar por fecha (más nuevos primero)
+      const itemsOrdenados = [...items].reverse();
+
+      itemsOrdenados.forEach((item, index) => {
         if (item.completado) completados++;
         
-        const fila = document.createElement('div');
-        fila.className = 'tabla-fila';
-        
-        const fecha = new Date(item.timestamp);
-        const fechaTexto = fecha.toLocaleDateString();
-        
-        fila.innerHTML = `
-          <div class="col-checkbox">
-            <input type="checkbox" ${item.completado ? 'checked' : ''} onchange="toggleItem('${item.id}')">
+        html += `
+          <div class="item-row">
+            <input type="checkbox" 
+                   ${item.completado ? 'checked' : ''} 
+                   onchange="toggleItem(${index})">
+            <span class="item-text ${item.completado ? 'completado' : ''}">${item.texto}</span>
+            <span class="item-fecha">${item.fecha}</span>
           </div>
-          <div class="col-texto ${item.completado ? 'completado' : ''}">${item.texto}</div>
-          <div class="col-fecha">${fechaTexto}</div>
         `;
-        
-        tablaBody.appendChild(fila);
       });
 
-      actualizarProgreso(completados, items.length);
-    }
-
-    // Actualizar progreso
-    function actualizarProgreso(completados, total) {
-      document.getElementById('itemsCompletados').innerText = completados;
-      document.getElementById('itemsTotales').innerText = total;
-      
-      const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
-      document.getElementById('porcentaje').innerText = porcentaje + '%';
-      document.getElementById('barraProgreso').style.width = porcentaje + '%';
-    }
-
-    // Guardar items en localStorage
-    function guardarItems(items) {
-      localStorage.setItem(`checklist_${perfil}`, JSON.stringify(items));
+      container.innerHTML = html;
+      completadosSpan.innerText = completados;
+      totalSpan.innerText = items.length;
     }
 
     // Agregar nuevo item
-    window.agregarItem = () => {
-      const texto = document.getElementById('nuevoItem').value.trim();
-      if (!texto) {
-        mostrarMensaje("Escribe una descripción", "error");
+    window.agregarItem = function() {
+      const input = document.getElementById('nuevoItem');
+      const texto = input.value.trim();
+      
+      if (texto === '') {
         return;
       }
 
-      // Obtener items actuales
-      const itemsGuardados = localStorage.getItem(`checklist_${perfil}`);
-      const items = itemsGuardados ? JSON.parse(itemsGuardados) : [];
-      
-      // Crear nuevo item
-      const nuevoItem = {
-        id: Date.now().toString(),
+      const fecha = new Date();
+      const fechaStr = fecha.toLocaleDateString();
+
+      items.push({
         texto: texto,
         completado: false,
-        timestamp: Date.now()
-      };
-      
-      items.push(nuevoItem);
-      guardarItems(items);
-      
-      mostrarMensaje("Item agregado", "exito");
-      document.getElementById('nuevoItem').value = '';
-      cargarItems();
+        fecha: fechaStr
+      });
+
+      input.value = '';
+      actualizarLista();
+      mostrarMensaje('Item agregado');
     };
 
-    // Toggle completado
-    window.toggleItem = (id) => {
-      const itemsGuardados = localStorage.getItem(`checklist_${perfil}`);
-      const items = itemsGuardados ? JSON.parse(itemsGuardados) : [];
-      
-      const itemIndex = items.findIndex(item => item.id === id);
-      if (itemIndex !== -1) {
-        items[itemIndex].completado = !items[itemIndex].completado;
-        guardarItems(items);
-        cargarItems();
+    // Cambiar estado del checkbox
+    window.toggleItem = function(index) {
+      // El index viene en orden inverso por el reverse()
+      const realIndex = items.length - 1 - index;
+      items[realIndex].completado = !items[realIndex].completado;
+      actualizarLista();
+    };
+
+    // Inicializar con algunos ejemplos
+    items = [
+      {
+        texto: 'Pagar agua',
+        completado: false,
+        fecha: new Date().toLocaleDateString()
+      },
+      {
+        texto: 'Comprar mercado',
+        completado: true,
+        fecha: new Date().toLocaleDateString()
       }
-    };
+    ];
 
-    // Cargar items al inicio
-    cargarItems();
+    // Mostrar lista inicial
+    actualizarLista();
   </script>
 </body>
 </html>
