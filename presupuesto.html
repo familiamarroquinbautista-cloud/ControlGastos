@@ -147,7 +147,7 @@
     }
 
     .subcategoria label {
-      width: 80px;
+      width: 120px;
       font-size: 0.85rem;
       color: #5a6a7a;
     }
@@ -247,7 +247,6 @@
       word-break: break-word;
     }
 
-    /* COLORES RESTAURADOS PARA MENSAJES */
     .mensaje.exito {
       background: #f8f9fa;
       border-color: #c0c0c0;
@@ -348,10 +347,16 @@
     <div class="card">
       <h2>CONFIGURAR MENSUAL</h2>
       
-      <!-- Mercado -->
+      <!-- MERCADO -->
       <div class="categoria">
         <div class="categoria-header">
           <span>🛒 Mercado</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Onces</label>
+          <input type="text" id="presupuesto_mercado_onces" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Onces', 'presupuesto_mercado_onces')">Guardar</button>
         </div>
         
         <div class="subcategoria">
@@ -361,28 +366,171 @@
         </div>
         
         <div class="subcategoria">
-          <label>Verduras</label>
-          <input type="text" id="presupuesto_mercado_verduras" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Verduras', 'presupuesto_mercado_verduras')">Guardar</button>
+          <label>Aseo</label>
+          <input type="text" id="presupuesto_mercado_aseo" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Aseo', 'presupuesto_mercado_aseo')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Otros</label>
+          <input type="text" id="presupuesto_mercado_otros" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Otros', 'presupuesto_mercado_otros')">Guardar</button>
         </div>
       </div>
 
-      <!-- Servicios -->
+      <!-- SERVICIOS -->
       <div class="categoria">
         <div class="categoria-header">
           <span>💡 Servicios</span>
         </div>
         
         <div class="subcategoria">
-          <label>Luz</label>
-          <input type="text" id="presupuesto_servicios_luz" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Luz', 'presupuesto_servicios_luz')">Guardar</button>
+          <label>Agua</label>
+          <input type="text" id="presupuesto_servicios_agua" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Agua', 'presupuesto_servicios_agua')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Energía</label>
+          <input type="text" id="presupuesto_servicios_energia" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Energía', 'presupuesto_servicios_energia')">Guardar</button>
         </div>
         
         <div class="subcategoria">
           <label>Gas</label>
           <input type="text" id="presupuesto_servicios_gas" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gas', 'presupuesto_servicios_gas')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Internet</label>
+          <input type="text" id="presupuesto_servicios_internet" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Internet', 'presupuesto_servicios_internet')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Celular</label>
+          <input type="text" id="presupuesto_servicios_celular" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Celular', 'presupuesto_servicios_celular')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Parqueadero</label>
+          <input type="text" id="presupuesto_servicios_parqueadero" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Parqueadero', 'presupuesto_servicios_parqueadero')">Guardar</button>
+        </div>
+      </div>
+
+      <!-- HOGAR -->
+      <div class="categoria">
+        <div class="categoria-header">
+          <span>🏠 Hogar</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Arriendo</label>
+          <input type="text" id="presupuesto_hogar_arriendo" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Hogar', 'Arriendo', 'presupuesto_hogar_arriendo')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Couta inicial apto</label>
+          <input type="text" id="presupuesto_hogar_couta_inicial" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Hogar', 'Couta inicial apto', 'presupuesto_hogar_couta_inicial')">Guardar</button>
+        </div>
+      </div>
+
+      <!-- FINANZAS -->
+      <div class="categoria">
+        <div class="categoria-header">
+          <span>💰 Finanzas</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Couta FNA</label>
+          <input type="text" id="presupuesto_finanzas_fna" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Finanzas', 'Couta FNA', 'presupuesto_finanzas_fna')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Couta Coasmedas</label>
+          <input type="text" id="presupuesto_finanzas_coasmedas" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Finanzas', 'Couta Coasmedas', 'presupuesto_finanzas_coasmedas')">Guardar</button>
+        </div>
+      </div>
+
+      <!-- TRANSPORTE -->
+      <div class="categoria">
+        <div class="categoria-header">
+          <span>🚗 Transporte</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Gasolina</label>
+          <input type="text" id="presupuesto_transporte_gasolina" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Gasolina', 'presupuesto_transporte_gasolina')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Transporte Publico</label>
+          <input type="text" id="presupuesto_transporte_publico" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Transporte Publico', 'presupuesto_transporte_publico')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Apps</label>
+          <input type="text" id="presupuesto_transporte_apps" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Apps', 'presupuesto_transporte_apps')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Mantenimientos</label>
+          <input type="text" id="presupuesto_transporte_mantenimientos" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Mantenimientos', 'presupuesto_transporte_mantenimientos')">Guardar</button>
+        </div>
+      </div>
+
+      <!-- OCIO -->
+      <div class="categoria">
+        <div class="categoria-header">
+          <span>🎮 Ocio</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Plataformas</label>
+          <input type="text" id="presupuesto_ocio_plataformas" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Plataformas', 'presupuesto_ocio_plataformas')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Cine</label>
+          <input type="text" id="presupuesto_ocio_cine" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Cine', 'presupuesto_ocio_cine')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Viajes</label>
+          <input type="text" id="presupuesto_ocio_viajes" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Viajes', 'presupuesto_ocio_viajes')">Guardar</button>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Restaurantes</label>
+          <input type="text" id="presupuesto_ocio_restaurantes" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Restaurantes', 'presupuesto_ocio_restaurantes')">Guardar</button>
+        </div>
+      </div>
+
+      <!-- OTROS -->
+      <div class="categoria">
+        <div class="categoria-header">
+          <span>📦 Otros</span>
+        </div>
+        
+        <div class="subcategoria">
+          <label>Otros</label>
+          <input type="text" id="presupuesto_otros_otros" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <button class="btn-guardar" onclick="guardarPresupuesto('Otros', 'Otros', 'presupuesto_otros_otros')">Guardar</button>
         </div>
       </div>
 
