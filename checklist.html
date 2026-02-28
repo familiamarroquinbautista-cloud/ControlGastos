@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Checklist de Gastos</title>
+  <title>Checklist de Gastos - ControlGastosPrueba</title>
   <style>
     * {
       margin: 0;
@@ -217,7 +217,7 @@
       font-size: 0.9rem;
     }
   </style>
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK (versión compat para usar con script directo) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
@@ -259,178 +259,186 @@
     }
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // Configuración de Firebase - REEMPLAZA CON TUS DATOS
+    // ===== CONFIGURACIÓN DE FIREBASE - TUS DATOS REALES =====
     const firebaseConfig = {
-      apiKey: "AIzaSyBQ9Z5K7JX7X7X7X7X7X7X7X7X7X7X7X7X",
-      authDomain: "tu-proyecto.firebaseapp.com",
-      projectId: "tu-proyecto",
-      storageBucket: "tu-proyecto.appspot.com",
-      messagingSenderId: "123456789012",
-      appId: "1:123456789012:web:abcdef1234567890"
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
     };
 
     // Inicializar Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    try {
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-    // Referencia ÚNICA para TODOS los perfiles (lista compartida)
-    const itemsRef = db.collection('checklist_compartido').doc('lista_principal').collection('items');
+      // Referencia ÚNICA para TODOS los perfiles (lista compartida)
+      const itemsRef = db.collection('checklist_compartido').doc('lista_principal').collection('items');
 
-    // Array de items
-    let items = [];
+      // Array de items
+      let items = [];
 
-    function mostrarMensaje(texto, esError = false) {
-      const mensaje = document.getElementById('mensaje');
-      mensaje.style.display = 'block';
-      mensaje.innerText = texto;
-      mensaje.className = esError ? 'mensaje error' : 'mensaje exito';
-      setTimeout(() => {
-        mensaje.style.display = 'none';
-      }, 2000);
-    }
+      function mostrarMensaje(texto, esError = false) {
+        const mensaje = document.getElementById('mensaje');
+        mensaje.style.display = 'block';
+        mensaje.innerText = texto;
+        mensaje.className = esError ? 'mensaje error' : 'mensaje exito';
+        setTimeout(() => {
+          mensaje.style.display = 'none';
+        }, 2000);
+      }
 
-    function cargarItems() {
-      itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-        items = [];
-        snapshot.forEach((doc) => {
-          items.push({
-            id: doc.id,
-            ...doc.data()
+      function cargarItems() {
+        itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+          items = [];
+          snapshot.forEach((doc) => {
+            items.push({
+              id: doc.id,
+              ...doc.data()
+            });
           });
+          
+          actualizarLista();
+          
+          if (items.length === 0) {
+            crearItemsEjemplo();
+          }
+        }, (error) => {
+          console.error("Error al cargar items:", error);
+          mostrarMensaje('Error al cargar los datos. Verifica Firebase.', true);
+          document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error de conexión con Firebase</div>';
         });
-        
-        actualizarLista();
+      }
+
+      async function crearItemsEjemplo() {
+        const ejemplos = [
+          {
+            texto: 'Pagar agua',
+            completado: false,
+            fecha: new Date().toLocaleDateString(),
+            timestamp: Date.now() - 100000,
+            creadoPor: 'Sistema'
+          },
+          {
+            texto: 'Comprar mercado',
+            completado: true,
+            fecha: new Date().toLocaleDateString(),
+            timestamp: Date.now() - 200000,
+            creadoPor: 'Sistema'
+          }
+        ];
+
+        for (const ejemplo of ejemplos) {
+          try {
+            await itemsRef.add(ejemplo);
+          } catch (error) {
+            console.error("Error creando item ejemplo:", error);
+          }
+        }
+      }
+
+      function actualizarLista() {
+        const container = document.getElementById('listaContainer');
+        const completadosSpan = document.getElementById('completados');
+        const totalSpan = document.getElementById('total');
         
         if (items.length === 0) {
-          crearItemsEjemplo();
+          container.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
+          completadosSpan.innerText = '0';
+          totalSpan.innerText = '0';
+          return;
         }
-      }, (error) => {
-        console.error("Error al cargar items:", error);
-        mostrarMensaje('Error al cargar los datos', true);
-        document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error al cargar. Recarga la página.</div>';
-      });
-    }
 
-    async function crearItemsEjemplo() {
-      const ejemplos = [
-        {
-          texto: 'Pagar agua',
+        let completados = 0;
+        let html = '';
+
+        const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
+
+        itemsOrdenados.forEach(item => {
+          if (item.completado) completados++;
+          
+          html += `
+            <div class="item-row">
+              <input type="checkbox" 
+                     ${item.completado ? 'checked' : ''} 
+                     onchange="toggleItem('${item.id}')">
+              <span class="item-text ${item.completado ? 'completado' : ''}">${item.texto}</span>
+              <span class="item-fecha">${item.fecha}</span>
+              <span class="btn-eliminar" onclick="eliminarItem('${item.id}')">×</span>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+        completadosSpan.innerText = completados;
+        totalSpan.innerText = items.length;
+      }
+
+      window.agregarItem = async function() {
+        const input = document.getElementById('nuevoItem');
+        const texto = input.value.trim();
+        
+        if (texto === '') {
+          mostrarMensaje('Escribe un texto para el item', true);
+          return;
+        }
+
+        const nuevoItem = {
+          texto: texto,
           completado: false,
           fecha: new Date().toLocaleDateString(),
-          timestamp: Date.now() - 100000,
-          creadoPor: 'Sistema'
-        },
-        {
-          texto: 'Comprar mercado',
-          completado: true,
-          fecha: new Date().toLocaleDateString(),
-          timestamp: Date.now() - 200000,
-          creadoPor: 'Sistema'
-        }
-      ];
+          timestamp: Date.now(),
+          creadoPor: perfil
+        };
 
-      for (const ejemplo of ejemplos) {
         try {
-          await itemsRef.add(ejemplo);
+          await itemsRef.add(nuevoItem);
+          input.value = '';
+          mostrarMensaje('Item agregado');
         } catch (error) {
-          console.error("Error creando item ejemplo:", error);
+          console.error("Error al agregar item:", error);
+          mostrarMensaje('Error al agregar el item', true);
         }
-      }
-    }
-
-    function actualizarLista() {
-      const container = document.getElementById('listaContainer');
-      const completadosSpan = document.getElementById('completados');
-      const totalSpan = document.getElementById('total');
-      
-      if (items.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
-        completadosSpan.innerText = '0';
-        totalSpan.innerText = '0';
-        return;
-      }
-
-      let completados = 0;
-      let html = '';
-
-      const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
-
-      itemsOrdenados.forEach(item => {
-        if (item.completado) completados++;
-        
-        html += `
-          <div class="item-row">
-            <input type="checkbox" 
-                   ${item.completado ? 'checked' : ''} 
-                   onchange="toggleItem('${item.id}')">
-            <span class="item-text ${item.completado ? 'completado' : ''}">${item.texto}</span>
-            <span class="item-fecha">${item.fecha}</span>
-            <span class="btn-eliminar" onclick="eliminarItem('${item.id}')">×</span>
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-      completadosSpan.innerText = completados;
-      totalSpan.innerText = items.length;
-    }
-
-    window.agregarItem = async function() {
-      const input = document.getElementById('nuevoItem');
-      const texto = input.value.trim();
-      
-      if (texto === '') {
-        mostrarMensaje('Escribe un texto para el item', true);
-        return;
-      }
-
-      const nuevoItem = {
-        texto: texto,
-        completado: false,
-        fecha: new Date().toLocaleDateString(),
-        timestamp: Date.now(),
-        creadoPor: perfil
       };
 
-      try {
-        await itemsRef.add(nuevoItem);
-        input.value = '';
-        mostrarMensaje('Item agregado');
-      } catch (error) {
-        console.error("Error al agregar item:", error);
-        mostrarMensaje('Error al agregar el item', true);
-      }
-    };
-
-    window.toggleItem = async function(id) {
-      const item = items.find(i => i.id === id);
-      if (item) {
-        try {
-          await itemsRef.doc(id).update({
-            completado: !item.completado,
-            actualizadoPor: perfil,
-            actualizadoEn: Date.now()
-          });
-        } catch (error) {
-          console.error("Error al actualizar item:", error);
-          mostrarMensaje('Error al actualizar', true);
+      window.toggleItem = async function(id) {
+        const item = items.find(i => i.id === id);
+        if (item) {
+          try {
+            await itemsRef.doc(id).update({
+              completado: !item.completado,
+              actualizadoPor: perfil,
+              actualizadoEn: Date.now()
+            });
+          } catch (error) {
+            console.error("Error al actualizar item:", error);
+            mostrarMensaje('Error al actualizar', true);
+          }
         }
-      }
-    };
+      };
 
-    window.eliminarItem = async function(id) {
-      if (confirm('¿Eliminar este item?')) {
-        try {
-          await itemsRef.doc(id).delete();
-          mostrarMensaje('Item eliminado');
-        } catch (error) {
-          console.error("Error al eliminar item:", error);
-          mostrarMensaje('Error al eliminar', true);
+      window.eliminarItem = async function(id) {
+        if (confirm('¿Eliminar este item?')) {
+          try {
+            await itemsRef.doc(id).delete();
+            mostrarMensaje('Item eliminado');
+          } catch (error) {
+            console.error("Error al eliminar item:", error);
+            mostrarMensaje('Error al eliminar', true);
+          }
         }
-      }
-    };
+      };
 
-    cargarItems();
+      // Cargar items
+      cargarItems();
+      
+    } catch (error) {
+      console.error("Error al inicializar Firebase:", error);
+      document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error: Configuración de Firebase incorrecta</div>';
+      document.getElementById('perfilDisplay').innerText = perfil + ' (Error Firebase)';
+    }
   </script>
 </body>
 </html>
