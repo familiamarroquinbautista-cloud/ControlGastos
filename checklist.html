@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Checklist de Gastos - ControlGastosPrueba</title>
   <style>
     * {
@@ -19,21 +20,24 @@
 
     .container {
       max-width: 600px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 100%;
     }
 
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
       border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .header h1 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 400;
       letter-spacing: 1px;
       color: #2c3e50;
@@ -42,25 +46,26 @@
     .perfil-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.8rem;
+      flex-wrap: wrap;
     }
 
     .perfil-badge {
       background: #f0f0f0;
-      padding: 0.4rem 1rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 20px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #2c3e50;
       border: 1px solid #d0d0d0;
     }
 
     .btn-volver {
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 0.8rem;
       background: white;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
@@ -76,15 +81,15 @@
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.2rem;
       margin-bottom: 1.5rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .card h2 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 400;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid #eaeaea;
       color: #2c3e50;
@@ -99,9 +104,10 @@
     .item-row {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 0.8rem;
+      gap: 0.8rem;
+      padding: 0.8rem 0;
       border-bottom: 1px solid #f0f0f0;
+      flex-wrap: wrap;
     }
 
     .item-row:last-child {
@@ -109,16 +115,19 @@
     }
 
     .item-row input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       cursor: pointer;
       accent-color: #2c3e50;
+      flex-shrink: 0;
     }
 
     .item-text {
       flex: 1;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #2c3e50;
+      word-break: break-word;
+      min-width: 150px;
     }
 
     .item-text.completado {
@@ -128,16 +137,18 @@
 
     .item-fecha {
       color: #95a5a6;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      white-space: nowrap;
     }
 
     .btn-eliminar {
       color: #8b3a3a;
       cursor: pointer;
-      font-size: 1.2rem;
-      padding: 0 0.3rem;
+      font-size: 1.4rem;
+      padding: 0 0.2rem;
       opacity: 0.5;
       transition: opacity 0.2s;
+      flex-shrink: 0;
     }
 
     .btn-eliminar:hover {
@@ -154,20 +165,26 @@
       color: #5a6a7a;
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .agregar-item {
       display: flex;
       gap: 0.8rem;
       margin-top: 1rem;
+      flex-wrap: wrap;
     }
 
     .agregar-item input {
       flex: 1;
+      min-width: 200px;
       padding: 0.8rem;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
       font-size: 1rem;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     .agregar-item input:focus {
@@ -181,8 +198,9 @@
       border: 1px solid #d0d0d0;
       border-radius: 6px;
       color: #2c3e50;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .btn-agregar:hover {
@@ -196,6 +214,7 @@
       font-size: 0.9rem;
       border: 1px solid;
       display: none;
+      word-break: break-word;
     }
 
     .mensaje.exito {
@@ -216,8 +235,53 @@
       padding: 2rem;
       font-size: 0.9rem;
     }
+
+    /* Ajustes para móvil pequeño */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0.8rem;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .perfil-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .item-row {
+        position: relative;
+        padding-right: 2rem;
+      }
+      
+      .btn-eliminar {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      
+      .agregar-item {
+        flex-direction: column;
+      }
+      
+      .agregar-item input {
+        width: 100%;
+      }
+      
+      .btn-agregar {
+        width: 100%;
+      }
+      
+      .item-fecha {
+        margin-left: 2rem;
+      }
+    }
   </style>
-  <!-- Firebase SDK (versión compat para usar con script directo) -->
+  <!-- Firebase SDK (versión compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
@@ -245,7 +309,8 @@
       </div>
 
       <div class="agregar-item">
-        <input type="text" id="nuevoItem" placeholder="Escribe un item..." onkeypress="if(event.key==='Enter') agregarItem()">
+        <!-- CAMBIO: inputmode optimizado para texto -->
+        <input type="text" id="nuevoItem" placeholder="Escribe un item..." inputmode="text" onkeypress="if(event.key==='Enter') agregarItem()">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
       </div>
     </div>
@@ -259,7 +324,7 @@
     }
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // ===== CONFIGURACIÓN DE FIREBASE - TUS DATOS REALES =====
+    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
@@ -269,15 +334,12 @@
       appId: "1:679682152121:web:d3981591d952df1333ed68"
     };
 
-    // Inicializar Firebase
     try {
       const app = firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
 
-      // Referencia ÚNICA para TODOS los perfiles (lista compartida)
       const itemsRef = db.collection('checklist_compartido').doc('lista_principal').collection('items');
 
-      // Array de items
       let items = [];
 
       function mostrarMensaje(texto, esError = false) {
@@ -431,7 +493,6 @@
         }
       };
 
-      // Cargar items
       cargarItems();
       
     } catch (error) {
