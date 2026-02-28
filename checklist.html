@@ -94,6 +94,8 @@
     /* Lista simple */
     .lista-container {
       margin: 1rem 0;
+      max-height: 400px;
+      overflow-y: auto;
     }
 
     .item-row {
@@ -131,7 +133,21 @@
       font-size: 0.85rem;
     }
 
-    /* Contador simple */
+    /* Botón eliminar */
+    .btn-eliminar {
+      color: #8b3a3a;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0 0.3rem;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+
+    .btn-eliminar:hover {
+      opacity: 1;
+    }
+
+    /* Contador */
     .contador {
       margin: 1rem 0;
       padding: 0.8rem;
@@ -227,12 +243,12 @@
       
       <!-- Lista de items -->
       <div class="lista-container" id="listaContainer">
-        <div class="empty-state">No hay items. Agrega uno nuevo.</div>
+        <div class="empty-state">Cargando...</div>
       </div>
 
       <!-- Agregar nuevo -->
       <div class="agregar-item">
-        <input type="text" id="nuevoItem" placeholder="Escribe un item...">
+        <input type="text" id="nuevoItem" placeholder="Escribe un item..." onkeypress="if(event.key==='Enter') agregarItem()">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
       </div>
     </div>
@@ -246,7 +262,10 @@
     }
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // Array simple en memoria
+    // Clave única para localStorage por perfil
+    const STORAGE_KEY = `checklist_${perfil}`;
+
+    // Array de items
     let items = [];
 
     // Mostrar mensaje
@@ -258,6 +277,39 @@
       setTimeout(() => {
         mensaje.style.display = 'none';
       }, 1500);
+    }
+
+    // Guardar en localStorage
+    function guardarItems() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    // Cargar de localStorage
+    function cargarItems() {
+      const guardados = localStorage.getItem(STORAGE_KEY);
+      if (guardados) {
+        items = JSON.parse(guardados);
+      } else {
+        // Si no hay datos guardados, crear ejemplos
+        items = [
+          {
+            id: Date.now() - 100000,
+            texto: 'Pagar agua',
+            completado: false,
+            fecha: new Date().toLocaleDateString(),
+            timestamp: Date.now() - 100000
+          },
+          {
+            id: Date.now() - 200000,
+            texto: 'Comprar mercado',
+            completado: true,
+            fecha: new Date().toLocaleDateString(),
+            timestamp: Date.now() - 200000
+          }
+        ];
+        guardarItems();
+      }
+      actualizarLista();
     }
 
     // Actualizar la lista en pantalla
@@ -276,19 +328,20 @@
       let completados = 0;
       let html = '';
 
-      // Ordenar por fecha (más nuevos primero)
-      const itemsOrdenados = [...items].reverse();
+      // Ordenar por timestamp (más nuevos primero)
+      const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
 
-      itemsOrdenados.forEach((item, index) => {
+      itemsOrdenados.forEach(item => {
         if (item.completado) completados++;
         
         html += `
           <div class="item-row">
             <input type="checkbox" 
                    ${item.completado ? 'checked' : ''} 
-                   onchange="toggleItem(${index})">
+                   onchange="toggleItem('${item.id}')">
             <span class="item-text ${item.completado ? 'completado' : ''}">${item.texto}</span>
             <span class="item-fecha">${item.fecha}</span>
+            <span class="btn-eliminar" onclick="eliminarItem('${item.id}')">×</span>
           </div>
         `;
       });
@@ -307,44 +360,44 @@
         return;
       }
 
+      const ahora = Date.now();
       const fecha = new Date();
       const fechaStr = fecha.toLocaleDateString();
 
       items.push({
+        id: ahora.toString(),
         texto: texto,
         completado: false,
-        fecha: fechaStr
+        fecha: fechaStr,
+        timestamp: ahora
       });
 
       input.value = '';
+      guardarItems();
       actualizarLista();
       mostrarMensaje('Item agregado');
     };
 
     // Cambiar estado del checkbox
-    window.toggleItem = function(index) {
-      // El index viene en orden inverso por el reverse()
-      const realIndex = items.length - 1 - index;
-      items[realIndex].completado = !items[realIndex].completado;
-      actualizarLista();
+    window.toggleItem = function(id) {
+      const item = items.find(i => i.id === id);
+      if (item) {
+        item.completado = !item.completado;
+        guardarItems();
+        actualizarLista();
+      }
     };
 
-    // Inicializar con algunos ejemplos
-    items = [
-      {
-        texto: 'Pagar agua',
-        completado: false,
-        fecha: new Date().toLocaleDateString()
-      },
-      {
-        texto: 'Comprar mercado',
-        completado: true,
-        fecha: new Date().toLocaleDateString()
-      }
-    ];
+    // Eliminar item
+    window.eliminarItem = function(id) {
+      items = items.filter(i => i.id !== id);
+      guardarItems();
+      actualizarLista();
+      mostrarMensaje('Item eliminado');
+    };
 
-    // Mostrar lista inicial
-    actualizarLista();
+    // Cargar items al iniciar
+    cargarItems();
   </script>
 </body>
 </html>
