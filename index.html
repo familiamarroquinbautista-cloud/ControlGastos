@@ -156,7 +156,6 @@
   <div id="splash" class="splash-screen">
     <video class="splash-video" autoplay muted playsinline id="splashVideo">
       <source src="splash.mp4" type="video/mp4">
-      <!-- Fallback si el video no carga -->
     </video>
     <button class="skip-splash" onclick="skipSplash()">Saltar intro</button>
   </div>
@@ -186,13 +185,11 @@
   </div>
 
   <script>
-    // Función para seleccionar perfil
     function seleccionarPerfil(nombre) {
       sessionStorage.setItem('perfil', nombre);
       window.location.href = nombre === 'Admin' ? 'resumen.html' : 'app.html';
     }
 
-    // Función para saltar el splash
     window.skipSplash = function() {
       const splash = document.getElementById('splash');
       const mainContent = document.getElementById('mainContent');
@@ -200,35 +197,27 @@
       splash.classList.add('fade-out');
       mainContent.classList.add('visible');
       
-      // Pausar el video
       const video = document.getElementById('splashVideo');
-      if (video) {
-        video.pause();
-      }
+      if (video) video.pause();
     };
 
-    // Manejar el splash screen
     document.addEventListener('DOMContentLoaded', function() {
       const splash = document.getElementById('splash');
       const mainContent = document.getElementById('mainContent');
       const video = document.getElementById('splashVideo');
       
-      // Duración del splash (4 segundos)
       const splashDuration = 4000;
       
-      // Mostrar contenido principal después del splash
       setTimeout(() => {
         splash.classList.add('fade-out');
         mainContent.classList.add('visible');
       }, splashDuration);
       
-      // Si el video termina antes, también ocultamos el splash
       video.addEventListener('ended', function() {
         splash.classList.add('fade-out');
         mainContent.classList.add('visible');
       });
       
-      // Si el video no puede cargar, ocultamos splash después de 2 segundos
       video.addEventListener('error', function() {
         setTimeout(() => {
           splash.classList.add('fade-out');
