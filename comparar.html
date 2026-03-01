@@ -87,7 +87,6 @@
       color: #5a6a7a;
     }
 
-    /* Selector de período */
     .periodo-selector {
       background: white;
       border: 1px solid #e0e0e0;
@@ -119,7 +118,6 @@
       font-weight: 500;
     }
 
-    /* Cards de resumen financiero */
     .finanzas-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -165,7 +163,6 @@
       color: #8b3a3a;
     }
 
-    /* Comparativa ingresos vs gastos */
     .comparativa-card {
       background: white;
       border: 1px solid #e0e0e0;
@@ -243,7 +240,6 @@
       color: #95a5a6;
     }
 
-    /* Resumen general presupuesto */
     .resumen-general {
       background: white;
       border: 1px solid #e0e0e0;
@@ -408,7 +404,6 @@
       font-size: 0.9rem;
     }
 
-    /* Ajustes para móvil pequeño */
     @media (max-width: 480px) {
       .container {
         padding: 0.8rem;
@@ -479,14 +474,12 @@
       Comparativa completa: Ingresos vs Gastos vs Presupuesto
     </div>
 
-    <!-- Selector de período -->
     <div class="periodo-selector">
       <button class="btn-periodo active" onclick="cambiarPeriodo('mes')">Este mes</button>
       <button class="btn-periodo" onclick="cambiarPeriodo('trimestre')">Últimos 3 meses</button>
       <button class="btn-periodo" onclick="cambiarPeriodo('año')">Año actual</button>
     </div>
 
-    <!-- Cards resumen financiero -->
     <div class="finanzas-grid">
       <div class="finanza-card ingresos">
         <div class="label">Ingresos</div>
@@ -502,7 +495,6 @@
       </div>
     </div>
 
-    <!-- Comparativa ingresos vs gastos -->
     <div class="comparativa-card">
       <h2>INGRESOS VS GASTOS</h2>
       
@@ -532,14 +524,12 @@
       </div>
     </div>
 
-    <!-- Resumen general presupuesto -->
     <div class="resumen-general">
       <div class="label">PRESUPUESTO VS GASTOS</div>
       <div class="valores" id="totalGeneral">$0 vs $0</div>
       <div id="diferenciaGeneral" class="diferencia">Cargando...</div>
     </div>
 
-    <!-- Comparación por categorías -->
     <div class="card">
       <h2>POR CATEGORÍA</h2>
       <div id="comparacionContainer">
@@ -547,7 +537,6 @@
       </div>
     </div>
 
-    <!-- Recomendaciones -->
     <div class="card">
       <h2>RECOMENDACIONES</h2>
       <div id="recomendaciones" class="recomendaciones">
@@ -577,7 +566,6 @@
 
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
     const categorias = {
       'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
       'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
