@@ -16,6 +16,17 @@
       background: #f5f5f5;
       color: #1e1e1e;
       line-height: 1.5;
+      min-height: 100vh;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Fondos por perfil */
+    body.fondo-maria {
+      background: linear-gradient(135deg, #ffe9f4 0%, #ffd9e8 100%);
+    }
+
+    body.fondo-andres {
+      background: linear-gradient(135deg, #e6f0e6 0%, #d6e8d6 100%);
     }
 
     .container {
@@ -23,6 +34,7 @@
       margin: 0 auto;
       padding: 1rem;
       width: 100%;
+      backdrop-filter: blur(2px);
     }
 
     /* Header */
@@ -32,7 +44,7 @@
       align-items: center;
       margin-bottom: 1.5rem;
       padding-bottom: 0.8rem;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       flex-wrap: wrap;
       gap: 0.5rem;
     }
@@ -42,6 +54,7 @@
       font-weight: 400;
       letter-spacing: 1px;
       color: #2c3e50;
+      text-shadow: 0 2px 4px rgba(255,255,255,0.5);
     }
 
     .perfil-info {
@@ -55,24 +68,27 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: #f0f0f0;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.1rem;
-      border: 1px solid #d0d0d0;
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
     .perfil-nombre {
       font-weight: 500;
       color: #2c3e50;
       font-size: 0.95rem;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.3);
     }
 
     .btn-outline {
       padding: 0.4rem 0.8rem;
-      background: white;
-      border: 1px solid #d0d0d0;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       border-radius: 6px;
       color: #2c3e50;
       font-size: 0.85rem;
@@ -83,23 +99,25 @@
     }
 
     .btn-outline:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
+      background: rgba(255, 255, 255, 0.8);
+      border-color: rgba(255, 255, 255, 0.6);
     }
 
     /* Navegación módulos */
     .nav-modulos {
-      background: white;
-      border: 1px solid #e0e0e0;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
     .nav-modulos h2 {
       font-size: 0.9rem;
       font-weight: 400;
-      color: #7f8c8d;
+      color: #4a5568;
       margin-bottom: 0.8rem;
       letter-spacing: 0.5px;
     }
@@ -112,8 +130,9 @@
 
     .btn-modulo {
       padding: 0.7rem 0.5rem;
-      background: white;
-      border: 1px solid #e0e0e0;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 6px;
       color: #2c3e50;
       font-size: 0.85rem;
@@ -126,17 +145,19 @@
     }
 
     .btn-modulo:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.6);
     }
 
     /* Saldo disponible */
     .saldo-card {
-      background: white;
-      border: 1px solid #e0e0e0;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
     .saldo-principal {
@@ -145,7 +166,7 @@
       align-items: center;
       margin-bottom: 1rem;
       padding-bottom: 0.8rem;
-      border-bottom: 1px solid #eaeaea;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .saldo-info {
@@ -155,7 +176,7 @@
 
     .saldo-label {
       font-size: 0.75rem;
-      color: #7f8c8d;
+      color: #4a5568;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -165,6 +186,7 @@
       font-weight: 300;
       color: #2c3e50;
       word-break: break-word;
+      text-shadow: 0 2px 4px rgba(255,255,255,0.3);
     }
 
     .saldo-positivo {
@@ -172,14 +194,6 @@
     }
 
     .saldo-negativo {
-      color: #8b3a3a;
-    }
-
-    .saldo-valor.saldo-positivo {
-      color: #2c5a2c;
-    }
-
-    .saldo-valor.saldo-negativo {
       color: #8b3a3a;
     }
 
@@ -192,7 +206,7 @@
     }
 
     .detalle-item .label {
-      color: #95a5a6;
+      color: #4a5568;
       font-size: 0.7rem;
       text-transform: uppercase;
     }
@@ -208,11 +222,13 @@
 
     /* Switch Ingreso/Gasto */
     .switch-container {
-      background: white;
-      border: 1px solid #e0e0e0;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
     .switch-label {
@@ -220,13 +236,14 @@
       justify-content: center;
       margin-bottom: 0.8rem;
       font-size: 0.85rem;
-      color: #7f8c8d;
+      color: #4a5568;
     }
 
     .switch-buttons {
       display: flex;
       gap: 0.4rem;
-      background: #f0f0f0;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(4px);
       padding: 0.25rem;
       border-radius: 50px;
     }
@@ -240,26 +257,31 @@
       font-weight: 500;
       cursor: pointer;
       background: transparent;
-      color: #5a6a7a;
+      color: #2c3e50;
+      transition: all 0.2s;
     }
 
     .switch-btn.ingreso.active {
-      background: #2c5a2c;
+      background: rgba(44, 90, 44, 0.8);
+      backdrop-filter: blur(4px);
       color: white;
     }
 
     .switch-btn.gasto.active {
-      background: #8b3a3a;
+      background: rgba(139, 58, 58, 0.8);
+      backdrop-filter: blur(4px);
       color: white;
     }
 
     /* Cards */
     .card {
-      background: white;
-      border: 1px solid #e0e0e0;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
     .card h2 {
@@ -267,14 +289,15 @@
       font-weight: 400;
       margin-bottom: 1rem;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid #eaeaea;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       color: #2c3e50;
     }
 
     /* Campos de registro */
     .campos-registro {
-      background: #fafafa;
-      border: 1px solid #eaeaea;
+      background: rgba(250, 250, 250, 0.4);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       padding: 1rem;
     }
@@ -286,30 +309,26 @@
     .campo label {
       display: block;
       font-size: 0.8rem;
-      color: #5a6a7a;
+      color: #2c3e50;
       margin-bottom: 0.2rem;
     }
 
     .campo input, .campo select {
       width: 100%;
       padding: 0.7rem;
-      border: 1px solid #e0e0e0;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 6px;
       font-size: 1rem;
-      background: white;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
       -webkit-appearance: none;
       appearance: none;
     }
 
-    .campo input[type="text"] {
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-    
-    .campo input[type="text"]::-webkit-outer-spin-button,
-    .campo input[type="text"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+    .campo input:focus, .campo select:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.8);
     }
 
     /* Método de pago */
@@ -320,14 +339,15 @@
     .metodo-pago-label {
       display: block;
       font-size: 0.8rem;
-      color: #5a6a7a;
+      color: #2c3e50;
       margin-bottom: 0.3rem;
     }
 
     .metodo-pago-opciones {
       display: flex;
       gap: 0.4rem;
-      background: #f0f0f0;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
       padding: 0.25rem;
       border-radius: 6px;
       flex-wrap: wrap;
@@ -342,24 +362,26 @@
       font-weight: 500;
       cursor: pointer;
       background: transparent;
-      color: #5a6a7a;
+      color: #2c3e50;
       text-align: center;
       min-width: 80px;
+      transition: all 0.2s;
     }
 
     .metodo-pago-opcion.seleccionado {
-      background: white;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
       color: #2c3e50;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .metodo-pago-opcion.debito.seleccionado {
-      background: #2c5a2c;
+      background: rgba(44, 90, 44, 0.7);
       color: white;
     }
 
     .metodo-pago-opcion.credito.seleccionado {
-      background: #8b3a3a;
+      background: rgba(139, 58, 58, 0.7);
       color: white;
     }
 
@@ -370,15 +392,11 @@
       flex-wrap: wrap;
     }
 
-    .campo-row .campo {
-      flex: 1 1 150px;
-      margin-bottom: 0;
-    }
-
     .btn-registro {
       padding: 0.7rem 1rem;
-      background: white;
-      border: 1px solid #d0d0d0;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 6px;
       color: #2c3e50;
       font-size: 0.9rem;
@@ -386,29 +404,22 @@
       white-space: nowrap;
       flex: 1 1 auto;
       min-width: 120px;
+      transition: all 0.2s;
     }
 
     .btn-registro:hover {
-      background: #f5f5f5;
-      border-color: #909090;
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.6);
     }
 
     .btn-registro.ingreso {
-      border-color: #2c5a2c;
+      border-color: rgba(44, 90, 44, 0.3);
       color: #2c5a2c;
     }
 
-    .btn-registro.ingreso:hover {
-      background: #f0f7f0;
-    }
-
     .btn-registro.gasto {
-      border-color: #8b3a3a;
+      border-color: rgba(139, 58, 58, 0.3);
       color: #8b3a3a;
-    }
-
-    .btn-registro.gasto:hover {
-      background: #fcf0f0;
     }
 
     /* Mensajes */
@@ -417,27 +428,17 @@
       padding: 0.8rem;
       border-radius: 6px;
       font-size: 0.9rem;
-      border: 1px solid;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       display: none;
       word-break: break-word;
-    }
-
-    .mensaje.exito {
-      background: #f8f9fa;
-      border-color: #c0c0c0;
-      color: #2c3e50;
-    }
-
-    .mensaje.error {
-      background: #fef5f5;
-      border-color: #e0c0c0;
-      color: #8b3a3a;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
     }
 
     /* Empty state */
     .empty-state {
       text-align: center;
-      color: #95a5a6;
+      color: #4a5568;
       padding: 2rem 0;
       font-size: 0.9rem;
     }
@@ -456,15 +457,12 @@
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       font-size: 0.7rem;
-      background: #f0f0f0;
-    }
-    
-    .item-row {
-      transition: background-color 0.2s;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
     }
     
     .item-row:hover {
-      background-color: #fafafa;
+      background-color: rgba(255, 255, 255, 0.3);
     }
     
     .btn-eliminar {
@@ -482,7 +480,7 @@
       opacity: 1;
     }
 
-    /* Ajustes para móvil pequeño */
+    /* Responsive */
     @media (max-width: 480px) {
       .container {
         padding: 0.8rem;
@@ -510,18 +508,6 @@
         flex-direction: column;
       }
       
-      .campo-row .campo {
-        width: 100%;
-      }
-      
-      .btn-registro {
-        width: 100%;
-      }
-      
-      .saldo-valor {
-        font-size: 1.4rem;
-      }
-      
       .item-row {
         position: relative;
         padding-right: 2rem;
@@ -536,9 +522,8 @@
     }
   </style>
 </head>
-<body>
+<body id="bodyFondo">
   <div class="container">
-    <!-- Header con perfil -->
     <div class="header">
       <h1>REGISTRO</h1>
       <div class="perfil-info">
@@ -548,7 +533,6 @@
       </div>
     </div>
 
-    <!-- Navegación módulos -->
     <div class="nav-modulos">
       <h2>MÓDULOS</h2>
       <div class="nav-botones">
@@ -558,7 +542,6 @@
       </div>
     </div>
 
-    <!-- Saldo disponible -->
     <div class="saldo-card">
       <div class="saldo-principal">
         <div class="saldo-info">
@@ -582,7 +565,6 @@
       </div>
     </div>
 
-    <!-- Switch Ingreso/Gasto -->
     <div class="switch-container">
       <div class="switch-label">SELECCIONA TIPO DE MOVIMIENTO</div>
       <div class="switch-buttons">
@@ -591,10 +573,8 @@
       </div>
     </div>
 
-    <!-- Formulario de GASTOS -->
     <div id="formGasto" class="card">
       <h2>NUEVO GASTO</h2>
-      
       <div class="campos-registro">
         <div class="campo">
           <label>Categoría</label>
@@ -619,18 +599,14 @@
         <div class="metodo-pago-container">
           <div class="metodo-pago-label">Método de pago</div>
           <div class="metodo-pago-opciones">
-            <button class="metodo-pago-opcion debito seleccionado" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">
-              Débito/Efectivo
-            </button>
-            <button class="metodo-pago-opcion credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">
-              Crédito
-            </button>
+            <button class="metodo-pago-opcion debito seleccionado" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">Débito/Efectivo</button>
+            <button class="metodo-pago-opcion credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">Crédito</button>
           </div>
         </div>
         
         <div class="campo">
           <label>Descripción (opcional)</label>
-          <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal" inputmode="text">
+          <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal">
         </div>
         
         <div class="campo-row">
@@ -643,10 +619,8 @@
       </div>
     </div>
 
-    <!-- Formulario de INGRESOS -->
     <div id="formIngreso" class="card" style="display: none;">
       <h2>NUEVO INGRESO</h2>
-      
       <div class="campos-registro">
         <div class="campo">
           <label>Tipo de ingreso</label>
@@ -661,7 +635,7 @@
         
         <div class="campo">
           <label>Descripción (opcional)</label>
-          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual" inputmode="text">
+          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual">
         </div>
         
         <div class="campo-row">
@@ -674,10 +648,8 @@
       </div>
     </div>
 
-    <!-- Mensajes -->
     <div id="mensaje" class="mensaje"></div>
 
-    <!-- HISTORIAL DE MOVIMIENTOS -->
     <div class="card">
       <h2>📋 HISTORIAL DE MOVIMIENTOS</h2>
       <div id="historialContainer" style="max-height: 400px; overflow-y: auto;">
@@ -685,7 +657,6 @@
       </div>
     </div>
 
-    <!-- Espacio adicional al final -->
     <div style="height: 1rem;"></div>
   </div>
 
@@ -711,6 +682,14 @@
       window.location.href = "index.html";
     }
 
+    // Aplicar fondo según perfil
+    const body = document.getElementById('bodyFondo');
+    if (perfil === 'Maria') {
+      body.classList.add('fondo-maria');
+    } else if (perfil === 'Andres') {
+      body.classList.add('fondo-andres');
+    }
+
     const avatar = document.getElementById('avatar');
     const nombrePerfil = document.getElementById('nombrePerfil');
     
@@ -720,7 +699,6 @@
     let tipoMovimientoActual = 'gasto';
     let metodoPagoActual = 'debito';
 
-    // ===== CATEGORÍAS Y SUBCATEGORÍAS =====
     const subcategoriasGasto = {
       'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
       'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
@@ -817,13 +795,11 @@
           tipoMov: 'gasto'
         });
         
-        const metodoTexto = metodoPagoActual === 'debito' ? 'Débito/Efectivo' : 'Crédito';
-        mostrarMensaje(`Gasto registrado: $${monto} en ${categoria} - ${subcategoria} (${metodoTexto})`, "exito");
+        mostrarMensaje(`Gasto registrado: $${monto}`, "exito");
         
         document.getElementById('descripcionGasto').value = '';
         document.getElementById('montoGasto').value = '';
         
-        // Actualizar saldo e historial
         await Promise.all([
           calcularSaldo(),
           cargarHistorial()
@@ -857,12 +833,11 @@
           tipoMov: 'ingreso'
         });
         
-        mostrarMensaje(`Ingreso registrado: $${monto} (${tipo})`, "exito");
+        mostrarMensaje(`Ingreso registrado: $${monto}`, "exito");
         
         document.getElementById('descripcionIngreso').value = '';
         document.getElementById('montoIngreso').value = '';
         
-        // Actualizar saldo e historial
         await Promise.all([
           calcularSaldo(),
           cargarHistorial()
@@ -937,14 +912,11 @@
       }
     }
 
-    // ===== NUEVAS FUNCIONES PARA HISTORIAL =====
-    
     async function cargarHistorial() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener ingresos del mes
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("usuario", "==", perfil),
@@ -953,7 +925,6 @@
         );
         const ingresosSnap = await getDocs(ingresosQuery);
         
-        // Obtener gastos del mes
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -962,7 +933,6 @@
         );
         const gastosSnap = await getDocs(gastosQuery);
         
-        // Combinar y ordenar por fecha
         let movimientos = [];
         
         ingresosSnap.forEach(doc => {
@@ -991,7 +961,6 @@
           });
         });
         
-        // Ordenar por fecha descendente (más reciente primero)
         movimientos.sort((a, b) => b.fecha - a.fecha);
         
         mostrarHistorial(movimientos);
@@ -1025,16 +994,16 @@
         const signo = mov.tipo === 'ingreso' ? '+' : '-';
         
         html += `
-          <div class="item-row" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap;">
-            <div style="min-width: 80px; font-size: 0.75rem; color: #95a5a6;">${fechaStr}</div>
+          <div class="item-row" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.2); flex-wrap: wrap;">
+            <div style="min-width: 80px; font-size: 0.75rem; color: #4a5568;">${fechaStr}</div>
             <div style="min-width: 60px; font-size: 0.8rem;">
-              <span class="badge" style="background: ${mov.tipo === 'ingreso' ? '#e8f0e8' : '#f0e8e8'}; padding: 0.2rem 0.5rem; border-radius: 4px;">
+              <span class="badge" style="background: ${mov.tipo === 'ingreso' ? 'rgba(44, 90, 44, 0.1)' : 'rgba(139, 58, 58, 0.1)'};">
                 ${mov.usuario}
               </span>
             </div>
             <div style="flex: 1; min-width: 150px;">
               <div style="font-weight: 500; font-size: 0.85rem;">${mov.descripcion}</div>
-              <div style="font-size: 0.7rem; color: #95a5a6;">${mov.categoria}</div>
+              <div style="font-size: 0.7rem; color: #4a5568;">${mov.categoria}</div>
             </div>
             <div style="min-width: 100px; text-align: right; font-weight: 500; font-size: 0.9rem;" class="${montoClass}">
               ${signo}$${mov.monto}
@@ -1058,7 +1027,6 @@
         
         mostrarMensaje("Movimiento eliminado correctamente", "exito");
         
-        // Actualizar todo
         await Promise.all([
           calcularSaldo(),
           cargarHistorial()
@@ -1070,7 +1038,6 @@
       }
     };
 
-    // Inicializar
     actualizarSubcategoriasGasto();
     calcularSaldo();
     cargarHistorial();
