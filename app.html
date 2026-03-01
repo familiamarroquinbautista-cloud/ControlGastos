@@ -461,13 +461,6 @@
     
     .item-row {
       transition: background-color 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem;
-      border-bottom: 1px solid #f0f0f0;
-      flex-wrap: wrap;
-      position: relative;
     }
     
     .item-row:hover {
@@ -487,15 +480,6 @@
     
     .btn-eliminar:hover {
       opacity: 1;
-    }
-
-    /* Scroll personalizado para el historial */
-    #historialContainer {
-      max-height: 400px;
-      overflow-y: auto;
-      border: 1px solid #f0f0f0;
-      border-radius: 8px;
-      background: white;
     }
 
     /* Ajustes para móvil pequeño */
@@ -539,6 +523,7 @@
       }
       
       .item-row {
+        position: relative;
         padding-right: 2rem;
       }
       
@@ -695,7 +680,7 @@
     <!-- HISTORIAL DE MOVIMIENTOS -->
     <div class="card">
       <h2>📋 HISTORIAL DE MOVIMIENTOS</h2>
-      <div id="historialContainer">
+      <div id="historialContainer" style="max-height: 400px; overflow-y: auto;">
         <div class="empty-state">Cargando historial...</div>
       </div>
     </div>
@@ -706,7 +691,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -829,8 +814,7 @@
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear(),
-          tipoMov: 'gasto',
-          timestamp: Date.now() // Añadir timestamp para mejor ordenamiento
+          tipoMov: 'gasto'
         });
         
         const metodoTexto = metodoPagoActual === 'debito' ? 'Débito/Efectivo' : 'Crédito';
@@ -870,8 +854,7 @@
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
           año: new Date().getFullYear(),
-          tipoMov: 'ingreso',
-          timestamp: Date.now() // Añadir timestamp para mejor ordenamiento
+          tipoMov: 'ingreso'
         });
         
         mostrarMensaje(`Ingreso registrado: $${monto} (${tipo})`, "exito");
@@ -906,7 +889,6 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Consultar ingresos del mes actual
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("usuario", "==", perfil),
@@ -920,7 +902,6 @@
           totalIngresos += doc.data().monto;
         });
 
-        // Consultar gastos del mes actual
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -956,37 +937,32 @@
       }
     }
 
-    // ===== FUNCIONES MEJORADAS PARA HISTORIAL =====
+    // ===== NUEVAS FUNCIONES PARA HISTORIAL =====
     
     async function cargarHistorial() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Crear consultas con ordenamiento por timestamp o fecha
+        // Obtener ingresos del mes
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("usuario", "==", perfil),
           where("mes", "==", mesActual),
-          where("año", "==", añoActual),
-          orderBy("timestamp", "desc") // Ordenar por timestamp descendente
+          where("año", "==", añoActual)
         );
+        const ingresosSnap = await getDocs(ingresosQuery);
         
+        // Obtener gastos del mes
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
           where("mes", "==", mesActual),
-          where("año", "==", añoActual),
-          orderBy("timestamp", "desc") // Ordenar por timestamp descendente
+          where("año", "==", añoActual)
         );
+        const gastosSnap = await getDocs(gastosQuery);
         
-        // Ejecutar consultas en paralelo
-        const [ingresosSnap, gastosSnap] = await Promise.all([
-          getDocs(ingresosQuery),
-          getDocs(gastosQuery)
-        ]);
-        
-        // Combinar y ordenar por fecha/timestamp
+        // Combinar y ordenar por fecha
         let movimientos = [];
         
         ingresosSnap.forEach(doc => {
@@ -995,7 +971,6 @@
             id: doc.id,
             tipo: 'ingreso',
             fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
-            timestamp: data.timestamp || 0,
             descripcion: data.descripcion || data.tipoIngreso,
             categoria: data.tipoIngreso,
             monto: data.monto,
@@ -1009,7 +984,6 @@
             id: doc.id,
             tipo: 'gasto',
             fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
-            timestamp: data.timestamp || 0,
             descripcion: data.descripcion || `${data.categoria} - ${data.subcategoria}`,
             categoria: `${data.categoria} (${data.metodoPago === 'credito' ? 'Crédito' : 'Débito'})`,
             monto: data.monto,
@@ -1017,88 +991,16 @@
           });
         });
         
-        // Ordenar por timestamp descendente (más reciente primero)
-        movimientos.sort((a, b) => b.timestamp - a.timestamp);
-        
-        // Limitar a los últimos 50 movimientos para mejor rendimiento
-        movimientos = movimientos.slice(0, 50);
+        // Ordenar por fecha descendente (más reciente primero)
+        movimientos.sort((a, b) => b.fecha - a.fecha);
         
         mostrarHistorial(movimientos);
         
       } catch (error) {
         console.error("Error al cargar historial:", error);
-        // Si hay error con orderBy, intentar sin ordenamiento
-        try {
-          await cargarHistorialSinOrden();
-        } catch (secondError) {
-          console.error("Error en segunda opción:", secondError);
-          document.getElementById('historialContainer').innerHTML = 
-            '<div class="empty-state">Error al cargar historial</div>';
-        }
+        document.getElementById('historialContainer').innerHTML = 
+          '<div class="empty-state">Error al cargar historial</div>';
       }
-    }
-
-    // Función de respaldo sin orderBy
-    async function cargarHistorialSinOrden() {
-      const mesActual = new Date().getMonth() + 1;
-      const añoActual = new Date().getFullYear();
-      
-      const ingresosQuery = query(
-        collection(db, "ingresos"),
-        where("usuario", "==", perfil),
-        where("mes", "==", mesActual),
-        where("año", "==", añoActual)
-      );
-      
-      const gastosQuery = query(
-        collection(db, "gastos"),
-        where("usuario", "==", perfil),
-        where("mes", "==", mesActual),
-        where("año", "==", añoActual)
-      );
-      
-      const [ingresosSnap, gastosSnap] = await Promise.all([
-        getDocs(ingresosQuery),
-        getDocs(gastosQuery)
-      ]);
-      
-      let movimientos = [];
-      
-      ingresosSnap.forEach(doc => {
-        const data = doc.data();
-        movimientos.push({
-          id: doc.id,
-          tipo: 'ingreso',
-          fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
-          timestamp: data.timestamp || (data.fecha?.toDate ? data.fecha.toDate().getTime() : 0),
-          descripcion: data.descripcion || data.tipoIngreso,
-          categoria: data.tipoIngreso,
-          monto: data.monto,
-          usuario: data.usuario
-        });
-      });
-      
-      gastosSnap.forEach(doc => {
-        const data = doc.data();
-        movimientos.push({
-          id: doc.id,
-          tipo: 'gasto',
-          fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
-          timestamp: data.timestamp || (data.fecha?.toDate ? data.fecha.toDate().getTime() : 0),
-          descripcion: data.descripcion || `${data.categoria} - ${data.subcategoria}`,
-          categoria: `${data.categoria} (${data.metodoPago === 'credito' ? 'Crédito' : 'Débito'})`,
-          monto: data.monto,
-          usuario: data.usuario
-        });
-      });
-      
-      // Ordenar por timestamp descendente
-      movimientos.sort((a, b) => b.timestamp - a.timestamp);
-      
-      // Limitar a 50
-      movimientos = movimientos.slice(0, 50);
-      
-      mostrarHistorial(movimientos);
     }
 
     function mostrarHistorial(movimientos) {
@@ -1112,32 +1014,18 @@
       let html = '';
       
       movimientos.forEach(mov => {
-        // Formatear fecha correctamente
-        let fechaStr = 'Fecha no disponible';
-        if (mov.fecha && mov.fecha instanceof Date && !isNaN(mov.fecha)) {
-          fechaStr = mov.fecha.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-          });
-        } else if (mov.timestamp) {
-          const fecha = new Date(mov.timestamp);
-          if (!isNaN(fecha)) {
-            fechaStr = fecha.toLocaleDateString('es-ES', {
-              day: '2-digit',
-              month: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit'
-            });
-          }
-        }
+        const fechaStr = mov.fecha.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
         
         const montoClass = mov.tipo === 'ingreso' ? 'monto-positivo' : 'monto-negativo';
         const signo = mov.tipo === 'ingreso' ? '+' : '-';
         
         html += `
-          <div class="item-row" data-id="${mov.id}">
+          <div class="item-row" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap;">
             <div style="min-width: 80px; font-size: 0.75rem; color: #95a5a6;">${fechaStr}</div>
             <div style="min-width: 60px; font-size: 0.8rem;">
               <span class="badge" style="background: ${mov.tipo === 'ingreso' ? '#e8f0e8' : '#f0e8e8'}; padding: 0.2rem 0.5rem; border-radius: 4px;">
