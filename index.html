@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Control Gastos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     * {
       margin: 0;
@@ -18,9 +20,9 @@
       align-items: center;
       background: #f5f5f5;
       color: #1e1e1e;
+      overflow: hidden;
     }
 
-    /* Splash screen */
     .splash-screen {
       position: fixed;
       top: 0;
@@ -46,7 +48,6 @@
       object-fit: cover;
     }
 
-    /* Skip button */
     .skip-splash {
       position: absolute;
       bottom: 30px;
@@ -59,16 +60,9 @@
       border-radius: 30px;
       font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.2s;
       backdrop-filter: blur(5px);
     }
 
-    .skip-splash:hover {
-      background: rgba(0, 0, 0, 0.7);
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* Contenido principal (oculto inicialmente) */
     .main-content {
       text-align: center;
       max-width: 500px;
@@ -110,10 +104,8 @@
       padding: 1.5rem 2.5rem;
       border-radius: 12px;
       font-size: 1.5rem;
-      font-weight: 400;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
       color: #2c3e50;
       min-width: 160px;
     }
@@ -121,12 +113,9 @@
     .btn-perfil:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-      border-color: #b0b0b0;
-      background: #fafafa;
     }
 
     .btn-perfil.admin {
-      border: 1px solid #d0d0d0;
       background: #f0f0f0;
     }
 
@@ -136,48 +125,43 @@
       color: #95a5a6;
     }
 
-    /* Responsive */
     @media (max-width: 480px) {
-      .skip-splash {
-        bottom: 20px;
-        right: 20px;
-        padding: 0.4rem 1rem;
-        font-size: 0.75rem;
-      }
-      
       .btn-perfil {
         min-width: 100%;
       }
     }
   </style>
 </head>
+
 <body>
-  <!-- Splash Screen - SOLO VIDEO -->
+
+  <!-- SPLASH -->
   <div id="splash" class="splash-screen">
-    <video class="splash-video" autoplay muted playsinline id="splashVideo">
+    <video 
+      class="splash-video"
+      id="splashVideo"
+      autoplay
+      muted
+      loop
+      playsinline
+      webkit-playsinline
+      preload="auto">
+
       <source src="splash.mp4" type="video/mp4">
-      <!-- Fallback si el video no carga -->
     </video>
+
     <button class="skip-splash" onclick="skipSplash()">Saltar intro</button>
   </div>
 
-  <!-- Contenido principal -->
+  <!-- CONTENIDO PRINCIPAL -->
   <div id="mainContent" class="main-content">
     <h1>CONTROL GASTOS</h1>
     <div class="subtitle">FAMILIA • seleccionar perfil</div>
     
     <div class="perfiles">
-      <button class="btn-perfil" onclick="seleccionarPerfil('Maria')">
-        MARIA
-      </button>
-      
-      <button class="btn-perfil" onclick="seleccionarPerfil('Andres')">
-        ANDRES
-      </button>
-
-      <button class="btn-perfil admin" onclick="seleccionarPerfil('Admin')">
-        ADMIN
-      </button>
+      <button class="btn-perfil" onclick="seleccionarPerfil('Maria')">MARIA</button>
+      <button class="btn-perfil" onclick="seleccionarPerfil('Andres')">ANDRES</button>
+      <button class="btn-perfil admin" onclick="seleccionarPerfil('Admin')">ADMIN</button>
     </div>
     
     <div class="footer">
@@ -186,49 +170,46 @@
   </div>
 
   <script>
-    // Función para seleccionar perfil
     function seleccionarPerfil(nombre) {
       sessionStorage.setItem('perfil', nombre);
       window.location.href = nombre === 'Admin' ? 'resumen.html' : 'app.html';
     }
 
-    // Función para saltar el splash
-    window.skipSplash = function() {
+    function skipSplash() {
       const splash = document.getElementById('splash');
       const mainContent = document.getElementById('mainContent');
-      
+      const video = document.getElementById('splashVideo');
+
       splash.classList.add('fade-out');
       mainContent.classList.add('visible');
-      
-      // Pausar el video
-      const video = document.getElementById('splashVideo');
-      if (video) {
-        video.pause();
-      }
-    };
 
-    // Manejar el splash screen
+      if (video) video.pause();
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
       const splash = document.getElementById('splash');
       const mainContent = document.getElementById('mainContent');
       const video = document.getElementById('splashVideo');
-      
-      // Duración del splash (4 segundos)
+
       const splashDuration = 4000;
-      
-      // Mostrar contenido principal después del splash
+
+      // Intentar forzar autoplay en móviles
+      if (video) {
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Autoplay bloqueado:", error);
+          });
+        }
+      }
+
+      // Ocultar splash después del tiempo definido
       setTimeout(() => {
         splash.classList.add('fade-out');
         mainContent.classList.add('visible');
       }, splashDuration);
-      
-      // Si el video termina antes, también ocultamos el splash
-      video.addEventListener('ended', function() {
-        splash.classList.add('fade-out');
-        mainContent.classList.add('visible');
-      });
-      
-      // Si el video no puede cargar, ocultamos splash después de 2 segundos
+
       video.addEventListener('error', function() {
         setTimeout(() => {
           splash.classList.add('fade-out');
@@ -237,5 +218,6 @@
       });
     });
   </script>
+
 </body>
 </html>
