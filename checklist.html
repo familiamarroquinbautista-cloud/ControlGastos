@@ -99,15 +99,25 @@
       margin: 1rem 0;
       max-height: 400px;
       overflow-y: auto;
+      border: 1px solid #f0f0f0;
+      border-radius: 8px;
+      background: #fafafa;
     }
 
     .item-row {
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      padding: 0.8rem 0;
+      padding: 0.8rem;
       border-bottom: 1px solid #f0f0f0;
       flex-wrap: wrap;
+      background: white;
+      transition: background-color 0.2s;
+      position: relative;
+    }
+
+    .item-row:hover {
+      background-color: #f8f9fa;
     }
 
     .item-row:last-child {
@@ -137,7 +147,19 @@
 
     .item-fecha {
       color: #95a5a6;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      background: #f5f5f5;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .item-creador {
+      font-size: 0.7rem;
+      color: #7f8c8d;
+      background: #e8e8e8;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
       white-space: nowrap;
     }
 
@@ -149,6 +171,8 @@
       opacity: 0.5;
       transition: opacity 0.2s;
       flex-shrink: 0;
+      background: none;
+      border: none;
     }
 
     .btn-eliminar:hover {
@@ -169,6 +193,21 @@
       gap: 0.5rem;
     }
 
+    .contador-progreso {
+      background: #2c3e50;
+      height: 4px;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .contador-progreso .barra {
+      height: 100%;
+      background: #2c5a2c;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
     .agregar-item {
       display: flex;
       gap: 0.8rem;
@@ -185,6 +224,7 @@
       font-size: 1rem;
       -webkit-appearance: none;
       appearance: none;
+      transition: border-color 0.2s;
     }
 
     .agregar-item input:focus {
@@ -201,10 +241,12 @@
       font-size: 0.95rem;
       cursor: pointer;
       white-space: nowrap;
+      transition: all 0.2s;
     }
 
     .btn-agregar:hover {
       background: #f5f5f5;
+      border-color: #909090;
     }
 
     .mensaje {
@@ -236,6 +278,29 @@
       font-size: 0.9rem;
     }
 
+    .acciones {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      justify-content: flex-end;
+    }
+
+    .btn-limpiar {
+      padding: 0.4rem 0.8rem;
+      background: white;
+      border: 1px solid #e0c0c0;
+      border-radius: 6px;
+      color: #8b3a3a;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-limpiar:hover {
+      background: #fcf0f0;
+      border-color: #c0a0a0;
+    }
+
     /* Ajustes para móvil pequeño */
     @media (max-width: 480px) {
       .container {
@@ -254,12 +319,22 @@
       
       .item-row {
         position: relative;
-        padding-right: 2rem;
+        padding-right: 2.5rem;
+        flex-wrap: wrap;
+      }
+      
+      .item-text {
+        width: calc(100% - 30px);
+      }
+      
+      .item-fecha, .item-creador {
+        font-size: 0.7rem;
+        margin-left: 30px;
       }
       
       .btn-eliminar {
         position: absolute;
-        right: 0;
+        right: 0.5rem;
         top: 50%;
         transform: translateY(-50%);
       }
@@ -274,10 +349,6 @@
       
       .btn-agregar {
         width: 100%;
-      }
-      
-      .item-fecha {
-        margin-left: 2rem;
       }
     }
   </style>
@@ -302,6 +373,10 @@
       
       <div class="contador" id="contador">
         <span>Completados: <span id="completados">0</span>/<span id="total">0</span></span>
+        <span id="porcentaje">0%</span>
+      </div>
+      <div class="contador-progreso">
+        <div class="barra" id="barraProgreso" style="width: 0%;"></div>
       </div>
       
       <div class="lista-container" id="listaContainer">
@@ -311,6 +386,10 @@
       <div class="agregar-item">
         <input type="text" id="nuevoItem" placeholder="Escribe un item..." inputmode="text" onkeypress="if(event.key==='Enter') agregarItem()">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
+      </div>
+
+      <div class="acciones">
+        <button class="btn-limpiar" onclick="limpiarCompletados()" id="btnLimpiar" style="display: none;">Limpiar completados</button>
       </div>
     </div>
   </div>
@@ -337,9 +416,11 @@
       const app = firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
 
+      // Usar una estructura más simple para checklist
       const itemsRef = db.collection('checklist_compartido').doc('lista_principal').collection('items');
 
       let items = [];
+      let unsubscribe = null;
 
       function mostrarMensaje(texto, esError = false) {
         const mensaje = document.getElementById('mensaje');
@@ -352,7 +433,13 @@
       }
 
       function cargarItems() {
-        itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+        // Limpiar suscripción anterior si existe
+        if (unsubscribe) {
+          unsubscribe();
+        }
+
+        // Crear nueva suscripción con ordenamiento
+        unsubscribe = itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
           items = [];
           snapshot.forEach((doc) => {
             items.push({
@@ -362,79 +449,92 @@
           });
           
           actualizarLista();
+          actualizarContador();
           
-          if (items.length === 0) {
-            crearItemsEjemplo();
-          }
+          // Mostrar botón de limpiar si hay items completados
+          const completados = items.filter(item => item.completado).length;
+          document.getElementById('btnLimpiar').style.display = completados > 0 ? 'inline-block' : 'none';
+          
         }, (error) => {
           console.error("Error al cargar items:", error);
-          mostrarMensaje('Error al cargar los datos. Verifica Firebase.', true);
-          document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error de conexión con Firebase</div>';
+          
+          // Intentar sin ordenamiento si hay error
+          if (error.code === 'failed-precondition') {
+            cargarItemsSinOrden();
+          } else {
+            mostrarMensaje('Error al cargar los datos. Verifica Firebase.', true);
+            document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error de conexión con Firebase</div>';
+          }
         });
       }
 
-      async function crearItemsEjemplo() {
-        const ejemplos = [
-          {
-            texto: 'Pagar agua',
-            completado: false,
-            fecha: new Date().toLocaleDateString(),
-            timestamp: Date.now() - 100000,
-            creadoPor: 'Sistema'
-          },
-          {
-            texto: 'Comprar mercado',
-            completado: true,
-            fecha: new Date().toLocaleDateString(),
-            timestamp: Date.now() - 200000,
-            creadoPor: 'Sistema'
-          }
-        ];
+      function cargarItemsSinOrden() {
+        itemsRef.onSnapshot((snapshot) => {
+          items = [];
+          snapshot.forEach((doc) => {
+            items.push({
+              id: doc.id,
+              ...doc.data()
+            });
+          });
+          
+          // Ordenar manualmente por timestamp
+          items.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+          
+          actualizarLista();
+          actualizarContador();
+          
+          const completados = items.filter(item => item.completado).length;
+          document.getElementById('btnLimpiar').style.display = completados > 0 ? 'inline-block' : 'none';
+        });
+      }
 
-        for (const ejemplo of ejemplos) {
-          try {
-            await itemsRef.add(ejemplo);
-          } catch (error) {
-            console.error("Error creando item ejemplo:", error);
-          }
-        }
+      function actualizarContador() {
+        const completados = items.filter(item => item.completado).length;
+        const total = items.length;
+        const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
+        
+        document.getElementById('completados').innerText = completados;
+        document.getElementById('total').innerText = total;
+        document.getElementById('porcentaje').innerText = `${porcentaje}%`;
+        document.getElementById('barraProgreso').style.width = `${porcentaje}%`;
       }
 
       function actualizarLista() {
         const container = document.getElementById('listaContainer');
-        const completadosSpan = document.getElementById('completados');
-        const totalSpan = document.getElementById('total');
         
         if (items.length === 0) {
           container.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
-          completadosSpan.innerText = '0';
-          totalSpan.innerText = '0';
           return;
         }
 
-        let completados = 0;
         let html = '';
 
-        const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
-
-        itemsOrdenados.forEach(item => {
-          if (item.completado) completados++;
+        items.forEach(item => {
+          const fecha = item.fecha || 'Sin fecha';
+          const creador = item.creadoPor || 'Sistema';
           
           html += `
             <div class="item-row">
               <input type="checkbox" 
                      ${item.completado ? 'checked' : ''} 
                      onchange="toggleItem('${item.id}')">
-              <span class="item-text ${item.completado ? 'completado' : ''}">${item.texto}</span>
-              <span class="item-fecha">${item.fecha}</span>
-              <span class="btn-eliminar" onclick="eliminarItem('${item.id}')">×</span>
+              <span class="item-text ${item.completado ? 'completado' : ''}">${escapeHtml(item.texto)}</span>
+              <span class="item-creador">${creador}</span>
+              <span class="item-fecha">${fecha}</span>
+              <button class="btn-eliminar" onclick="eliminarItem('${item.id}')" title="Eliminar item">×</button>
             </div>
           `;
         });
 
         container.innerHTML = html;
-        completadosSpan.innerText = completados;
-        totalSpan.innerText = items.length;
+      }
+
+      // Función para escapar HTML y prevenir XSS
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
       }
 
       window.agregarItem = async function() {
@@ -446,10 +546,19 @@
           return;
         }
 
+        const fechaActual = new Date();
+        const fechaStr = fechaActual.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
         const nuevoItem = {
           texto: texto,
           completado: false,
-          fecha: new Date().toLocaleDateString(),
+          fecha: fechaStr,
           timestamp: Date.now(),
           creadoPor: perfil
         };
@@ -457,7 +566,7 @@
         try {
           await itemsRef.add(nuevoItem);
           input.value = '';
-          mostrarMensaje('Item agregado');
+          mostrarMensaje('Item agregado correctamente');
         } catch (error) {
           console.error("Error al agregar item:", error);
           mostrarMensaje('Error al agregar el item', true);
@@ -481,7 +590,7 @@
       };
 
       window.eliminarItem = async function(id) {
-        if (confirm('¿Eliminar este item?')) {
+        if (confirm('¿Eliminar este item permanentemente?')) {
           try {
             await itemsRef.doc(id).delete();
             mostrarMensaje('Item eliminado');
@@ -492,6 +601,30 @@
         }
       };
 
+      window.limpiarCompletados = async function() {
+        const completados = items.filter(item => item.completado);
+        
+        if (completados.length === 0) {
+          mostrarMensaje('No hay items completados para limpiar', true);
+          return;
+        }
+
+        if (confirm(`¿Eliminar todos los items completados (${completados.length})?`)) {
+          try {
+            const batch = db.batch();
+            completados.forEach(item => {
+              batch.delete(itemsRef.doc(item.id));
+            });
+            await batch.commit();
+            mostrarMensaje(`${completados.length} items eliminados`);
+          } catch (error) {
+            console.error("Error al limpiar completados:", error);
+            mostrarMensaje('Error al limpiar items', true);
+          }
+        }
+      };
+
+      // Iniciar carga de items
       cargarItems();
       
     } catch (error) {
