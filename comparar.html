@@ -110,12 +110,13 @@
       color: #5a6a7a;
       flex: 1 1 auto;
       min-width: 80px;
+      transition: all 0.2s;
     }
 
     .btn-periodo.active {
-      background: #f0f0f0;
-      border-color: #a0a0a0;
-      color: #2c3e50;
+      background: #2c3e50;
+      border-color: #2c3e50;
+      color: white;
       font-weight: 500;
     }
 
@@ -133,6 +134,12 @@
       border-radius: 10px;
       padding: 0.8rem 0.5rem;
       text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .finanza-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     .finanza-card .label {
@@ -209,6 +216,7 @@
       background: #2c3e50;
       border-radius: 4px;
       width: 0%;
+      transition: width 0.3s;
     }
 
     .barra-llenado.barra-positiva {
@@ -325,6 +333,10 @@
       border-bottom: 1px solid #f0f0f0;
     }
 
+    .subcategoria:last-child {
+      border-bottom: none;
+    }
+
     .subcategoria-header {
       display: flex;
       justify-content: space-between;
@@ -406,6 +418,28 @@
       color: #95a5a6;
       padding: 1.5rem;
       font-size: 0.9rem;
+    }
+
+    /* Loading spinner */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .loading-spinner {
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f0f0f0;
+      border-top: 3px solid #2c3e50;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* Ajustes para móvil pequeño */
@@ -543,7 +577,9 @@
     <div class="card">
       <h2>POR CATEGORÍA</h2>
       <div id="comparacionContainer">
-        <div class="empty-state">Cargando datos...</div>
+        <div class="loading">
+          <div class="loading-spinner"></div>
+        </div>
       </div>
     </div>
 
@@ -560,14 +596,17 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const db = getFirestore(initializeApp({
+    const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
       projectId: "controlgastosprueba",
       storageBucket: "controlgastosprueba.firebasestorage.app",
       messagingSenderId: "679682152121",
       appId: "1:679682152121:web:d3981591d952df1333ed68"
-    }));
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     const perfil = sessionStorage.getItem('perfil');
     
@@ -577,7 +616,7 @@
 
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
+    // ===== CATEGORÍAS Y SUBCATEGORÍAS =====
     const categorias = {
       'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
       'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
@@ -632,78 +671,85 @@
     }
 
     async function obtenerIngresos(filtros) {
-      let ingresosQuery;
-      
-      if (filtros.tipo === 'rango') {
-        let todosIngresos = [];
-        for (const { mes, año } of filtros.meses) {
+      try {
+        if (filtros.tipo === 'rango') {
+          let todosIngresos = [];
+          for (const { mes, año } of filtros.meses) {
+            const q = query(
+              collection(db, "ingresos"),
+              where("mes", "==", mes),
+              where("año", "==", año)
+            );
+            const snapshot = await getDocs(q);
+            snapshot.forEach(doc => todosIngresos.push({ id: doc.id, ...doc.data() }));
+          }
+          return todosIngresos;
+        } else if (filtros.tipo === 'año') {
           const q = query(
             collection(db, "ingresos"),
-            where("mes", "==", mes),
-            where("año", "==", año)
+            where("año", "==", filtros.año)
           );
           const snapshot = await getDocs(q);
-          snapshot.forEach(doc => todosIngresos.push(doc.data()));
+          return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } else {
+          const q = query(
+            collection(db, "ingresos"),
+            where("mes", "==", filtros.mes),
+            where("año", "==", filtros.año)
+          );
+          const snapshot = await getDocs(q);
+          return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         }
-        return todosIngresos;
-      } else if (filtros.tipo === 'año') {
-        const q = query(
-          collection(db, "ingresos"),
-          where("año", "==", filtros.año)
-        );
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => doc.data());
-      } else {
-        const q = query(
-          collection(db, "ingresos"),
-          where("mes", "==", filtros.mes),
-          where("año", "==", filtros.año)
-        );
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => doc.data());
+      } catch (error) {
+        console.error("Error obteniendo ingresos:", error);
+        return [];
       }
     }
 
     async function obtenerGastos(filtros) {
-      let gastosQuery;
-      
-      if (filtros.tipo === 'rango') {
-        let todosGastos = [];
-        for (const { mes, año } of filtros.meses) {
+      try {
+        if (filtros.tipo === 'rango') {
+          let todosGastos = [];
+          for (const { mes, año } of filtros.meses) {
+            const q = query(
+              collection(db, "gastos"),
+              where("usuario", "==", perfil),
+              where("mes", "==", mes),
+              where("año", "==", año)
+            );
+            const snapshot = await getDocs(q);
+            snapshot.forEach(doc => todosGastos.push({ id: doc.id, ...doc.data() }));
+          }
+          return todosGastos;
+        } else if (filtros.tipo === 'año') {
           const q = query(
             collection(db, "gastos"),
             where("usuario", "==", perfil),
-            where("mes", "==", mes),
-            where("año", "==", año)
+            where("año", "==", filtros.año)
           );
           const snapshot = await getDocs(q);
-          snapshot.forEach(doc => todosGastos.push(doc.data()));
+          return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } else {
+          const q = query(
+            collection(db, "gastos"),
+            where("usuario", "==", perfil),
+            where("mes", "==", filtros.mes),
+            where("año", "==", filtros.año)
+          );
+          const snapshot = await getDocs(q);
+          return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         }
-        return todosGastos;
-      } else if (filtros.tipo === 'año') {
-        const q = query(
-          collection(db, "gastos"),
-          where("usuario", "==", perfil),
-          where("año", "==", filtros.año)
-        );
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => doc.data());
-      } else {
-        const q = query(
-          collection(db, "gastos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", filtros.mes),
-          where("año", "==", filtros.año)
-        );
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => doc.data());
+      } catch (error) {
+        console.error("Error obteniendo gastos:", error);
+        return [];
       }
     }
 
-    async function obtenerPresupuesto(filtros) {
-      if (filtros.tipo === 'rango' || filtros.tipo === 'año') {
+    async function obtenerPresupuesto() {
+      try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
+        
         const q = query(
           collection(db, "presupuestos"),
           where("usuario", "==", 'GENERAL'),
@@ -711,39 +757,61 @@
           where("año", "==", añoActual)
         );
         const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => doc.data());
-      } else {
-        const q = query(
-          collection(db, "presupuestos"),
-          where("usuario", "==", 'GENERAL'),
-          where("mes", "==", filtros.mes),
-          where("año", "==", filtros.año)
-        );
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => doc.data());
+        
+        const presupuestos = {};
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const key = `${data.categoria}_${data.subcategoria}`;
+          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
+        });
+        
+        return presupuestos;
+      } catch (error) {
+        console.error("Error obteniendo presupuesto:", error);
+        return {};
       }
     }
 
     async function cargarTodo() {
       try {
+        // Mostrar loading
+        document.getElementById('comparacionContainer').innerHTML = `
+          <div class="loading">
+            <div class="loading-spinner"></div>
+          </div>
+        `;
+
         const filtros = obtenerFiltrosPeriodo();
         
-        const ingresosData = await obtenerIngresos(filtros);
+        // Ejecutar consultas en paralelo
+        const [ingresos, gastos, presupuestos] = await Promise.all([
+          obtenerIngresos(filtros),
+          obtenerGastos(filtros),
+          obtenerPresupuesto()
+        ]);
+
+        // Calcular totales de ingresos
         let totalIngresos = 0;
-        ingresosData.forEach(data => {
-          if (data.tipo === 'familiar' || data.usuario === perfil) {
+        ingresos.forEach(data => {
+          // Filtrar ingresos por usuario específico si es necesario
+          if (data.usuario === perfil || data.tipo === 'familiar') {
             totalIngresos += data.monto;
           }
         });
 
-        const gastosData = await obtenerGastos(filtros);
+        // Calcular totales de gastos
         let totalGastos = 0;
-        gastosData.forEach(data => {
+        const gastosPorCategoria = {};
+        
+        gastos.forEach(data => {
           totalGastos += data.monto;
+          const key = `${data.categoria}_${data.subcategoria}`;
+          gastosPorCategoria[key] = (gastosPorCategoria[key] || 0) + data.monto;
         });
 
         const saldo = totalIngresos - totalGastos;
         
+        // Actualizar UI
         document.getElementById('totalIngresos').innerText = `$${totalIngresos}`;
         document.getElementById('totalGastos').innerText = `$${totalGastos}`;
         document.getElementById('totalSaldo').innerText = `$${saldo}`;
@@ -755,6 +823,7 @@
         document.getElementById('detalleGastos').innerText = `$${totalGastos}`;
         document.getElementById('detalleSaldo').innerText = `$${saldo}`;
 
+        // Actualizar barras de porcentaje
         const total = totalIngresos + totalGastos;
         if (total > 0) {
           const porcentajeIngresos = (totalIngresos / total) * 100;
@@ -768,80 +837,19 @@
           barra.className = `barra-llenado ${porcentajeIngresos >= porcentajeGastos ? 'barra-positiva' : 'barra-negativa'}`;
         }
 
-        const presupuestoData = await obtenerPresupuesto(filtros);
-        const presupuestos = {};
+        // Calcular totales de presupuesto
         let totalPresupuesto = 0;
-        
-        presupuestoData.forEach(data => {
-          const key = `${data.categoria}_${data.subcategoria}`;
-          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
-          totalPresupuesto += data.monto;
+        Object.values(presupuestos).forEach(monto => {
+          totalPresupuesto += monto;
         });
 
-        const gastos = {};
-        gastosData.forEach(data => {
-          const key = `${data.categoria}_${data.subcategoria}`;
-          gastos[key] = (gastos[key] || 0) + data.monto;
-        });
-
-        const container = document.getElementById('comparacionContainer');
-        container.innerHTML = '';
-
+        // Calcular total de gastos por categoría
         let totalGastosCategoria = 0;
+        Object.values(gastosPorCategoria).forEach(monto => {
+          totalGastosCategoria += monto;
+        });
 
-        for (const [categoria, subcategorias] of Object.entries(categorias)) {
-          const categoriaDiv = document.createElement('div');
-          categoriaDiv.className = 'categoria';
-          
-          categoriaDiv.innerHTML = `<div class="categoria-header">${categoria}</div>`;
-
-          let totalCatPresupuesto = 0;
-          let totalCatGasto = 0;
-
-          for (const subcategoria of subcategorias) {
-            const key = `${categoria}_${subcategoria}`;
-            const presupuesto = presupuestos[key] || 0;
-            const gasto = gastos[key] || 0;
-            const diferencia = presupuesto - gasto;
-
-            totalCatPresupuesto += presupuesto;
-            totalCatGasto += gasto;
-            totalGastosCategoria += gasto;
-
-            let diferenciaClass = '';
-            let diferenciaText = 'Sin presupuesto';
-            
-            if (presupuesto > 0) {
-              diferenciaClass = diferencia >= 0 ? 'positivo' : 'negativo';
-              diferenciaText = diferencia >= 0 ? `Ahorro $${diferencia}` : `Exceso $${Math.abs(diferencia)}`;
-            }
-
-            const subDiv = document.createElement('div');
-            subDiv.className = 'subcategoria';
-            subDiv.innerHTML = `
-              <div class="subcategoria-header">
-                <span class="subcategoria-nombre">${subcategoria}</span>
-                <span class="diferencia-badge ${diferenciaClass}">${diferenciaText}</span>
-              </div>
-              <div class="valores">
-                <span class="presupuesto">Presupuesto: $${presupuesto}</span>
-                <span class="gasto">Gastado: $${gasto}</span>
-              </div>
-            `;
-            categoriaDiv.appendChild(subDiv);
-          }
-
-          const totalCatDiv = document.createElement('div');
-          totalCatDiv.className = 'total-row';
-          totalCatDiv.innerHTML = `
-            <span>Total ${categoria}</span>
-            <span>$${totalCatPresupuesto} / $${totalCatGasto}</span>
-          `;
-          categoriaDiv.appendChild(totalCatDiv);
-
-          container.appendChild(categoriaDiv);
-        }
-
+        // Actualizar resumen general
         document.getElementById('totalGeneral').innerHTML = `$${totalPresupuesto} vs $${totalGastosCategoria}`;
         
         const diferenciaGeneral = totalPresupuesto - totalGastosCategoria;
@@ -858,6 +866,10 @@
           diferenciaElement.className = 'diferencia negativo';
         }
 
+        // Mostrar comparación por categorías
+        mostrarComparacionCategorias(presupuestos, gastosPorCategoria);
+
+        // Actualizar recomendaciones
         const recomendaciones = document.getElementById('recomendaciones');
         if (totalIngresos === 0 && totalGastos === 0) {
           recomendaciones.innerHTML = 'No hay movimientos en este período.';
@@ -869,11 +881,73 @@
         }
 
       } catch (error) {
-        console.error(error);
+        console.error("Error en cargarTodo:", error);
         document.getElementById('comparacionContainer').innerHTML = '<div class="empty-state">Error al cargar datos</div>';
+        document.getElementById('recomendaciones').innerHTML = 'Error al cargar recomendaciones';
       }
     }
 
+    function mostrarComparacionCategorias(presupuestos, gastos) {
+      const container = document.getElementById('comparacionContainer');
+      container.innerHTML = '';
+
+      let html = '';
+
+      for (const [categoria, subcategorias] of Object.entries(categorias)) {
+        let categoriaHtml = `
+          <div class="categoria">
+            <div class="categoria-header">${categoria}</div>
+        `;
+
+        let totalCatPresupuesto = 0;
+        let totalCatGasto = 0;
+
+        for (const subcategoria of subcategorias) {
+          const key = `${categoria}_${subcategoria}`;
+          const presupuesto = presupuestos[key] || 0;
+          const gasto = gastos[key] || 0;
+          const diferencia = presupuesto - gasto;
+
+          totalCatPresupuesto += presupuesto;
+          totalCatGasto += gasto;
+
+          let diferenciaClass = '';
+          let diferenciaText = 'Sin presupuesto';
+          
+          if (presupuesto > 0) {
+            diferenciaClass = diferencia >= 0 ? 'positivo' : 'negativo';
+            diferenciaText = diferencia >= 0 ? `Ahorro $${diferencia}` : `Exceso $${Math.abs(diferencia)}`;
+          }
+
+          categoriaHtml += `
+            <div class="subcategoria">
+              <div class="subcategoria-header">
+                <span class="subcategoria-nombre">${subcategoria}</span>
+                <span class="diferencia-badge ${diferenciaClass}">${diferenciaText}</span>
+              </div>
+              <div class="valores">
+                <span class="presupuesto">Presupuesto: $${presupuesto}</span>
+                <span class="gasto">Gastado: $${gasto}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        categoriaHtml += `
+            <div class="total-row">
+              <span>Total ${categoria}</span>
+              <span>$${totalCatPresupuesto} / $${totalCatGasto}</span>
+            </div>
+          </div>
+        `;
+
+        html += categoriaHtml;
+      }
+
+      container.innerHTML = html;
+    }
+
+    // Cargar datos iniciales
     cargarTodo();
   </script>
 </body>
