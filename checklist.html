@@ -99,25 +99,15 @@
       margin: 1rem 0;
       max-height: 400px;
       overflow-y: auto;
-      border: 1px solid #f0f0f0;
-      border-radius: 8px;
-      background: #fafafa;
     }
 
     .item-row {
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      padding: 0.8rem;
+      padding: 0.8rem 0;
       border-bottom: 1px solid #f0f0f0;
       flex-wrap: wrap;
-      background: white;
-      transition: background-color 0.2s;
-      position: relative;
-    }
-
-    .item-row:hover {
-      background-color: #f8f9fa;
     }
 
     .item-row:last-child {
@@ -147,19 +137,7 @@
 
     .item-fecha {
       color: #95a5a6;
-      font-size: 0.75rem;
-      white-space: nowrap;
-      background: #f5f5f5;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-    }
-
-    .item-creador {
-      font-size: 0.7rem;
-      color: #7f8c8d;
-      background: #e8e8e8;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
+      font-size: 0.8rem;
       white-space: nowrap;
     }
 
@@ -171,8 +149,6 @@
       opacity: 0.5;
       transition: opacity 0.2s;
       flex-shrink: 0;
-      background: none;
-      border: none;
     }
 
     .btn-eliminar:hover {
@@ -193,21 +169,6 @@
       gap: 0.5rem;
     }
 
-    .contador-progreso {
-      background: #2c3e50;
-      height: 4px;
-      border-radius: 2px;
-      margin-top: 0.5rem;
-      overflow: hidden;
-    }
-
-    .contador-progreso .barra {
-      height: 100%;
-      background: #2c5a2c;
-      width: 0%;
-      transition: width 0.3s;
-    }
-
     .agregar-item {
       display: flex;
       gap: 0.8rem;
@@ -224,7 +185,6 @@
       font-size: 1rem;
       -webkit-appearance: none;
       appearance: none;
-      transition: border-color 0.2s;
     }
 
     .agregar-item input:focus {
@@ -241,12 +201,10 @@
       font-size: 0.95rem;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s;
     }
 
     .btn-agregar:hover {
       background: #f5f5f5;
-      border-color: #909090;
     }
 
     .mensaje {
@@ -278,29 +236,6 @@
       font-size: 0.9rem;
     }
 
-    .acciones {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-      justify-content: flex-end;
-    }
-
-    .btn-limpiar {
-      padding: 0.4rem 0.8rem;
-      background: white;
-      border: 1px solid #e0c0c0;
-      border-radius: 6px;
-      color: #8b3a3a;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-limpiar:hover {
-      background: #fcf0f0;
-      border-color: #c0a0a0;
-    }
-
     /* Ajustes para móvil pequeño */
     @media (max-width: 480px) {
       .container {
@@ -319,22 +254,12 @@
       
       .item-row {
         position: relative;
-        padding-right: 2.5rem;
-        flex-wrap: wrap;
-      }
-      
-      .item-text {
-        width: calc(100% - 30px);
-      }
-      
-      .item-fecha, .item-creador {
-        font-size: 0.7rem;
-        margin-left: 30px;
+        padding-right: 2rem;
       }
       
       .btn-eliminar {
         position: absolute;
-        right: 0.5rem;
+        right: 0;
         top: 50%;
         transform: translateY(-50%);
       }
@@ -349,6 +274,10 @@
       
       .btn-agregar {
         width: 100%;
+      }
+      
+      .item-fecha {
+        margin-left: 2rem;
       }
     }
   </style>
@@ -373,10 +302,6 @@
       
       <div class="contador" id="contador">
         <span>Completados: <span id="completados">0</span>/<span id="total">0</span></span>
-        <span id="porcentaje">0%</span>
-      </div>
-      <div class="contador-progreso">
-        <div class="barra" id="barraProgreso" style="width: 0%;"></div>
       </div>
       
       <div class="lista-container" id="listaContainer">
@@ -386,10 +311,6 @@
       <div class="agregar-item">
         <input type="text" id="nuevoItem" placeholder="Escribe un item..." inputmode="text" onkeypress="if(event.key==='Enter') agregarItem()">
         <button class="btn-agregar" onclick="agregarItem()">Agregar</button>
-      </div>
-
-      <div class="acciones">
-        <button class="btn-limpiar" onclick="limpiarCompletados()" id="btnLimpiar" style="display: none;">Limpiar completados</button>
       </div>
     </div>
   </div>
@@ -416,11 +337,9 @@
       const app = firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
 
-      // Usar una estructura más simple para checklist
       const itemsRef = db.collection('checklist_compartido').doc('lista_principal').collection('items');
 
       let items = [];
-      let unsubscribe = null;
 
       function mostrarMensaje(texto, esError = false) {
         const mensaje = document.getElementById('mensaje');
@@ -433,13 +352,7 @@
       }
 
       function cargarItems() {
-        // Limpiar suscripción anterior si existe
-        if (unsubscribe) {
-          unsubscribe();
-        }
-
-        // Crear nueva suscripción con ordenamiento
-        unsubscribe = itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+        itemsRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
           items = [];
           snapshot.forEach((doc) => {
             items.push({
@@ -449,92 +362,79 @@
           });
           
           actualizarLista();
-          actualizarContador();
           
-          // Mostrar botón de limpiar si hay items completados
-          const completados = items.filter(item => item.completado).length;
-          document.getElementById('btnLimpiar').style.display = completados > 0 ? 'inline-block' : 'none';
-          
+          if (items.length === 0) {
+            crearItemsEjemplo();
+          }
         }, (error) => {
           console.error("Error al cargar items:", error);
-          
-          // Intentar sin ordenamiento si hay error
-          if (error.code === 'failed-precondition') {
-            cargarItemsSinOrden();
-          } else {
-            mostrarMensaje('Error al cargar los datos. Verifica Firebase.', true);
-            document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error de conexión con Firebase</div>';
+          mostrarMensaje('Error al cargar los datos. Verifica Firebase.', true);
+          document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error de conexión con Firebase</div>';
+        });
+      }
+
+      async function crearItemsEjemplo() {
+        const ejemplos = [
+          {
+            texto: 'Pagar agua',
+            completado: false,
+            fecha: new Date().toLocaleDateString(),
+            timestamp: Date.now() - 100000,
+            creadoPor: 'Sistema'
+          },
+          {
+            texto: 'Comprar mercado',
+            completado: true,
+            fecha: new Date().toLocaleDateString(),
+            timestamp: Date.now() - 200000,
+            creadoPor: 'Sistema'
           }
-        });
-      }
+        ];
 
-      function cargarItemsSinOrden() {
-        itemsRef.onSnapshot((snapshot) => {
-          items = [];
-          snapshot.forEach((doc) => {
-            items.push({
-              id: doc.id,
-              ...doc.data()
-            });
-          });
-          
-          // Ordenar manualmente por timestamp
-          items.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-          
-          actualizarLista();
-          actualizarContador();
-          
-          const completados = items.filter(item => item.completado).length;
-          document.getElementById('btnLimpiar').style.display = completados > 0 ? 'inline-block' : 'none';
-        });
-      }
-
-      function actualizarContador() {
-        const completados = items.filter(item => item.completado).length;
-        const total = items.length;
-        const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
-        
-        document.getElementById('completados').innerText = completados;
-        document.getElementById('total').innerText = total;
-        document.getElementById('porcentaje').innerText = `${porcentaje}%`;
-        document.getElementById('barraProgreso').style.width = `${porcentaje}%`;
+        for (const ejemplo of ejemplos) {
+          try {
+            await itemsRef.add(ejemplo);
+          } catch (error) {
+            console.error("Error creando item ejemplo:", error);
+          }
+        }
       }
 
       function actualizarLista() {
         const container = document.getElementById('listaContainer');
+        const completadosSpan = document.getElementById('completados');
+        const totalSpan = document.getElementById('total');
         
         if (items.length === 0) {
           container.innerHTML = '<div class="empty-state">No hay items. Agrega uno nuevo.</div>';
+          completadosSpan.innerText = '0';
+          totalSpan.innerText = '0';
           return;
         }
 
+        let completados = 0;
         let html = '';
 
-        items.forEach(item => {
-          const fecha = item.fecha || 'Sin fecha';
-          const creador = item.creadoPor || 'Sistema';
+        const itemsOrdenados = [...items].sort((a, b) => b.timestamp - a.timestamp);
+
+        itemsOrdenados.forEach(item => {
+          if (item.completado) completados++;
           
           html += `
             <div class="item-row">
               <input type="checkbox" 
                      ${item.completado ? 'checked' : ''} 
                      onchange="toggleItem('${item.id}')">
-              <span class="item-text ${item.completado ? 'completado' : ''}">${escapeHtml(item.texto)}</span>
-              <span class="item-creador">${creador}</span>
-              <span class="item-fecha">${fecha}</span>
-              <button class="btn-eliminar" onclick="eliminarItem('${item.id}')" title="Eliminar item">×</button>
+              <span class="item-text ${item.completado ? 'completado' : ''}">${item.texto}</span>
+              <span class="item-fecha">${item.fecha}</span>
+              <span class="btn-eliminar" onclick="eliminarItem('${item.id}')">×</span>
             </div>
           `;
         });
 
         container.innerHTML = html;
-      }
-
-      // Función para escapar HTML y prevenir XSS
-      function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        completadosSpan.innerText = completados;
+        totalSpan.innerText = items.length;
       }
 
       window.agregarItem = async function() {
@@ -546,19 +446,10 @@
           return;
         }
 
-        const fechaActual = new Date();
-        const fechaStr = fechaActual.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
         const nuevoItem = {
           texto: texto,
           completado: false,
-          fecha: fechaStr,
+          fecha: new Date().toLocaleDateString(),
           timestamp: Date.now(),
           creadoPor: perfil
         };
@@ -566,7 +457,7 @@
         try {
           await itemsRef.add(nuevoItem);
           input.value = '';
-          mostrarMensaje('Item agregado correctamente');
+          mostrarMensaje('Item agregado');
         } catch (error) {
           console.error("Error al agregar item:", error);
           mostrarMensaje('Error al agregar el item', true);
@@ -590,7 +481,7 @@
       };
 
       window.eliminarItem = async function(id) {
-        if (confirm('¿Eliminar este item permanentemente?')) {
+        if (confirm('¿Eliminar este item?')) {
           try {
             await itemsRef.doc(id).delete();
             mostrarMensaje('Item eliminado');
@@ -601,30 +492,6 @@
         }
       };
 
-      window.limpiarCompletados = async function() {
-        const completados = items.filter(item => item.completado);
-        
-        if (completados.length === 0) {
-          mostrarMensaje('No hay items completados para limpiar', true);
-          return;
-        }
-
-        if (confirm(`¿Eliminar todos los items completados (${completados.length})?`)) {
-          try {
-            const batch = db.batch();
-            completados.forEach(item => {
-              batch.delete(itemsRef.doc(item.id));
-            });
-            await batch.commit();
-            mostrarMensaje(`${completados.length} items eliminados`);
-          } catch (error) {
-            console.error("Error al limpiar completados:", error);
-            mostrarMensaje('Error al limpiar items', true);
-          }
-        }
-      };
-
-      // Iniciar carga de items
       cargarItems();
       
     } catch (error) {
@@ -632,6 +499,888 @@
       document.getElementById('listaContainer').innerHTML = '<div class="empty-state">Error: Configuración de Firebase incorrecta</div>';
       document.getElementById('perfilDisplay').innerText = perfil + ' (Error Firebase)';
     }
+  </script>
+</body>
+</html>
+
+comparar.html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Comparar vs Presupuesto</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1e1e1e;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 100%;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .header h1 {
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #2c3e50;
+    }
+
+    .perfil-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .perfil-badge {
+      background: #f0f0f0;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #2c3e50;
+      border: 1px solid #d0d0d0;
+    }
+
+    .btn-volver {
+      padding: 0.4rem 0.8rem;
+      background: white;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      color: #2c3e50;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-volver:hover {
+      background: #f5f5f5;
+      border-color: #a0a0a0;
+    }
+
+    .aviso {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #5a6a7a;
+    }
+
+    /* Selector de período */
+    .periodo-selector {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 0.4rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-periodo {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #5a6a7a;
+      flex: 1 1 auto;
+      min-width: 80px;
+    }
+
+    .btn-periodo.active {
+      background: #f0f0f0;
+      border-color: #a0a0a0;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    /* Cards de resumen financiero */
+    .finanzas-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .finanza-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 0.8rem 0.5rem;
+      text-align: center;
+    }
+
+    .finanza-card .label {
+      font-size: 0.7rem;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.2rem;
+    }
+
+    .finanza-card .valor {
+      font-size: 1.1rem;
+      font-weight: 300;
+      word-break: break-word;
+    }
+
+    .finanza-card.ingresos .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.gastos .valor {
+      color: #8b3a3a;
+    }
+
+    .finanza-card.saldo.positivo .valor {
+      color: #2c5a2c;
+    }
+
+    .finanza-card.saldo.negativo .valor {
+      color: #8b3a3a;
+    }
+
+    /* Comparativa ingresos vs gastos */
+    .comparativa-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .comparativa-card h2 {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #7f8c8d;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .barra-container {
+      margin: 0.8rem 0;
+    }
+
+    .barra-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #5a6a7a;
+      margin-bottom: 0.3rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .barra {
+      height: 8px;
+      background: #eaeaea;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .barra-llenado {
+      height: 8px;
+      background: #2c3e50;
+      border-radius: 4px;
+      width: 0%;
+    }
+
+    .barra-llenado.barra-positiva {
+      background: #2c5a2c;
+    }
+
+    .barra-llenado.barra-negativa {
+      background: #8b3a3a;
+    }
+
+    .detalle-valores {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eaeaea;
+    }
+
+    .detalle-item {
+      text-align: center;
+    }
+
+    .detalle-item .valor {
+      font-size: 1.1rem;
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .detalle-item .label {
+      font-size: 0.7rem;
+      color: #95a5a6;
+    }
+
+    /* Resumen general presupuesto */
+    .resumen-general {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .resumen-general .label {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+      margin-bottom: 0.5rem;
+    }
+
+    .resumen-general .valores {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+      word-break: break-word;
+    }
+
+    .resumen-general .diferencia {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+    }
+
+    .diferencia.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
+    }
+
+    .diferencia.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      color: #4a5568;
+      letter-spacing: 0.3px;
+    }
+
+    .categoria {
+      margin-bottom: 1.2rem;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .categoria-header {
+      background: #f8f9fa;
+      padding: 0.8rem 1rem;
+      font-weight: 500;
+      border-bottom: 1px solid #eaeaea;
+      color: #2c3e50;
+      font-size: 0.95rem;
+    }
+
+    .subcategoria {
+      padding: 0.8rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .subcategoria-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .subcategoria-nombre {
+      font-weight: 500;
+      color: #4a5568;
+      font-size: 0.9rem;
+    }
+
+    .diferencia-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      white-space: nowrap;
+    }
+
+    .diferencia-badge.positivo {
+      background: #f0f7f0;
+      border-color: #c0d0c0;
+      color: #2c5a2c;
+    }
+
+    .diferencia-badge.negativo {
+      background: #fcf0f0;
+      border-color: #e0c0c0;
+      color: #8b3a3a;
+    }
+
+    .valores {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .presupuesto {
+      color: #7f8c8d;
+    }
+
+    .gasto {
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    .total-row {
+      background: #f8f9fa;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+      border-top: 1px solid #e0e0e0;
+      color: #2c3e50;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .recomendaciones {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #5a6a7a;
+      word-break: break-word;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #95a5a6;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* Ajustes para móvil pequeño */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0.8rem;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .perfil-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .finanzas-grid {
+        gap: 0.4rem;
+      }
+      
+      .finanza-card .valor {
+        font-size: 1rem;
+      }
+      
+      .periodo-selector {
+        flex-direction: column;
+      }
+      
+      .btn-periodo {
+        width: 100%;
+      }
+      
+      .detalle-valores {
+        gap: 0.3rem;
+      }
+      
+      .detalle-item .valor {
+        font-size: 0.95rem;
+      }
+      
+      .subcategoria-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .valores {
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      
+      .total-row {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>COMPARAR</h1>
+      <div class="perfil-info">
+        <span class="perfil-badge" id="perfilDisplay">Cargando...</span>
+        <button class="btn-volver" onclick="window.location.href='app.html'">← Volver</button>
+      </div>
+    </div>
+
+    <div class="aviso">
+      Comparativa completa: Ingresos vs Gastos vs Presupuesto
+    </div>
+
+    <!-- Selector de período -->
+    <div class="periodo-selector">
+      <button class="btn-periodo active" onclick="cambiarPeriodo('mes')">Este mes</button>
+      <button class="btn-periodo" onclick="cambiarPeriodo('trimestre')">Últimos 3 meses</button>
+      <button class="btn-periodo" onclick="cambiarPeriodo('año')">Año actual</button>
+    </div>
+
+    <!-- Cards resumen financiero -->
+    <div class="finanzas-grid">
+      <div class="finanza-card ingresos">
+        <div class="label">Ingresos</div>
+        <div class="valor" id="totalIngresos">$0</div>
+      </div>
+      <div class="finanza-card gastos">
+        <div class="label">Gastos</div>
+        <div class="valor" id="totalGastos">$0</div>
+      </div>
+      <div class="finanza-card saldo" id="saldoCard">
+        <div class="label">Saldo</div>
+        <div class="valor" id="totalSaldo">$0</div>
+      </div>
+    </div>
+
+    <!-- Comparativa ingresos vs gastos -->
+    <div class="comparativa-card">
+      <h2>INGRESOS VS GASTOS</h2>
+      
+      <div class="barra-container">
+        <div class="barra-label">
+          <span>Ingresos: <span id="ingresosPorcentaje">0%</span></span>
+          <span>Gastos: <span id="gastosPorcentaje">0%</span></span>
+        </div>
+        <div class="barra">
+          <div class="barra-llenado" id="barraComparativa" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="detalle-valores">
+        <div class="detalle-item">
+          <div class="valor" id="detalleIngresos">$0</div>
+          <div class="label">INGRESOS</div>
+        </div>
+        <div class="detalle-item">
+          <div class="valor" id="detalleGastos">$0</div>
+          <div class="label">GASTOS</div>
+        </div>
+        <div class="detalle-item">
+          <div class="valor" id="detalleSaldo">$0</div>
+          <div class="label">SALDO</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen general presupuesto -->
+    <div class="resumen-general">
+      <div class="label">PRESUPUESTO VS GASTOS</div>
+      <div class="valores" id="totalGeneral">$0 vs $0</div>
+      <div id="diferenciaGeneral" class="diferencia">Cargando...</div>
+    </div>
+
+    <!-- Comparación por categorías -->
+    <div class="card">
+      <h2>POR CATEGORÍA</h2>
+      <div id="comparacionContainer">
+        <div class="empty-state">Cargando datos...</div>
+      </div>
+    </div>
+
+    <!-- Recomendaciones -->
+    <div class="card">
+      <h2>RECOMENDACIONES</h2>
+      <div id="recomendaciones" class="recomendaciones">
+        Cargando...
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const db = getFirestore(initializeApp({
+      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
+      authDomain: "controlgastosprueba.firebaseapp.com",
+      projectId: "controlgastosprueba",
+      storageBucket: "controlgastosprueba.firebasestorage.app",
+      messagingSenderId: "679682152121",
+      appId: "1:679682152121:web:d3981591d952df1333ed68"
+    }));
+
+    const perfil = sessionStorage.getItem('perfil');
+    
+    if (!perfil || perfil === 'Admin') {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById('perfilDisplay').innerText = perfil;
+
+    // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
+    const categorias = {
+      'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
+      'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
+      'Hogar': ['Arriendo', 'Couta inicial apto'],
+      'Finanzas': ['Couta FNA', 'Couta Coasmedas'],
+      'Transporte': ['Gasolina', 'Transporte Publico', 'Apps', 'Mantenimientos'],
+      'Ocio': ['Plataformas', 'Cine', 'Viajes', 'Restaurantes'],
+      'Otros': ['Otros']
+    };
+
+    let periodoActual = 'mes';
+
+    window.cambiarPeriodo = function(periodo) {
+      periodoActual = periodo;
+      
+      document.querySelectorAll('.btn-periodo').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      cargarTodo();
+    };
+
+    function obtenerFiltrosPeriodo() {
+      const ahora = new Date();
+      const mesActual = ahora.getMonth() + 1;
+      const añoActual = ahora.getFullYear();
+      
+      if (periodoActual === 'mes') {
+        return {
+          mes: mesActual,
+          año: añoActual
+        };
+      } else if (periodoActual === 'trimestre') {
+        let meses = [];
+        for (let i = 0; i < 3; i++) {
+          let mes = mesActual - i;
+          let año = añoActual;
+          if (mes <= 0) {
+            mes += 12;
+            año -= 1;
+          }
+          meses.push({ mes, año });
+        }
+        return { meses, tipo: 'rango' };
+      } else {
+        return {
+          año: añoActual,
+          tipo: 'año'
+        };
+      }
+    }
+
+    async function obtenerIngresos(filtros) {
+      let ingresosQuery;
+      
+      if (filtros.tipo === 'rango') {
+        let todosIngresos = [];
+        for (const { mes, año } of filtros.meses) {
+          const q = query(
+            collection(db, "ingresos"),
+            where("mes", "==", mes),
+            where("año", "==", año)
+          );
+          const snapshot = await getDocs(q);
+          snapshot.forEach(doc => todosIngresos.push(doc.data()));
+        }
+        return todosIngresos;
+      } else if (filtros.tipo === 'año') {
+        const q = query(
+          collection(db, "ingresos"),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      } else {
+        const q = query(
+          collection(db, "ingresos"),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      }
+    }
+
+    async function obtenerGastos(filtros) {
+      let gastosQuery;
+      
+      if (filtros.tipo === 'rango') {
+        let todosGastos = [];
+        for (const { mes, año } of filtros.meses) {
+          const q = query(
+            collection(db, "gastos"),
+            where("usuario", "==", perfil),
+            where("mes", "==", mes),
+            where("año", "==", año)
+          );
+          const snapshot = await getDocs(q);
+          snapshot.forEach(doc => todosGastos.push(doc.data()));
+        }
+        return todosGastos;
+      } else if (filtros.tipo === 'año') {
+        const q = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      } else {
+        const q = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      }
+    }
+
+    async function obtenerPresupuesto(filtros) {
+      if (filtros.tipo === 'rango' || filtros.tipo === 'año') {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        const q = query(
+          collection(db, "presupuestos"),
+          where("usuario", "==", 'GENERAL'),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      } else {
+        const q = query(
+          collection(db, "presupuestos"),
+          where("usuario", "==", 'GENERAL'),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => doc.data());
+      }
+    }
+
+    async function cargarTodo() {
+      try {
+        const filtros = obtenerFiltrosPeriodo();
+        
+        const ingresosData = await obtenerIngresos(filtros);
+        let totalIngresos = 0;
+        ingresosData.forEach(data => {
+          if (data.tipo === 'familiar' || data.usuario === perfil) {
+            totalIngresos += data.monto;
+          }
+        });
+
+        const gastosData = await obtenerGastos(filtros);
+        let totalGastos = 0;
+        gastosData.forEach(data => {
+          totalGastos += data.monto;
+        });
+
+        const saldo = totalIngresos - totalGastos;
+        
+        document.getElementById('totalIngresos').innerText = `$${totalIngresos}`;
+        document.getElementById('totalGastos').innerText = `$${totalGastos}`;
+        document.getElementById('totalSaldo').innerText = `$${saldo}`;
+        
+        const saldoCard = document.getElementById('saldoCard');
+        saldoCard.className = `finanza-card saldo ${saldo >= 0 ? 'positivo' : 'negativo'}`;
+
+        document.getElementById('detalleIngresos').innerText = `$${totalIngresos}`;
+        document.getElementById('detalleGastos').innerText = `$${totalGastos}`;
+        document.getElementById('detalleSaldo').innerText = `$${saldo}`;
+
+        const total = totalIngresos + totalGastos;
+        if (total > 0) {
+          const porcentajeIngresos = (totalIngresos / total) * 100;
+          const porcentajeGastos = (totalGastos / total) * 100;
+          
+          document.getElementById('ingresosPorcentaje').innerText = `${porcentajeIngresos.toFixed(1)}%`;
+          document.getElementById('gastosPorcentaje').innerText = `${porcentajeGastos.toFixed(1)}%`;
+          
+          const barra = document.getElementById('barraComparativa');
+          barra.style.width = `${porcentajeIngresos}%`;
+          barra.className = `barra-llenado ${porcentajeIngresos >= porcentajeGastos ? 'barra-positiva' : 'barra-negativa'}`;
+        }
+
+        const presupuestoData = await obtenerPresupuesto(filtros);
+        const presupuestos = {};
+        let totalPresupuesto = 0;
+        
+        presupuestoData.forEach(data => {
+          const key = `${data.categoria}_${data.subcategoria}`;
+          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
+          totalPresupuesto += data.monto;
+        });
+
+        const gastos = {};
+        gastosData.forEach(data => {
+          const key = `${data.categoria}_${data.subcategoria}`;
+          gastos[key] = (gastos[key] || 0) + data.monto;
+        });
+
+        const container = document.getElementById('comparacionContainer');
+        container.innerHTML = '';
+
+        let totalGastosCategoria = 0;
+
+        for (const [categoria, subcategorias] of Object.entries(categorias)) {
+          const categoriaDiv = document.createElement('div');
+          categoriaDiv.className = 'categoria';
+          
+          categoriaDiv.innerHTML = `<div class="categoria-header">${categoria}</div>`;
+
+          let totalCatPresupuesto = 0;
+          let totalCatGasto = 0;
+
+          for (const subcategoria of subcategorias) {
+            const key = `${categoria}_${subcategoria}`;
+            const presupuesto = presupuestos[key] || 0;
+            const gasto = gastos[key] || 0;
+            const diferencia = presupuesto - gasto;
+
+            totalCatPresupuesto += presupuesto;
+            totalCatGasto += gasto;
+            totalGastosCategoria += gasto;
+
+            let diferenciaClass = '';
+            let diferenciaText = 'Sin presupuesto';
+            
+            if (presupuesto > 0) {
+              diferenciaClass = diferencia >= 0 ? 'positivo' : 'negativo';
+              diferenciaText = diferencia >= 0 ? `Ahorro $${diferencia}` : `Exceso $${Math.abs(diferencia)}`;
+            }
+
+            const subDiv = document.createElement('div');
+            subDiv.className = 'subcategoria';
+            subDiv.innerHTML = `
+              <div class="subcategoria-header">
+                <span class="subcategoria-nombre">${subcategoria}</span>
+                <span class="diferencia-badge ${diferenciaClass}">${diferenciaText}</span>
+              </div>
+              <div class="valores">
+                <span class="presupuesto">Presupuesto: $${presupuesto}</span>
+                <span class="gasto">Gastado: $${gasto}</span>
+              </div>
+            `;
+            categoriaDiv.appendChild(subDiv);
+          }
+
+          const totalCatDiv = document.createElement('div');
+          totalCatDiv.className = 'total-row';
+          totalCatDiv.innerHTML = `
+            <span>Total ${categoria}</span>
+            <span>$${totalCatPresupuesto} / $${totalCatGasto}</span>
+          `;
+          categoriaDiv.appendChild(totalCatDiv);
+
+          container.appendChild(categoriaDiv);
+        }
+
+        document.getElementById('totalGeneral').innerHTML = `$${totalPresupuesto} vs $${totalGastosCategoria}`;
+        
+        const diferenciaGeneral = totalPresupuesto - totalGastosCategoria;
+        const diferenciaElement = document.getElementById('diferenciaGeneral');
+        
+        if (totalPresupuesto === 0) {
+          diferenciaElement.innerText = 'Sin presupuesto configurado';
+          diferenciaElement.className = 'diferencia';
+        } else if (diferenciaGeneral >= 0) {
+          diferenciaElement.innerText = `Disponible: $${diferenciaGeneral}`;
+          diferenciaElement.className = 'diferencia positivo';
+        } else {
+          diferenciaElement.innerText = `Déficit: $${Math.abs(diferenciaGeneral)}`;
+          diferenciaElement.className = 'diferencia negativo';
+        }
+
+        const recomendaciones = document.getElementById('recomendaciones');
+        if (totalIngresos === 0 && totalGastos === 0) {
+          recomendaciones.innerHTML = 'No hay movimientos en este período.';
+        } else if (saldo >= 0) {
+          recomendaciones.innerHTML = `✅ Tus ingresos superan a tus gastos. Saldo positivo de $${saldo}. Sigue así!`;
+        } else {
+          const porcentajeGasto = totalIngresos > 0 ? ((totalGastos / totalIngresos) * 100).toFixed(1) : 100;
+          recomendaciones.innerHTML = `⚠️ Tus gastos superan a tus ingresos en $${Math.abs(saldo)} (${porcentajeGasto}% de tus ingresos). Revisa tus gastos.`;
+        }
+
+      } catch (error) {
+        console.error(error);
+        document.getElementById('comparacionContainer').innerHTML = '<div class="empty-state">Error al cargar datos</div>';
+      }
+    }
+
+    cargarTodo();
   </script>
 </body>
 </html>
