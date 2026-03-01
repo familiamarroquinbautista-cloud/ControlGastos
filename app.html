@@ -442,6 +442,46 @@
       font-size: 0.9rem;
     }
 
+    /* Estilos para el historial */
+    .monto-positivo {
+      color: #2c5a2c;
+    }
+    
+    .monto-negativo {
+      color: #8b3a3a;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      background: #f0f0f0;
+    }
+    
+    .item-row {
+      transition: background-color 0.2s;
+    }
+    
+    .item-row:hover {
+      background-color: #fafafa;
+    }
+    
+    .btn-eliminar {
+      transition: opacity 0.2s;
+      background: none;
+      border: none;
+      color: #8b3a3a;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0 0.2rem;
+      opacity: 0.5;
+    }
+    
+    .btn-eliminar:hover {
+      opacity: 1;
+    }
+
     /* Ajustes para móvil pequeño */
     @media (max-width: 480px) {
       .container {
@@ -480,6 +520,18 @@
       
       .saldo-valor {
         font-size: 1.4rem;
+      }
+      
+      .item-row {
+        position: relative;
+        padding-right: 2rem;
+      }
+      
+      .btn-eliminar {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
       }
     }
   </style>
@@ -625,13 +677,21 @@
     <!-- Mensajes -->
     <div id="mensaje" class="mensaje"></div>
 
+    <!-- HISTORIAL DE MOVIMIENTOS -->
+    <div class="card">
+      <h2>📋 HISTORIAL DE MOVIMIENTOS</h2>
+      <div id="historialContainer" style="max-height: 400px; overflow-y: auto;">
+        <div class="empty-state">Cargando historial...</div>
+      </div>
+    </div>
+
     <!-- Espacio adicional al final -->
     <div style="height: 1rem;"></div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
@@ -655,12 +715,12 @@
     const nombrePerfil = document.getElementById('nombrePerfil');
     
     nombrePerfil.innerText = perfil;
-    avatar.innerText = perfil === 'Maria' ? '' : '';
+    avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
 
     let tipoMovimientoActual = 'gasto';
     let metodoPagoActual = 'debito';
 
-    // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
+    // ===== CATEGORÍAS Y SUBCATEGORÍAS =====
     const subcategoriasGasto = {
       'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
       'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
@@ -763,8 +823,11 @@
         document.getElementById('descripcionGasto').value = '';
         document.getElementById('montoGasto').value = '';
         
-        // Actualizar saldo
-        await calcularSaldo();
+        // Actualizar saldo e historial
+        await Promise.all([
+          calcularSaldo(),
+          cargarHistorial()
+        ]);
         
       } catch (error) {
         console.error("Error al registrar gasto:", error);
@@ -799,8 +862,11 @@
         document.getElementById('descripcionIngreso').value = '';
         document.getElementById('montoIngreso').value = '';
         
-        // Actualizar saldo
-        await calcularSaldo();
+        // Actualizar saldo e historial
+        await Promise.all([
+          calcularSaldo(),
+          cargarHistorial()
+        ]);
         
       } catch (error) {
         console.error("Error al registrar ingreso:", error);
@@ -823,7 +889,6 @@
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // CORREGIDO: Filtrar ingresos por usuario
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("usuario", "==", perfil),
@@ -872,9 +937,143 @@
       }
     }
 
+    // ===== NUEVAS FUNCIONES PARA HISTORIAL =====
+    
+    async function cargarHistorial() {
+      try {
+        const mesActual = new Date().getMonth() + 1;
+        const añoActual = new Date().getFullYear();
+        
+        // Obtener ingresos del mes
+        const ingresosQuery = query(
+          collection(db, "ingresos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        const ingresosSnap = await getDocs(ingresosQuery);
+        
+        // Obtener gastos del mes
+        const gastosQuery = query(
+          collection(db, "gastos"),
+          where("usuario", "==", perfil),
+          where("mes", "==", mesActual),
+          where("año", "==", añoActual)
+        );
+        const gastosSnap = await getDocs(gastosQuery);
+        
+        // Combinar y ordenar por fecha
+        let movimientos = [];
+        
+        ingresosSnap.forEach(doc => {
+          const data = doc.data();
+          movimientos.push({
+            id: doc.id,
+            tipo: 'ingreso',
+            fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
+            descripcion: data.descripcion || data.tipoIngreso,
+            categoria: data.tipoIngreso,
+            monto: data.monto,
+            usuario: data.usuario
+          });
+        });
+        
+        gastosSnap.forEach(doc => {
+          const data = doc.data();
+          movimientos.push({
+            id: doc.id,
+            tipo: 'gasto',
+            fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
+            descripcion: data.descripcion || `${data.categoria} - ${data.subcategoria}`,
+            categoria: `${data.categoria} (${data.metodoPago === 'credito' ? 'Crédito' : 'Débito'})`,
+            monto: data.monto,
+            usuario: data.usuario
+          });
+        });
+        
+        // Ordenar por fecha descendente (más reciente primero)
+        movimientos.sort((a, b) => b.fecha - a.fecha);
+        
+        mostrarHistorial(movimientos);
+        
+      } catch (error) {
+        console.error("Error al cargar historial:", error);
+        document.getElementById('historialContainer').innerHTML = 
+          '<div class="empty-state">Error al cargar historial</div>';
+      }
+    }
+
+    function mostrarHistorial(movimientos) {
+      const container = document.getElementById('historialContainer');
+      
+      if (movimientos.length === 0) {
+        container.innerHTML = '<div class="empty-state">No hay movimientos este mes</div>';
+        return;
+      }
+
+      let html = '';
+      
+      movimientos.forEach(mov => {
+        const fechaStr = mov.fecha.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        const montoClass = mov.tipo === 'ingreso' ? 'monto-positivo' : 'monto-negativo';
+        const signo = mov.tipo === 'ingreso' ? '+' : '-';
+        
+        html += `
+          <div class="item-row" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap;">
+            <div style="min-width: 80px; font-size: 0.75rem; color: #95a5a6;">${fechaStr}</div>
+            <div style="min-width: 60px; font-size: 0.8rem;">
+              <span class="badge" style="background: ${mov.tipo === 'ingreso' ? '#e8f0e8' : '#f0e8e8'}; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                ${mov.usuario}
+              </span>
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+              <div style="font-weight: 500; font-size: 0.85rem;">${mov.descripcion}</div>
+              <div style="font-size: 0.7rem; color: #95a5a6;">${mov.categoria}</div>
+            </div>
+            <div style="min-width: 100px; text-align: right; font-weight: 500; font-size: 0.9rem;" class="${montoClass}">
+              ${signo}$${mov.monto}
+            </div>
+            <button class="btn-eliminar" onclick="eliminarMovimiento('${mov.id}', '${mov.tipo}')" title="Eliminar movimiento">×</button>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    window.eliminarMovimiento = async function(id, tipo) {
+      if (!confirm('¿Eliminar este movimiento permanentemente?')) {
+        return;
+      }
+
+      try {
+        const collectionName = tipo === 'ingreso' ? 'ingresos' : 'gastos';
+        await deleteDoc(doc(db, collectionName, id));
+        
+        mostrarMensaje("Movimiento eliminado correctamente", "exito");
+        
+        // Actualizar todo
+        await Promise.all([
+          calcularSaldo(),
+          cargarHistorial()
+        ]);
+        
+      } catch (error) {
+        console.error("Error al eliminar:", error);
+        mostrarMensaje("Error al eliminar el movimiento", "error");
+      }
+    };
+
     // Inicializar
     actualizarSubcategoriasGasto();
     calcularSaldo();
+    cargarHistorial();
   </script>
 </body>
 </html>
