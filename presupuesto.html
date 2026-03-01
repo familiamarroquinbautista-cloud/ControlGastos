@@ -105,8 +105,6 @@
       margin-bottom: 1rem;
       color: #4a5568;
       letter-spacing: 0.3px;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid #eaeaea;
     }
 
     .card h3 {
@@ -140,37 +138,18 @@
       color: #2c3e50;
     }
 
-    .categoria-total {
-      margin-left: auto;
-      font-size: 0.85rem;
-      color: #7f8c8d;
-      background: white;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      border: 1px solid #e0e0e0;
-    }
-
     .subcategoria {
       display: flex;
       gap: 0.8rem;
       margin-bottom: 1rem;
       align-items: center;
       flex-wrap: wrap;
-      background: white;
-      padding: 0.8rem;
-      border-radius: 6px;
-      border: 1px solid #f0f0f0;
-    }
-
-    .subcategoria:hover {
-      background: #f8f9fa;
     }
 
     .subcategoria label {
       width: 120px;
       font-size: 0.85rem;
       color: #5a6a7a;
-      font-weight: 500;
     }
 
     .subcategoria input {
@@ -180,7 +159,7 @@
       border: 1px solid #e0e0e0;
       border-radius: 6px;
       font-size: 0.95rem;
-      transition: all 0.2s;
+      transition: border 0.2s;
       -webkit-appearance: none;
       appearance: none;
     }
@@ -193,13 +172,6 @@
     .subcategoria input:focus {
       outline: none;
       border-color: #2c3e50;
-      box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1);
-    }
-
-    .subcategoria input:disabled {
-      background: #f5f5f5;
-      color: #7f8c8d;
-      cursor: not-allowed;
     }
 
     .btn-guardar {
@@ -214,74 +186,44 @@
       white-space: nowrap;
     }
 
-    .btn-guardar:hover:not(:disabled) {
+    .btn-guardar:hover {
       background: #f5f5f5;
       border-color: #909090;
     }
 
-    .btn-guardar:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .monto-actual {
-      font-size: 0.8rem;
-      color: #7f8c8d;
-      margin-left: 0.5rem;
-      background: #f0f0f0;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-    }
-
     /* Total presupuesto */
     .total-presupuesto {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border-radius: 12px;
-      padding: 1.5rem;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1rem;
       text-align: center;
       margin-top: 1.5rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .total-presupuesto .label {
       font-size: 0.85rem;
-      opacity: 0.9;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      color: #7f8c8d;
+      margin-bottom: 0.3rem;
     }
 
     .total-presupuesto .valor {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       font-weight: 300;
+      color: #2c3e50;
       word-break: break-word;
-      line-height: 1.2;
     }
 
     /* Historial */
-    .historial-container {
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #eaeaea;
-      border-radius: 8px;
-      background: white;
-    }
-
     .historial-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.8rem;
+      padding: 0.8rem 0;
       border-bottom: 1px solid #f0f0f0;
       font-size: 0.85rem;
       flex-wrap: wrap;
       gap: 0.5rem;
-      transition: background-color 0.2s;
-    }
-
-    .historial-item:hover {
-      background-color: #f8f9fa;
     }
 
     .historial-item:last-child {
@@ -292,25 +234,6 @@
       color: #95a5a6;
       font-size: 0.75rem;
       white-space: nowrap;
-    }
-
-    .historial-item .acciones {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .btn-eliminar-historial {
-      background: none;
-      border: none;
-      color: #8b3a3a;
-      font-size: 1.2rem;
-      cursor: pointer;
-      opacity: 0.5;
-      padding: 0 0.2rem;
-    }
-
-    .btn-eliminar-historial:hover {
-      opacity: 1;
     }
 
     /* Mensajes */
@@ -325,92 +248,34 @@
     }
 
     .mensaje.exito {
-      background: #f0f7f0;
-      border-color: #c0d0c0;
-      color: #2c5a2c;
+      background: #f8f9fa;
+      border-color: #c0c0c0;
+      color: #2c3e50;
     }
 
     .mensaje.error {
-      background: #fcf0f0;
+      background: #fef5f5;
       border-color: #e0c0c0;
       color: #8b3a3a;
-    }
-
-    /* Botones de acción */
-    .acciones-globales {
-      display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-accion {
-      flex: 1;
-      padding: 0.8rem;
-      background: white;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      color: #2c3e50;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      min-width: 120px;
-    }
-
-    .btn-accion:hover {
-      background: #f5f5f5;
-      border-color: #909090;
-    }
-
-    .btn-accion.primario {
-      background: #2c3e50;
-      border-color: #2c3e50;
-      color: white;
-    }
-
-    .btn-accion.primario:hover {
-      background: #1e2b37;
     }
 
     /* Empty state */
     .empty-state {
       text-align: center;
       color: #95a5a6;
-      padding: 2rem;
+      padding: 1.5rem 0;
       font-size: 0.9rem;
-    }
-
-    /* Loading spinner */
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    .loading-spinner {
-      width: 30px;
-      height: 30px;
-      border: 3px solid #f0f0f0;
-      border-top: 3px solid #2c3e50;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
 
     /* Nota importante */
     .nota {
       margin-top: 1rem;
       padding: 0.8rem;
-      background: #fff3cd;
-      border: 1px solid #ffeeba;
+      background: #f8f9fa;
+      border: 1px solid #eaeaea;
       border-radius: 6px;
       font-size: 0.8rem;
-      color: #856404;
+      color: #5a6a7a;
       text-align: center;
     }
 
@@ -449,7 +314,7 @@
       }
       
       .total-presupuesto .valor {
-        font-size: 2rem;
+        font-size: 1.6rem;
       }
       
       .historial-item {
@@ -459,10 +324,6 @@
       
       .historial-item .fecha {
         align-self: flex-end;
-      }
-      
-      .acciones-globales {
-        flex-direction: column;
       }
     }
   </style>
@@ -482,229 +343,193 @@
       PRESUPUESTO GENERAL · Compartido por Maria y Andres
     </div>
 
-    <!-- Acciones globales -->
-    <div class="acciones-globales">
-      <button class="btn-accion" onclick="cargarPresupuestosExistentes()">📋 Cargar valores</button>
-      <button class="btn-accion primario" onclick="limpiarCampos()">🔄 Limpiar campos</button>
-    </div>
-
     <!-- Configuración de presupuesto -->
     <div class="card">
       <h2>CONFIGURAR MENSUAL</h2>
       
       <!-- MERCADO -->
-      <div class="categoria" id="categoria-Mercado">
+      <div class="categoria">
         <div class="categoria-header">
           <span>🛒 Mercado</span>
-          <span class="categoria-total" id="total-Mercado">$0</span>
         </div>
         
-        <div class="subcategoria" data-categoria="Mercado" data-subcategoria="Onces">
+        <div class="subcategoria">
           <label>Onces</label>
           <input type="text" id="presupuesto_mercado_onces" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_mercado_onces">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Onces', 'presupuesto_mercado_onces')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Mercado" data-subcategoria="Carnes">
+        <div class="subcategoria">
           <label>Carnes</label>
           <input type="text" id="presupuesto_mercado_carnes" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_mercado_carnes">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Carnes', 'presupuesto_mercado_carnes')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Mercado" data-subcategoria="Aseo">
+        <div class="subcategoria">
           <label>Aseo</label>
           <input type="text" id="presupuesto_mercado_aseo" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_mercado_aseo">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Aseo', 'presupuesto_mercado_aseo')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Mercado" data-subcategoria="Otros">
+        <div class="subcategoria">
           <label>Otros</label>
           <input type="text" id="presupuesto_mercado_otros" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_mercado_otros">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Mercado', 'Otros', 'presupuesto_mercado_otros')">Guardar</button>
         </div>
       </div>
 
       <!-- SERVICIOS -->
-      <div class="categoria" id="categoria-Servicios">
+      <div class="categoria">
         <div class="categoria-header">
           <span>💡 Servicios</span>
-          <span class="categoria-total" id="total-Servicios">$0</span>
         </div>
         
-        <div class="subcategoria" data-categoria="Servicios" data-subcategoria="Agua">
+        <div class="subcategoria">
           <label>Agua</label>
           <input type="text" id="presupuesto_servicios_agua" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_servicios_agua">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Agua', 'presupuesto_servicios_agua')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Servicios" data-subcategoria="Energía">
+        <div class="subcategoria">
           <label>Energía</label>
           <input type="text" id="presupuesto_servicios_energia" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_servicios_energia">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Energía', 'presupuesto_servicios_energia')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Servicios" data-subcategoria="Gas">
+        <div class="subcategoria">
           <label>Gas</label>
           <input type="text" id="presupuesto_servicios_gas" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_servicios_gas">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Gas', 'presupuesto_servicios_gas')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Servicios" data-subcategoria="Internet">
+        <div class="subcategoria">
           <label>Internet</label>
           <input type="text" id="presupuesto_servicios_internet" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_servicios_internet">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Internet', 'presupuesto_servicios_internet')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Servicios" data-subcategoria="Celular">
+        <div class="subcategoria">
           <label>Celular</label>
           <input type="text" id="presupuesto_servicios_celular" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_servicios_celular">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Celular', 'presupuesto_servicios_celular')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Servicios" data-subcategoria="Parqueadero">
+        <div class="subcategoria">
           <label>Parqueadero</label>
           <input type="text" id="presupuesto_servicios_parqueadero" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_servicios_parqueadero">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Servicios', 'Parqueadero', 'presupuesto_servicios_parqueadero')">Guardar</button>
         </div>
       </div>
 
       <!-- HOGAR -->
-      <div class="categoria" id="categoria-Hogar">
+      <div class="categoria">
         <div class="categoria-header">
           <span>🏠 Hogar</span>
-          <span class="categoria-total" id="total-Hogar">$0</span>
         </div>
         
-        <div class="subcategoria" data-categoria="Hogar" data-subcategoria="Arriendo">
+        <div class="subcategoria">
           <label>Arriendo</label>
           <input type="text" id="presupuesto_hogar_arriendo" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_hogar_arriendo">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Hogar', 'Arriendo', 'presupuesto_hogar_arriendo')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Hogar" data-subcategoria="Couta inicial apto">
+        <div class="subcategoria">
           <label>Couta inicial apto</label>
           <input type="text" id="presupuesto_hogar_couta_inicial" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_hogar_couta_inicial">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Hogar', 'Couta inicial apto', 'presupuesto_hogar_couta_inicial')">Guardar</button>
         </div>
       </div>
 
       <!-- FINANZAS -->
-      <div class="categoria" id="categoria-Finanzas">
+      <div class="categoria">
         <div class="categoria-header">
           <span>💰 Finanzas</span>
-          <span class="categoria-total" id="total-Finanzas">$0</span>
         </div>
         
-        <div class="subcategoria" data-categoria="Finanzas" data-subcategoria="Couta FNA">
+        <div class="subcategoria">
           <label>Couta FNA</label>
           <input type="text" id="presupuesto_finanzas_fna" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_finanzas_fna">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Finanzas', 'Couta FNA', 'presupuesto_finanzas_fna')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Finanzas" data-subcategoria="Couta Coasmedas">
+        <div class="subcategoria">
           <label>Couta Coasmedas</label>
           <input type="text" id="presupuesto_finanzas_coasmedas" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_finanzas_coasmedas">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Finanzas', 'Couta Coasmedas', 'presupuesto_finanzas_coasmedas')">Guardar</button>
         </div>
       </div>
 
       <!-- TRANSPORTE -->
-      <div class="categoria" id="categoria-Transporte">
+      <div class="categoria">
         <div class="categoria-header">
           <span>🚗 Transporte</span>
-          <span class="categoria-total" id="total-Transporte">$0</span>
         </div>
         
-        <div class="subcategoria" data-categoria="Transporte" data-subcategoria="Gasolina">
+        <div class="subcategoria">
           <label>Gasolina</label>
           <input type="text" id="presupuesto_transporte_gasolina" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_transporte_gasolina">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Gasolina', 'presupuesto_transporte_gasolina')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Transporte" data-subcategoria="Transporte Publico">
+        <div class="subcategoria">
           <label>Transporte Publico</label>
           <input type="text" id="presupuesto_transporte_publico" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_transporte_publico">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Transporte Publico', 'presupuesto_transporte_publico')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Transporte" data-subcategoria="Apps">
+        <div class="subcategoria">
           <label>Apps</label>
           <input type="text" id="presupuesto_transporte_apps" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_transporte_apps">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Apps', 'presupuesto_transporte_apps')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Transporte" data-subcategoria="Mantenimientos">
+        <div class="subcategoria">
           <label>Mantenimientos</label>
           <input type="text" id="presupuesto_transporte_mantenimientos" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_transporte_mantenimientos">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Transporte', 'Mantenimientos', 'presupuesto_transporte_mantenimientos')">Guardar</button>
         </div>
       </div>
 
       <!-- OCIO -->
-      <div class="categoria" id="categoria-Ocio">
+      <div class="categoria">
         <div class="categoria-header">
           <span>🎮 Ocio</span>
-          <span class="categoria-total" id="total-Ocio">$0</span>
         </div>
         
-        <div class="subcategoria" data-categoria="Ocio" data-subcategoria="Plataformas">
+        <div class="subcategoria">
           <label>Plataformas</label>
           <input type="text" id="presupuesto_ocio_plataformas" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_ocio_plataformas">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Plataformas', 'presupuesto_ocio_plataformas')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Ocio" data-subcategoria="Cine">
+        <div class="subcategoria">
           <label>Cine</label>
           <input type="text" id="presupuesto_ocio_cine" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_ocio_cine">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Cine', 'presupuesto_ocio_cine')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Ocio" data-subcategoria="Viajes">
+        <div class="subcategoria">
           <label>Viajes</label>
           <input type="text" id="presupuesto_ocio_viajes" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_ocio_viajes">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Viajes', 'presupuesto_ocio_viajes')">Guardar</button>
         </div>
         
-        <div class="subcategoria" data-categoria="Ocio" data-subcategoria="Restaurantes">
+        <div class="subcategoria">
           <label>Restaurantes</label>
           <input type="text" id="presupuesto_ocio_restaurantes" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_ocio_restaurantes">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Ocio', 'Restaurantes', 'presupuesto_ocio_restaurantes')">Guardar</button>
         </div>
       </div>
 
       <!-- OTROS -->
-      <div class="categoria" id="categoria-Otros">
+      <div class="categoria">
         <div class="categoria-header">
           <span>📦 Otros</span>
-          <span class="categoria-total" id="total-Otros">$0</span>
         </div>
         
-        <div class="subcategoria" data-categoria="Otros" data-subcategoria="Otros">
+        <div class="subcategoria">
           <label>Otros</label>
           <input type="text" id="presupuesto_otros_otros" placeholder="Monto" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <span class="monto-actual" id="actual_otros_otros">$0</span>
           <button class="btn-guardar" onclick="guardarPresupuesto('Otros', 'Otros', 'presupuesto_otros_otros')">Guardar</button>
         </div>
       </div>
@@ -717,36 +542,31 @@
       <div id="mensaje" class="mensaje"></div>
       
       <div class="nota">
-        💡 Cada guardado acumula al presupuesto actual del mes. Puedes ver el total acumulado en cada subcategoría.
+        💡 Cada guardado acumula al presupuesto actual del mes
       </div>
     </div>
 
     <!-- Historial -->
     <div class="card">
       <h2>REGISTROS DEL MES</h2>
-      <div class="historial-container" id="historial">
-        <div class="loading">
-          <div class="loading-spinner"></div>
-        </div>
+      <div id="historial">
+        <div class="empty-state">Cargando...</div>
       </div>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = {
+    const db = getFirestore(initializeApp({
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
       projectId: "controlgastosprueba",
       storageBucket: "controlgastosprueba.firebasestorage.app",
       messagingSenderId: "679682152121",
       appId: "1:679682152121:web:d3981591d952df1333ed68"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    }));
 
     const perfil = sessionStorage.getItem('perfil');
     
@@ -756,36 +576,8 @@
 
     document.getElementById('perfilDisplay').innerText = perfil;
 
-    // Mapa de IDs de inputs a categorías y subcategorías
-    const inputMap = {
-      'presupuesto_mercado_onces': { categoria: 'Mercado', subcategoria: 'Onces' },
-      'presupuesto_mercado_carnes': { categoria: 'Mercado', subcategoria: 'Carnes' },
-      'presupuesto_mercado_aseo': { categoria: 'Mercado', subcategoria: 'Aseo' },
-      'presupuesto_mercado_otros': { categoria: 'Mercado', subcategoria: 'Otros' },
-      'presupuesto_servicios_agua': { categoria: 'Servicios', subcategoria: 'Agua' },
-      'presupuesto_servicios_energia': { categoria: 'Servicios', subcategoria: 'Energía' },
-      'presupuesto_servicios_gas': { categoria: 'Servicios', subcategoria: 'Gas' },
-      'presupuesto_servicios_internet': { categoria: 'Servicios', subcategoria: 'Internet' },
-      'presupuesto_servicios_celular': { categoria: 'Servicios', subcategoria: 'Celular' },
-      'presupuesto_servicios_parqueadero': { categoria: 'Servicios', subcategoria: 'Parqueadero' },
-      'presupuesto_hogar_arriendo': { categoria: 'Hogar', subcategoria: 'Arriendo' },
-      'presupuesto_hogar_couta_inicial': { categoria: 'Hogar', subcategoria: 'Couta inicial apto' },
-      'presupuesto_finanzas_fna': { categoria: 'Finanzas', subcategoria: 'Couta FNA' },
-      'presupuesto_finanzas_coasmedas': { categoria: 'Finanzas', subcategoria: 'Couta Coasmedas' },
-      'presupuesto_transporte_gasolina': { categoria: 'Transporte', subcategoria: 'Gasolina' },
-      'presupuesto_transporte_publico': { categoria: 'Transporte', subcategoria: 'Transporte Publico' },
-      'presupuesto_transporte_apps': { categoria: 'Transporte', subcategoria: 'Apps' },
-      'presupuesto_transporte_mantenimientos': { categoria: 'Transporte', subcategoria: 'Mantenimientos' },
-      'presupuesto_ocio_plataformas': { categoria: 'Ocio', subcategoria: 'Plataformas' },
-      'presupuesto_ocio_cine': { categoria: 'Ocio', subcategoria: 'Cine' },
-      'presupuesto_ocio_viajes': { categoria: 'Ocio', subcategoria: 'Viajes' },
-      'presupuesto_ocio_restaurantes': { categoria: 'Ocio', subcategoria: 'Restaurantes' },
-      'presupuesto_otros_otros': { categoria: 'Otros', subcategoria: 'Otros' }
-    };
-
     window.guardarPresupuesto = async (categoria, subcategoria, inputId) => {
-      const input = document.getElementById(inputId);
-      const monto = parseFloat(input.value);
+      const monto = parseFloat(document.getElementById(inputId).value);
       
       if (isNaN(monto) || monto <= 0) {
         mostrarMensaje("Ingresa un monto válido", "error");
@@ -800,22 +592,15 @@
           monto: monto,
           fecha: new Date(),
           mes: new Date().getMonth() + 1,
-          año: new Date().getFullYear(),
-          timestamp: Date.now(),
-          creadoPor: perfil
+          año: new Date().getFullYear()
         });
         
         mostrarMensaje(`Presupuesto actualizado: ${categoria} - ${subcategoria} $${monto}`, "exito");
-        input.value = '';
-        
-        // Recargar todo
-        await Promise.all([
-          cargarHistorial(),
-          calcularTotales()
-        ]);
-        
+        document.getElementById(inputId).value = '';
+        cargarHistorial();
+        calcularTotalPresupuesto();
       } catch (error) {
-        console.error("Error al guardar:", error);
+        console.error(error);
         mostrarMensaje("Error al guardar", "error");
       }
     };
@@ -840,7 +625,7 @@
           where("usuario", "==", 'GENERAL'),
           where("mes", "==", mesActual),
           where("año", "==", añoActual),
-          orderBy("timestamp", "desc")
+          orderBy("fecha", "desc")
         );
         
         const querySnapshot = await getDocs(q);
@@ -852,57 +637,24 @@
           return;
         }
 
-        let html = '';
+        historial.innerHTML = '';
         querySnapshot.forEach(doc => {
           const data = doc.data();
-          const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date(data.timestamp);
-          const fechaStr = fecha.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-          });
-          
-          html += `
-            <div class="historial-item" data-id="${doc.id}">
-              <div>
-                <strong>${data.categoria} - ${data.subcategoria}:</strong> $${data.monto}
-                <div style="font-size: 0.7rem; color: #95a5a6;">por: ${data.creadoPor || 'Sistema'}</div>
-              </div>
-              <div class="acciones">
-                <span class="fecha">${fechaStr}</span>
-                <button class="btn-eliminar-historial" onclick="eliminarRegistro('${doc.id}')" title="Eliminar">×</button>
-              </div>
-            </div>
+          const fecha = data.fecha.toDate ? data.fecha.toDate() : new Date();
+          const div = document.createElement("div");
+          div.className = "historial-item";
+          div.innerHTML = `
+            <span><strong>${data.categoria} - ${data.subcategoria}:</strong> $${data.monto}</span>
+            <span class="fecha">${fecha.toLocaleDateString()}</span>
           `;
+          historial.appendChild(div);
         });
-
-        historial.innerHTML = html;
       } catch (error) {
-        console.error("Error cargando historial:", error);
-        document.getElementById('historial').innerHTML = '<div class="empty-state">Error al cargar historial</div>';
+        console.error(error);
       }
     }
 
-    window.eliminarRegistro = async function(id) {
-      if (!confirm('¿Eliminar este registro de presupuesto?')) {
-        return;
-      }
-
-      try {
-        await deleteDoc(doc(db, "presupuestos", id));
-        mostrarMensaje("Registro eliminado", "exito");
-        await Promise.all([
-          cargarHistorial(),
-          calcularTotales()
-        ]);
-      } catch (error) {
-        console.error("Error al eliminar:", error);
-        mostrarMensaje("Error al eliminar", "error");
-      }
-    };
-
-    async function calcularTotales() {
+    async function calcularTotalPresupuesto() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
@@ -915,79 +667,21 @@
         );
         
         const querySnapshot = await getDocs(q);
+        let total = 0;
         
-        // Inicializar acumuladores
-        const totales = {};
-        const totalesCategoria = {};
-        
-        // Inicializar todas las subcategorías en 0
-        for (const [inputId, info] of Object.entries(inputMap)) {
-          const key = `${info.categoria}_${info.subcategoria}`;
-          totales[key] = 0;
-        }
-        
-        // Sumar montos
         querySnapshot.forEach(doc => {
-          const data = doc.data();
-          const key = `${data.categoria}_${data.subcategoria}`;
-          totales[key] = (totales[key] || 0) + data.monto;
-          
-          // Sumar por categoría
-          totalesCategoria[data.categoria] = (totalesCategoria[data.categoria] || 0) + data.monto;
+          total += doc.data().monto || 0;
         });
         
-        // Actualizar montos actuales en la UI
-        for (const [inputId, info] of Object.entries(inputMap)) {
-          const key = `${info.categoria}_${info.subcategoria}`;
-          const monto = totales[key] || 0;
-          const spanId = `actual_${inputId.replace('presupuesto_', '')}`;
-          const span = document.getElementById(spanId);
-          if (span) {
-            span.innerText = `$${monto}`;
-          }
-        }
-        
-        // Actualizar totales por categoría
-        for (const [categoria, total] of Object.entries(totalesCategoria)) {
-          const totalSpan = document.getElementById(`total-${categoria}`);
-          if (totalSpan) {
-            totalSpan.innerText = `$${total}`;
-          }
-        }
-        
-        // Calcular y mostrar total general
-        const totalGeneral = Object.values(totales).reduce((sum, val) => sum + val, 0);
-        document.getElementById('totalPresupuesto').innerText = `$${totalGeneral}`;
-        
+        document.getElementById('totalPresupuesto').innerText = `$${total}`;
       } catch (error) {
-        console.error("Error calculando totales:", error);
+        console.error(error);
       }
     }
 
-    window.cargarPresupuestosExistentes = async function() {
-      try {
-        mostrarMensaje("Cargando valores existentes...", "exito");
-        await calcularTotales();
-      } catch (error) {
-        console.error("Error cargando presupuestos:", error);
-        mostrarMensaje("Error al cargar valores", "error");
-      }
-    };
-
-    window.limpiarCampos = function() {
-      // Limpiar todos los inputs
-      for (const inputId of Object.keys(inputMap)) {
-        const input = document.getElementById(inputId);
-        if (input) {
-          input.value = '';
-        }
-      }
-      mostrarMensaje("Campos limpiados", "exito");
-    };
-
-    // Inicializar
     cargarHistorial();
-    calcularTotales();
+    calcularTotalPresupuesto();
   </script>
 </body>
 </html>
+
