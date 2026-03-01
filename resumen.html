@@ -36,7 +36,6 @@
       border-radius: 12px;
       flex-wrap: wrap;
       gap: 0.8rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .header h1 {
@@ -54,13 +53,12 @@
     }
 
     .perfil-badge {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 0.4rem 1rem;
+      background: #f0f0f0;
+      padding: 0.4rem 0.8rem;
       border-radius: 20px;
       font-size: 0.85rem;
-      color: white;
-      font-weight: 500;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      color: #2c3e50;
+      border: 1px solid #d0d0d0;
     }
 
     .btn-outline {
@@ -81,14 +79,14 @@
     }
 
     .aviso {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
       border-radius: 8px;
       padding: 0.8rem;
       margin-bottom: 1.5rem;
       text-align: center;
       font-size: 0.85rem;
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+      color: #5a6a7a;
     }
 
     /* Selector de período */
@@ -114,18 +112,12 @@
       color: #5a6a7a;
       flex: 1 1 auto;
       min-width: 80px;
-      transition: all 0.2s;
-    }
-
-    .btn-periodo:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
     }
 
     .btn-periodo.active {
-      background: #2c3e50;
-      border-color: #2c3e50;
-      color: white;
+      background: #f0f0f0;
+      border-color: #a0a0a0;
+      color: #2c3e50;
       font-weight: 500;
     }
 
@@ -143,13 +135,6 @@
       border-radius: 12px;
       padding: 1rem 0.8rem;
       text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    }
-
-    .finanza-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
     }
 
     .finanza-card .label {
@@ -191,7 +176,6 @@
       padding: 1.2rem;
       margin-bottom: 1.5rem;
       overflow-x: auto;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .comparativa-global h2 {
@@ -226,22 +210,20 @@
       border-radius: 6px 6px 0 0;
       transition: height 0.3s;
       position: relative;
-      margin: 2px 0;
     }
 
     .barra.ingresos {
-      background: linear-gradient(to top, #2c5a2c, #3e8e3e);
+      background: #2c5a2c;
     }
 
     .barra.gastos {
-      background: linear-gradient(to top, #8b3a3a, #b44c4c);
+      background: #8b3a3a;
     }
 
     .barra-label {
       margin-top: 0.5rem;
       font-size: 0.8rem;
       color: #5a6a7a;
-      font-weight: 500;
     }
 
     .barra-valor {
@@ -252,42 +234,16 @@
       font-size: 0.7rem;
       font-weight: 500;
       white-space: nowrap;
-      background: rgba(0,0,0,0.8);
-      color: white;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .barra-item:hover .barra-valor {
-      opacity: 1;
     }
 
     .detalle-mensual {
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
+      gap: 1rem;
       margin-top: 1.2rem;
       padding-top: 1.2rem;
       border-top: 1px solid #eaeaea;
       flex-wrap: wrap;
-    }
-
-    .detalle-mensual-item {
-      text-align: center;
-    }
-
-    .detalle-mensual-item .valor {
-      font-size: 1.2rem;
-      font-weight: 300;
-      color: #2c3e50;
-    }
-
-    .detalle-mensual-item .label {
-      font-size: 0.75rem;
-      color: #95a5a6;
-      text-transform: uppercase;
     }
 
     /* Cards dobles */
@@ -303,7 +259,6 @@
       border: 1px solid #e0e0e0;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .card-header {
@@ -311,7 +266,7 @@
       padding: 0.8rem 1rem;
       border-bottom: 1px solid #eaeaea;
       font-size: 0.95rem;
-      font-weight: 500;
+      font-weight: 400;
       color: #2c3e50;
       display: flex;
       align-items: center;
@@ -325,10 +280,6 @@
     }
 
     /* Tablas */
-    .tabla-container {
-      overflow-x: auto;
-    }
-
     .tabla {
       width: 100%;
       border-collapse: collapse;
@@ -342,9 +293,6 @@
       font-weight: 500;
       color: #4a5568;
       border-bottom: 1px solid #e0e0e0;
-      position: sticky;
-      top: 0;
-      background: #fafafa;
     }
 
     .tabla td {
@@ -353,22 +301,16 @@
       word-break: break-word;
     }
 
-    .tabla tr:hover td {
-      background-color: #f8f9fa;
-    }
-
     .text-right {
       text-align: right;
     }
 
     .monto-positivo {
       color: #2c5a2c;
-      font-weight: 500;
     }
 
     .monto-negativo {
       color: #8b3a3a;
-      font-weight: 500;
     }
 
     .diferencia-badge {
@@ -398,71 +340,45 @@
       font-weight: 500;
     }
 
-    .total-row td {
-      border-top: 2px solid #e0e0e0;
-    }
-
     /* Perfiles */
     .perfiles-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
-      margin-bottom: 1.5rem;
     }
 
     .perfil-card {
       border: 1px solid #eaeaea;
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .perfil-header {
-      padding: 1rem;
+      padding: 0.8rem;
       font-weight: 500;
       border-bottom: 1px solid #eaeaea;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      background: #fafafa;
       display: flex;
       justify-content: space-between;
-      font-size: 1rem;
+      font-size: 0.9rem;
       flex-wrap: wrap;
       gap: 0.5rem;
       color: #2c3e50;
     }
 
-    .perfil-header.maria {
-      background: linear-gradient(135deg, #f8e1e1 0%, #f0d0d0 100%);
-    }
-
-    .perfil-header.andres {
-      background: linear-gradient(135deg, #e1e8f8 0%, #d0d8f0 100%);
-    }
-
     .perfil-items {
-      padding: 1rem;
-      max-height: 300px;
-      overflow-y: auto;
+      padding: 0.8rem;
     }
 
     .gasto-item {
       display: flex;
       justify-content: space-between;
-      padding: 0.6rem 0;
+      padding: 0.4rem 0;
       border-bottom: 1px solid #f5f5f5;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       flex-wrap: wrap;
       gap: 0.3rem;
       color: #4a5568;
-    }
-
-    .gasto-item:last-child {
-      border-bottom: none;
-    }
-
-    .gasto-item .categoria {
-      color: #7f8c8d;
-      font-size: 0.75rem;
     }
 
     .badge {
@@ -479,32 +395,10 @@
       color: #3a3a5a;
     }
 
-    /* Loading spinner */
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid #f0f0f0;
-      border-top: 3px solid #2c3e50;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
     .empty-state {
       text-align: center;
       color: #95a5a6;
-      padding: 2rem;
+      padding: 1.5rem;
       font-size: 0.9rem;
     }
 
@@ -589,15 +483,15 @@
       .detalle-mensual {
         flex-direction: column;
         align-items: center;
-        gap: 0.8rem;
+        gap: 0.5rem;
       }
       
       .tabla {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
       }
       
       .tabla th, .tabla td {
-        padding: 0.4rem 0.2rem;
+        padding: 0.4rem 0.3rem;
       }
     }
   </style>
@@ -613,7 +507,7 @@
     </div>
 
     <div class="aviso">
-      📊 Panel de control familiar · Ingresos, gastos y presupuesto consolidado
+      Comparativa completa: Ingresos (Individuales/Familiares) vs Gastos por persona
     </div>
 
     <div class="fecha-actual" id="fechaActual"></div>
@@ -643,24 +537,24 @@
 
     <!-- Comparativa ingresos vs gastos -->
     <div class="comparativa-global">
-      <h2>📊 COMPARATIVA INGRESOS VS GASTOS POR MES</h2>
+      <h2>COMPARATIVA INGRESOS VS GASTOS</h2>
       
       <div class="barras-container" id="barrasMensuales">
         <!-- Se genera dinámicamente -->
       </div>
 
       <div class="detalle-mensual">
-        <div class="detalle-mensual-item">
-          <div class="valor" id="promedioIngresos">$0</div>
-          <div class="label">Ingresos promedio</div>
+        <div>
+          <span class="badge">💰 Ingresos promedio</span>
+          <span id="promedioIngresos">$0</span>
         </div>
-        <div class="detalle-mensual-item">
-          <div class="valor" id="promedioGastos">$0</div>
-          <div class="label">Gastos promedio</div>
+        <div>
+          <span class="badge">📝 Gastos promedio</span>
+          <span id="promedioGastos">$0</span>
         </div>
-        <div class="detalle-mensual-item">
-          <div class="valor" id="promedioSaldo">$0</div>
-          <div class="label">Saldo promedio</div>
+        <div>
+          <span class="badge">⚖️ Saldo promedio</span>
+          <span id="promedioSaldo">$0</span>
         </div>
       </div>
     </div>
@@ -670,24 +564,20 @@
       <!-- Ingresos del período -->
       <div class="card">
         <div class="card-header">
-          <span>💰 INGRESOS RECIENTES</span>
+          💰 INGRESOS DEL PERÍODO
         </div>
         <div class="card-content" id="listaIngresos">
-          <div class="loading">
-            <div class="loading-spinner"></div>
-          </div>
+          <div class="empty-state">Cargando ingresos...</div>
         </div>
       </div>
 
       <!-- Gastos del período -->
       <div class="card">
         <div class="card-header">
-          <span>📝 GASTOS RECIENTES</span>
+          📝 GASTOS DEL PERÍODO
         </div>
         <div class="card-content" id="listaGastos">
-          <div class="loading">
-            <div class="loading-spinner"></div>
-          </div>
+          <div class="empty-state">Cargando gastos...</div>
         </div>
       </div>
     </div>
@@ -695,41 +585,32 @@
     <!-- Presupuesto vs Gastos -->
     <div class="card" style="margin-bottom: 1.5rem;">
       <div class="card-header">
-        <span>📊 PRESUPUESTO GENERAL VS GASTOS COMBINADOS</span>
+        📊 PRESUPUESTO GENERAL vs GASTOS COMBINADOS
       </div>
       <div class="card-content" id="resumenConjunto" style="overflow-x: auto;">
-        <div class="loading">
-          <div class="loading-spinner"></div>
-        </div>
+        <div class="empty-state">Cargando...</div>
       </div>
     </div>
 
     <!-- Gastos por persona -->
-    <h2 style="font-weight: 400; margin: 1.5rem 0 1rem; color: #2c3e50; font-size: 1.1rem;">
-      👥 GASTOS POR PERSONA
-    </h2>
+    <h2 style="font-weight: 400; margin: 1.5rem 0 1rem; color: #2c3e50; font-size: 1.1rem;">GASTOS POR PERSONA</h2>
     <div class="perfiles-grid" id="perfilesContainer">
-      <div class="loading">
-        <div class="loading-spinner"></div>
-      </div>
+      <div class="empty-state">Cargando...</div>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = {
+    const db = getFirestore(initializeApp({
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
       projectId: "controlgastosprueba",
       storageBucket: "controlgastosprueba.firebasestorage.app",
       messagingSenderId: "679682152121",
       appId: "1:679682152121:web:d3981591d952df1333ed68"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    }));
 
     const perfil = sessionStorage.getItem('perfil');
     
@@ -743,7 +624,7 @@
 
     const perfiles = ['Maria', 'Andres'];
 
-    // ===== CATEGORÍAS Y SUBCATEGORÍAS =====
+    // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
     const categorias = {
       'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
       'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
@@ -775,8 +656,7 @@
       if (periodoActual === 'mes') {
         return {
           mes: mesActual,
-          año: añoActual,
-          tipo: 'mes'
+          año: añoActual
         };
       } else if (periodoActual === 'trimestre') {
         let meses = [];
@@ -799,101 +679,64 @@
     }
 
     async function obtenerIngresosPeriodo(filtros) {
-      try {
-        if (filtros.tipo === 'rango') {
-          let todos = [];
-          for (const { mes, año } of filtros.meses) {
-            const q = query(
-              collection(db, "ingresos"),
-              where("mes", "==", mes),
-              where("año", "==", año)
-            );
-            const snap = await getDocs(q);
-            snap.forEach(doc => todos.push({ id: doc.id, ...doc.data() }));
-          }
-          return todos;
-        } else if (filtros.tipo === 'año') {
+      if (filtros.tipo === 'rango') {
+        let todos = [];
+        for (const { mes, año } of filtros.meses) {
           const q = query(
             collection(db, "ingresos"),
-            where("año", "==", filtros.año)
+            where("mes", "==", mes),
+            where("año", "==", año)
           );
           const snap = await getDocs(q);
-          return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } else {
-          const q = query(
-            collection(db, "ingresos"),
-            where("mes", "==", filtros.mes),
-            where("año", "==", filtros.año)
-          );
-          const snap = await getDocs(q);
-          return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          snap.forEach(doc => todos.push({ id: doc.id, ...doc.data() }));
         }
-      } catch (error) {
-        console.error("Error obteniendo ingresos:", error);
-        return [];
+        return todos;
+      } else if (filtros.tipo === 'año') {
+        const q = query(
+          collection(db, "ingresos"),
+          where("año", "==", filtros.año)
+        );
+        const snap = await getDocs(q);
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      } else {
+        const q = query(
+          collection(db, "ingresos"),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
+        );
+        const snap = await getDocs(q);
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       }
     }
 
     async function obtenerGastosPeriodo(filtros) {
-      try {
-        if (filtros.tipo === 'rango') {
-          let todos = [];
-          for (const { mes, año } of filtros.meses) {
-            const q = query(
-              collection(db, "gastos"),
-              where("mes", "==", mes),
-              where("año", "==", año)
-            );
-            const snap = await getDocs(q);
-            snap.forEach(doc => todos.push({ id: doc.id, ...doc.data() }));
-          }
-          return todos;
-        } else if (filtros.tipo === 'año') {
+      if (filtros.tipo === 'rango') {
+        let todos = [];
+        for (const { mes, año } of filtros.meses) {
           const q = query(
             collection(db, "gastos"),
-            where("año", "==", filtros.año)
+            where("mes", "==", mes),
+            where("año", "==", año)
           );
           const snap = await getDocs(q);
-          return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } else {
-          const q = query(
-            collection(db, "gastos"),
-            where("mes", "==", filtros.mes),
-            where("año", "==", filtros.año)
-          );
-          const snap = await getDocs(q);
-          return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          snap.forEach(doc => todos.push({ id: doc.id, ...doc.data() }));
         }
-      } catch (error) {
-        console.error("Error obteniendo gastos:", error);
-        return [];
-      }
-    }
-
-    async function obtenerPresupuesto() {
-      try {
-        const mesActual = new Date().getMonth() + 1;
-        const añoActual = new Date().getFullYear();
-        
+        return todos;
+      } else if (filtros.tipo === 'año') {
         const q = query(
-          collection(db, "presupuestos"),
-          where("usuario", "==", 'GENERAL'),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual)
+          collection(db, "gastos"),
+          where("año", "==", filtros.año)
         );
         const snap = await getDocs(q);
-        
-        const presupuestos = {};
-        snap.forEach(doc => {
-          const data = doc.data();
-          const key = `${data.categoria}_${data.subcategoria}`;
-          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
-        });
-        
-        return presupuestos;
-      } catch (error) {
-        console.error("Error obteniendo presupuesto:", error);
-        return {};
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      } else {
+        const q = query(
+          collection(db, "gastos"),
+          where("mes", "==", filtros.mes),
+          where("año", "==", filtros.año)
+        );
+        const snap = await getDocs(q);
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       }
     }
 
@@ -901,55 +744,29 @@
       try {
         const filtros = obtenerFiltrosPeriodo();
         
-        // Ejecutar consultas en paralelo
-        const [ingresos, gastos, presupuestos] = await Promise.all([
-          obtenerIngresosPeriodo(filtros),
-          obtenerGastosPeriodo(filtros),
-          obtenerPresupuesto()
-        ]);
-
-        // Calcular totales
+        const ingresos = await obtenerIngresosPeriodo(filtros);
         let totalIngresos = 0;
         ingresos.forEach(data => {
-          totalIngresos += data.monto || 0;
+          totalIngresos += data.monto;
         });
 
+        const gastos = await obtenerGastosPeriodo(filtros);
         let totalGastos = 0;
         const gastosPorPerfil = {
           'Maria': {},
           'Andres': {}
         };
-        const gastosPorMes = {};
         
         gastos.forEach(data => {
-          totalGastos += data.monto || 0;
-          
-          // Agrupar por perfil
+          totalGastos += data.monto;
+          const key = `${data.categoria}_${data.subcategoria}`;
           if (data.usuario === 'Maria' || data.usuario === 'Andres') {
-            const key = `${data.categoria}_${data.subcategoria}`;
-            gastosPorPerfil[data.usuario][key] = (gastosPorPerfil[data.usuario][key] || 0) + (data.monto || 0);
+            gastosPorPerfil[data.usuario][key] = (gastosPorPerfil[data.usuario][key] || 0) + data.monto;
           }
-          
-          // Agrupar por mes para el gráfico
-          const mesKey = `${data.mes}/${data.año}`;
-          if (!gastosPorMes[mesKey]) {
-            gastosPorMes[mesKey] = { ingresos: 0, gastos: 0 };
-          }
-          gastosPorMes[mesKey].gastos += data.monto || 0;
-        });
-
-        // Agrupar ingresos por mes para el gráfico
-        ingresos.forEach(data => {
-          const mesKey = `${data.mes}/${data.año}`;
-          if (!gastosPorMes[mesKey]) {
-            gastosPorMes[mesKey] = { ingresos: 0, gastos: 0 };
-          }
-          gastosPorMes[mesKey].ingresos += data.monto || 0;
         });
 
         const saldo = totalIngresos - totalGastos;
         
-        // Actualizar UI
         document.getElementById('totalIngresosGlobal').innerText = `$${totalIngresos}`;
         document.getElementById('totalGastosGlobal').innerText = `$${totalGastos}`;
         document.getElementById('saldoGlobal').innerText = `$${saldo}`;
@@ -957,28 +774,27 @@
         const saldoCard = document.getElementById('saldoGlobalCard');
         saldoCard.className = `finanza-card saldo ${saldo >= 0 ? 'positivo' : 'negativo'}`;
 
-        // Mostrar listas
         mostrarListaIngresos(ingresos);
         mostrarListaGastos(gastos);
 
-        // Mostrar gráfico de barras
-        mostrarGraficoBarras(gastosPorMes);
+        const presupuestoQuery = query(
+          collection(db, "presupuestos"),
+          where("usuario", "==", 'GENERAL')
+        );
+        const presupuestoSnap = await getDocs(presupuestoQuery);
+        const presupuestos = {};
+        presupuestoSnap.forEach(doc => {
+          const data = doc.data();
+          const key = `${data.categoria}_${data.subcategoria}`;
+          presupuestos[key] = (presupuestos[key] || 0) + data.monto;
+        });
 
-        // Calcular promedios
-        const mesesCount = Object.keys(gastosPorMes).length || 1;
-        document.getElementById('promedioIngresos').innerText = `$${Math.round(totalIngresos / mesesCount)}`;
-        document.getElementById('promedioGastos').innerText = `$${Math.round(totalGastos / mesesCount)}`;
-        document.getElementById('promedioSaldo').innerText = `$${Math.round(saldo / mesesCount)}`;
-
-        // Mostrar resumen conjunto
         mostrarResumenConjunto(presupuestos, gastosPorPerfil);
-        
-        // Mostrar gastos individuales
         mostrarGastosIndividuales(gastosPorPerfil);
+        mostrarGraficoBarras(ingresos, gastos, filtros);
 
       } catch (error) {
-        console.error("Error en cargarResumen:", error);
-        mostrarErrorEnComponentes();
+        console.error(error);
       }
     }
 
@@ -990,30 +806,24 @@
         return;
       }
 
-      // Ordenar por fecha descendente y tomar últimos 15
-      const ingresosOrdenados = ingresos
-        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-        .slice(0, 15);
-
-      let html = '<div class="tabla-container"><table class="tabla">';
+      let html = '<table class="tabla">';
       html += '<tr><th>Fecha</th><th>Usuario</th><th>Descripción</th><th class="text-right">Monto</th></tr>';
 
-      ingresosOrdenados.forEach(data => {
-        const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date(data.timestamp);
-        const fechaStr = fecha.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: '2-digit'
-        });
-        
+      ingresos.sort((a, b) => {
+        const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date();
+        const fechaB = b.fecha?.toDate ? b.fecha.toDate() : new Date();
+        return fechaB - fechaA;
+      }).slice(0, 15).forEach(data => {
+        const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
         html += `<tr>`;
-        html += `<td>${fechaStr}</td>`;
+        html += `<td>${fecha.toLocaleDateString()}</td>`;
         html += `<td>${data.usuario === 'GENERAL' ? 'Familiar' : data.usuario}</td>`;
-        html += `<td>${data.descripcion || data.tipoIngreso || 'Sin descripción'}</td>`;
+        html += `<td>${data.descripcion}</td>`;
         html += `<td class="text-right monto-positivo">+$${data.monto}</td>`;
         html += `</tr>`;
       });
 
-      html += '</table></div>';
+      html += '</table>';
       container.innerHTML = html;
     }
 
@@ -1025,81 +835,90 @@
         return;
       }
 
-      // Ordenar por fecha descendente y tomar últimos 15
-      const gastosOrdenados = gastos
-        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-        .slice(0, 15);
-
-      let html = '<div class="tabla-container"><table class="tabla">';
+      let html = '<table class="tabla">';
       html += '<tr><th>Fecha</th><th>Usuario</th><th>Categoría</th><th class="text-right">Monto</th></tr>';
 
-      gastosOrdenados.forEach(data => {
-        const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date(data.timestamp);
-        const fechaStr = fecha.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: '2-digit'
-        });
-        
+      gastos.sort((a, b) => {
+        const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date();
+        const fechaB = b.fecha?.toDate ? b.fecha.toDate() : new Date();
+        return fechaB - fechaA;
+      }).slice(0, 15).forEach(data => {
+        const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
         html += `<tr>`;
-        html += `<td>${fechaStr}</td>`;
+        html += `<td>${fecha.toLocaleDateString()}</td>`;
         html += `<td>${data.usuario}</td>`;
         html += `<td>${data.categoria} - ${data.subcategoria}</td>`;
         html += `<td class="text-right monto-negativo">-$${data.monto}</td>`;
         html += `</tr>`;
       });
 
-      html += '</table></div>';
+      html += '</table>';
       container.innerHTML = html;
     }
 
-    function mostrarGraficoBarras(gastosPorMes) {
+    function mostrarGraficoBarras(ingresos, gastos, filtros) {
+      const meses = {};
+      
+      ingresos.forEach(data => {
+        const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
+        const key = `${fecha.getMonth()+1}/${fecha.getFullYear()}`;
+        if (!meses[key]) meses[key] = { ingresos: 0, gastos: 0 };
+        meses[key].ingresos += data.monto;
+      });
+
+      gastos.forEach(data => {
+        const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date();
+        const key = `${fecha.getMonth()+1}/${fecha.getFullYear()}`;
+        if (!meses[key]) meses[key] = { ingresos: 0, gastos: 0 };
+        meses[key].gastos += data.monto;
+      });
+
+      const mesesOrdenados = Object.entries(meses).sort((a, b) => {
+        const [m1, y1] = a[0].split('/').map(Number);
+        const [m2, y2] = b[0].split('/').map(Number);
+        return y1 - y2 || m1 - m2;
+      });
+
+      let maxValor = 0;
+      mesesOrdenados.forEach(([_, datos]) => {
+        maxValor = Math.max(maxValor, datos.ingresos, datos.gastos);
+      });
+
       const container = document.getElementById('barrasMensuales');
       container.innerHTML = '';
 
-      // Ordenar meses cronológicamente
-      const mesesOrdenados = Object.entries(gastosPorMes)
-        .sort((a, b) => {
-          const [m1, y1] = a[0].split('/').map(Number);
-          const [m2, y2] = b[0].split('/').map(Number);
-          return y1 - y2 || m1 - m2;
-        })
-        .slice(-6); // Últimos 6 meses
-
-      if (mesesOrdenados.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay datos para mostrar</div>';
-        return;
-      }
-
-      // Encontrar el valor máximo para escalar
-      const maxValor = Math.max(
-        ...mesesOrdenados.map(([_, datos]) => Math.max(datos.ingresos || 0, datos.gastos || 0))
-      );
-
-      mesesOrdenados.forEach(([mes, datos]) => {
-        const alturaIngresos = maxValor > 0 ? ((datos.ingresos || 0) / maxValor) * 160 : 0;
-        const alturaGastos = maxValor > 0 ? ((datos.gastos || 0) / maxValor) * 160 : 0;
+      mesesOrdenados.slice(-6).forEach(([mes, datos]) => {
+        const alturaIngresos = maxValor > 0 ? (datos.ingresos / maxValor) * 180 : 0;
+        const alturaGastos = maxValor > 0 ? (datos.gastos / maxValor) * 180 : 0;
 
         const barraDiv = document.createElement('div');
         barraDiv.className = 'barra-item';
         barraDiv.innerHTML = `
           <div style="height: 180px; display: flex; flex-direction: column-reverse; align-items: center; gap: 2px;">
             <div class="barra ingresos" style="height: ${alturaIngresos}px;">
-              <span class="barra-valor">$${datos.ingresos || 0}</span>
+              <span class="barra-valor">$${datos.ingresos}</span>
             </div>
             <div class="barra gastos" style="height: ${alturaGastos}px;">
-              <span class="barra-valor">$${datos.gastos || 0}</span>
+              <span class="barra-valor">$${datos.gastos}</span>
             </div>
           </div>
           <div class="barra-label">${mes}</div>
         `;
         container.appendChild(barraDiv);
       });
+
+      const totalMeses = mesesOrdenados.length;
+      const sumaIngresos = Object.values(meses).reduce((sum, d) => sum + d.ingresos, 0);
+      const sumaGastos = Object.values(meses).reduce((sum, d) => sum + d.gastos, 0);
+      
+      document.getElementById('promedioIngresos').innerText = `$${totalMeses > 0 ? (sumaIngresos / totalMeses).toFixed(0) : 0}`;
+      document.getElementById('promedioGastos').innerText = `$${totalMeses > 0 ? (sumaGastos / totalMeses).toFixed(0) : 0}`;
+      document.getElementById('promedioSaldo').innerText = `$${totalMeses > 0 ? ((sumaIngresos - sumaGastos) / totalMeses).toFixed(0) : 0}`;
     }
 
-    function mostrarResumenConjunto(presupuestos, gastosPorPerfil) {
+    function mostrarResumenConjunto(presupuesto, gastosPorPerfil) {
       const container = document.getElementById('resumenConjunto');
       
-      // Combinar gastos de Maria y Andres
       const gastosCombinados = {};
       
       for (const perfil of ['Maria', 'Andres']) {
@@ -1108,7 +927,7 @@
         }
       }
 
-      let html = '<div class="tabla-container"><table class="tabla">';
+      let html = '<table class="tabla">';
       html += '<tr><th>Categoría</th><th>Subcategoría</th><th class="text-right">Presupuesto</th><th class="text-right">Gastos (M+A)</th><th class="text-right">Diferencia</th></tr>';
 
       let totalPresupuesto = 0;
@@ -1117,7 +936,7 @@
       for (const [categoria, subcategorias] of Object.entries(categorias)) {
         for (const subcategoria of subcategorias) {
           const key = `${categoria}_${subcategoria}`;
-          const presupuestoVal = presupuestos[key] || 0;
+          const presupuestoVal = presupuesto[key] || 0;
           const gastoVal = gastosCombinados[key] || 0;
           const diferencia = presupuestoVal - gastoVal;
           
@@ -1125,8 +944,6 @@
           totalGastos += gastoVal;
 
           let diferenciaClass = '';
-          let diferenciaText = `$${diferencia}`;
-          
           if (presupuestoVal > 0) {
             diferenciaClass = diferencia >= 0 ? 'positivo' : 'negativo';
           }
@@ -1136,7 +953,7 @@
           html += `<td>${subcategoria}</td>`;
           html += `<td class="text-right">$${presupuestoVal}</td>`;
           html += `<td class="text-right">$${gastoVal}</td>`;
-          html += `<td class="text-right"><span class="diferencia-badge ${diferenciaClass}">${diferenciaText}</span></td>`;
+          html += `<td class="text-right"><span class="diferencia-badge ${diferenciaClass}">$${diferencia}</span></td>`;
           html += `</tr>`;
         }
       }
@@ -1153,7 +970,7 @@
       html += `<td class="text-right"><span class="diferencia-badge ${totalClass}">$${diferenciaTotal}</span></td>`;
       html += `</tr>`;
 
-      html += '</table></div>';
+      html += '</table>';
       container.innerHTML = html;
     }
 
@@ -1164,7 +981,6 @@
       for (const perfilActual of perfiles) {
         let totalGastosPerfil = 0;
         
-        // Calcular total del perfil
         for (const [categoria, subcategorias] of Object.entries(categorias)) {
           for (const subcategoria of subcategorias) {
             const key = `${categoria}_${subcategoria}`;
@@ -1175,12 +991,9 @@
         const perfilCard = document.createElement('div');
         perfilCard.className = 'perfil-card';
 
-        const headerClass = perfilActual === 'Maria' ? 'maria' : 'andres';
-        const emoji = perfilActual === 'Maria' ? '👩' : '👨';
-
         perfilCard.innerHTML = `
-          <div class="perfil-header ${headerClass}">
-            <span>${emoji} ${perfilActual}</span>
+          <div class="perfil-header">
+            <span>${perfilActual === 'Maria' ? '👩' : '👨'} ${perfilActual}</span>
             <span>$${totalGastosPerfil}</span>
           </div>
         `;
@@ -1199,10 +1012,7 @@
               const itemDiv = document.createElement('div');
               itemDiv.className = 'gasto-item';
               itemDiv.innerHTML = `
-                <div>
-                  <span>${categoria} - ${subcategoria}</span>
-                  <div class="categoria">${categoria}</div>
-                </div>
+                <span>${categoria} - ${subcategoria}</span>
                 <span>$${gastoVal}</span>
               `;
               itemsDiv.appendChild(itemDiv);
@@ -1211,7 +1021,7 @@
         }
 
         if (!tieneGastos) {
-          itemsDiv.innerHTML = '<div class="empty-state">Sin gastos en este período</div>';
+          itemsDiv.innerHTML = '<div style="color: #95a5a6; text-align: center;">Sin gastos</div>';
         }
 
         perfilCard.appendChild(itemsDiv);
@@ -1219,16 +1029,8 @@
       }
     }
 
-    function mostrarErrorEnComponentes() {
-      document.getElementById('listaIngresos').innerHTML = '<div class="empty-state">Error al cargar ingresos</div>';
-      document.getElementById('listaGastos').innerHTML = '<div class="empty-state">Error al cargar gastos</div>';
-      document.getElementById('resumenConjunto').innerHTML = '<div class="empty-state">Error al cargar presupuesto</div>';
-      document.getElementById('perfilesContainer').innerHTML = '<div class="empty-state">Error al cargar gastos por persona</div>';
-      document.getElementById('barrasMensuales').innerHTML = '<div class="empty-state">Error al cargar gráfico</div>';
-    }
-
-    // Cargar datos iniciales
     cargarResumen();
   </script>
 </body>
 </html>
+
