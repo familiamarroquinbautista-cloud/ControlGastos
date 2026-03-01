@@ -236,6 +236,7 @@
       font-size: 0.9rem;
     }
 
+    /* Ajustes para móvil pequeño */
     @media (max-width: 480px) {
       .container {
         padding: 0.8rem;
@@ -274,8 +275,13 @@
       .btn-agregar {
         width: 100%;
       }
+      
+      .item-fecha {
+        margin-left: 2rem;
+      }
     }
   </style>
+  <!-- Firebase SDK (versión compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
@@ -310,12 +316,14 @@
   </div>
 
   <script>
+    // Verificar perfil
     const perfil = sessionStorage.getItem('perfil');
     if (!perfil) {
       window.location.href = "index.html";
     }
     document.getElementById('perfilDisplay').innerText = perfil;
 
+    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
       authDomain: "controlgastosprueba.firebaseapp.com",
