@@ -68,14 +68,6 @@
       border-color: rgba(255, 255, 255, 0.5);
     }
 
-    /* Loading indicator mientras el video carga */
-    .video-loading {
-      position: absolute;
-      color: white;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
     /* Contenido principal (oculto inicialmente) */
     .main-content {
       text-align: center;
@@ -162,11 +154,10 @@
 <body>
   <!-- Splash Screen - SOLO VIDEO -->
   <div id="splash" class="splash-screen">
-    <video class="splash-video" autoplay muted playsinline preload="auto" id="splashVideo">
+    <video class="splash-video" autoplay muted playsinline id="splashVideo">
       <source src="splash.mp4" type="video/mp4">
-      Tu navegador no soporta el elemento de video.
+      <!-- Fallback si el video no carga -->
     </video>
-    <div class="video-loading" id="videoLoading">Cargando video...</div>
     <button class="skip-splash" onclick="skipSplash()">Saltar intro</button>
   </div>
 
@@ -209,73 +200,43 @@
       splash.classList.add('fade-out');
       mainContent.classList.add('visible');
       
+      // Pausar el video
       const video = document.getElementById('splashVideo');
       if (video) {
         video.pause();
-        video.currentTime = 0; // Reiniciar video
       }
     };
 
-    // Forzar reproducción automática
+    // Manejar el splash screen
     document.addEventListener('DOMContentLoaded', function() {
       const splash = document.getElementById('splash');
       const mainContent = document.getElementById('mainContent');
       const video = document.getElementById('splashVideo');
-      const loadingIndicator = document.getElementById('videoLoading');
       
-      // Configurar volumen (asegurar que está mudo para autoplay)
-      video.volume = 0;
+      // Duración del splash (4 segundos)
+      const splashDuration = 4000;
       
-      // Intentar reproducir el video automáticamente
-      const playPromise = video.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          // Video se está reproduciendo automáticamente
-          loadingIndicator.style.display = 'none';
-          console.log('✅ Video reproduciendo automáticamente');
-        }).catch(error => {
-          // Error en reproducción automática (navegador bloqueó)
-          console.log('⚠️ Reproducción automática bloqueada, usando timeout');
-          loadingIndicator.innerText = 'Presiona Saltar para continuar';
-          
-          // Si no puede reproducir automáticamente, ocultamos el splash después de 3 segundos
-          setTimeout(() => {
-            splash.classList.add('fade-out');
-            mainContent.classList.add('visible');
-          }, 3000);
-        });
-      }
-      
-      // Duración del splash (4 segundos como respaldo)
+      // Mostrar contenido principal después del splash
       setTimeout(() => {
         splash.classList.add('fade-out');
         mainContent.classList.add('visible');
-      }, 4000);
+      }, splashDuration);
       
-      // Si el video termina antes, ocultamos el splash
+      // Si el video termina antes, también ocultamos el splash
       video.addEventListener('ended', function() {
         splash.classList.add('fade-out');
         mainContent.classList.add('visible');
       });
       
-      // Cuando el video comienza a cargar
-      video.addEventListener('loadeddata', function() {
-        loadingIndicator.style.display = 'none';
-      });
-      
       // Si el video no puede cargar, ocultamos splash después de 2 segundos
       video.addEventListener('error', function() {
-        loadingIndicator.innerText = 'Error al cargar video';
         setTimeout(() => {
           splash.classList.add('fade-out');
           mainContent.classList.add('visible');
         }, 2000);
       });
-      
-      // Precarga adicional
-      video.load();
     });
   </script>
 </body>
 </html>
+
