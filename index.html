@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Control Gastos</title>
   <style>
     * {
@@ -44,6 +45,32 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    /* Fallback para móviles si el video no se reproduce */
+    .splash-fallback {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .splash-fallback h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+
+    .splash-fallback p {
+      font-size: 1rem;
+      opacity: 0.9;
     }
 
     /* Skip button */
@@ -152,12 +179,17 @@
   </style>
 </head>
 <body>
-  <!-- Splash Screen - SOLO VIDEO -->
+  <!-- Splash Screen -->
   <div id="splash" class="splash-screen">
-    <video class="splash-video" autoplay muted playsinline id="splashVideo">
+    <video class="splash-video" id="splashVideo" autoplay muted playsinline preload="auto">
       <source src="splash.mp4" type="video/mp4">
       <!-- Fallback si el video no carga -->
     </video>
+    <!-- Fallback visual que se muestra si el video no se reproduce -->
+    <div id="splashFallback" class="splash-fallback" style="display: none;">
+      <h2>CONTROL GASTOS</h2>
+      <p>FAMILIA</p>
+    </div>
     <button class="skip-splash" onclick="skipSplash()">Saltar intro</button>
   </div>
 
@@ -194,47 +226,90 @@
 
     // Función para saltar el splash
     window.skipSplash = function() {
+      ocultarSplash();
+    };
+
+    function ocultarSplash() {
       const splash = document.getElementById('splash');
       const mainContent = document.getElementById('mainContent');
+      const video = document.getElementById('splashVideo');
       
       splash.classList.add('fade-out');
       mainContent.classList.add('visible');
       
-      // Pausar el video
-      const video = document.getElementById('splashVideo');
+      // Pausar el video si existe
       if (video) {
         video.pause();
       }
-    };
+    }
+
+    // Función para intentar reproducir el video automáticamente
+    function reproducirVideo() {
+      const video = document.getElementById('splashVideo');
+      const fallback = document.getElementById('splashFallback');
+      
+      if (!video) return;
+      
+      // Intentar reproducir el video
+      const playPromise = video.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          // Video se reproduce correctamente
+          console.log('Video reproduciéndose automáticamente');
+        }).catch(error => {
+          // Error de autoplay - mostrar fallback
+          console.log('Autoplay bloqueado:', error);
+          video.style.display = 'none';
+          fallback.style.display = 'flex';
+          
+          // Configurar tiempo de espera para ocultar splash
+          setTimeout(() => {
+            ocultarSplash();
+          }, 3000);
+        });
+      }
+    }
 
     // Manejar el splash screen
     document.addEventListener('DOMContentLoaded', function() {
-      const splash = document.getElementById('splash');
-      const mainContent = document.getElementById('mainContent');
       const video = document.getElementById('splashVideo');
+      const fallback = document.getElementById('splashFallback');
       
-      // Duración del splash (4 segundos)
-      const splashDuration = 4000;
+      // Intentar reproducir el video
+      reproducirVideo();
       
-      // Mostrar contenido principal después del splash
-      setTimeout(() => {
-        splash.classList.add('fade-out');
-        mainContent.classList.add('visible');
-      }, splashDuration);
+      // Configurar tiempo máximo de splash (5 segundos)
+      const splashTimeout = setTimeout(() => {
+        ocultarSplash();
+      }, 5000);
       
-      // Si el video termina antes, también ocultamos el splash
+      // Si el video termina, ocultar splash
       video.addEventListener('ended', function() {
-        splash.classList.add('fade-out');
-        mainContent.classList.add('visible');
+        clearTimeout(splashTimeout);
+        ocultarSplash();
       });
       
-      // Si el video no puede cargar, ocultamos splash después de 2 segundos
+      // Si el video puede reproducirse pero tarda en cargar
+      video.addEventListener('canplay', function() {
+        // El video está listo, pero ya estamos intentando reproducir
+      });
+      
+      // Si hay error con el video
       video.addEventListener('error', function() {
+        console.log('Error al cargar el video');
+        video.style.display = 'none';
+        fallback.style.display = 'flex';
+        
         setTimeout(() => {
-          splash.classList.add('fade-out');
-          mainContent.classList.add('visible');
+          ocultarSplash();
         }, 2000);
       });
+    });
+
+    // También intentar reproducir cuando la página esté completamente cargada
+    window.addEventListener('load', function() {
+      reproducirVideo();
     });
   </script>
 </body>
