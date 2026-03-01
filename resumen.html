@@ -89,6 +89,7 @@
       color: #5a6a7a;
     }
 
+    /* Selector de período */
     .periodo-selector {
       background: white;
       border: 1px solid #e0e0e0;
@@ -120,6 +121,7 @@
       font-weight: 500;
     }
 
+    /* Cards resumen global */
     .finanzas-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -166,6 +168,7 @@
       color: #8b3a3a;
     }
 
+    /* Gráfico de barras comparativo */
     .comparativa-global {
       background: white;
       border: 1px solid #e0e0e0;
@@ -243,6 +246,7 @@
       flex-wrap: wrap;
     }
 
+    /* Cards dobles */
     .cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -275,6 +279,7 @@
       overflow-y: auto;
     }
 
+    /* Tablas */
     .tabla {
       width: 100%;
       border-collapse: collapse;
@@ -335,6 +340,7 @@
       font-weight: 500;
     }
 
+    /* Perfiles */
     .perfiles-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -403,6 +409,7 @@
       font-size: 0.85rem;
     }
 
+    /* Ajustes para móvil */
     @media (max-width: 768px) {
       .finanzas-grid {
         gap: 0.5rem;
@@ -449,8 +456,42 @@
         gap: 0.5rem;
       }
       
+      .finanza-card {
+        padding: 0.8rem;
+      }
+      
       .finanza-card .valor {
         font-size: 1.5rem;
+      }
+      
+      .comparativa-global {
+        padding: 1rem;
+      }
+      
+      .barras-container {
+        gap: 0.3rem;
+      }
+      
+      .barra-item {
+        width: 50px;
+      }
+      
+      .barra {
+        width: 25px;
+      }
+      
+      .detalle-mensual {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .tabla {
+        font-size: 0.75rem;
+      }
+      
+      .tabla th, .tabla td {
+        padding: 0.4rem 0.3rem;
       }
     }
   </style>
@@ -471,12 +512,14 @@
 
     <div class="fecha-actual" id="fechaActual"></div>
 
+    <!-- Selector de período -->
     <div class="periodo-selector">
       <button class="btn-periodo active" onclick="cambiarPeriodo('mes')">Este mes</button>
       <button class="btn-periodo" onclick="cambiarPeriodo('trimestre')">Últimos 3 meses</button>
       <button class="btn-periodo" onclick="cambiarPeriodo('año')">Año actual</button>
     </div>
 
+    <!-- Cards resumen financiero -->
     <div class="finanzas-grid">
       <div class="finanza-card ingresos">
         <div class="label">Ingresos totales</div>
@@ -492,10 +535,12 @@
       </div>
     </div>
 
+    <!-- Comparativa ingresos vs gastos -->
     <div class="comparativa-global">
       <h2>COMPARATIVA INGRESOS VS GASTOS</h2>
       
       <div class="barras-container" id="barrasMensuales">
+        <!-- Se genera dinámicamente -->
       </div>
 
       <div class="detalle-mensual">
@@ -514,29 +559,40 @@
       </div>
     </div>
 
+    <!-- Ingresos y Gastos por tipo -->
     <div class="cards-grid">
+      <!-- Ingresos del período -->
       <div class="card">
-        <div class="card-header">💰 INGRESOS DEL PERÍODO</div>
+        <div class="card-header">
+          💰 INGRESOS DEL PERÍODO
+        </div>
         <div class="card-content" id="listaIngresos">
           <div class="empty-state">Cargando ingresos...</div>
         </div>
       </div>
 
+      <!-- Gastos del período -->
       <div class="card">
-        <div class="card-header">📝 GASTOS DEL PERÍODO</div>
+        <div class="card-header">
+          📝 GASTOS DEL PERÍODO
+        </div>
         <div class="card-content" id="listaGastos">
           <div class="empty-state">Cargando gastos...</div>
         </div>
       </div>
     </div>
 
+    <!-- Presupuesto vs Gastos -->
     <div class="card" style="margin-bottom: 1.5rem;">
-      <div class="card-header">📊 PRESUPUESTO GENERAL vs GASTOS COMBINADOS</div>
+      <div class="card-header">
+        📊 PRESUPUESTO GENERAL vs GASTOS COMBINADOS
+      </div>
       <div class="card-content" id="resumenConjunto" style="overflow-x: auto;">
         <div class="empty-state">Cargando...</div>
       </div>
     </div>
 
+    <!-- Gastos por persona -->
     <h2 style="font-weight: 400; margin: 1.5rem 0 1rem; color: #2c3e50; font-size: 1.1rem;">GASTOS POR PERSONA</h2>
     <div class="perfiles-grid" id="perfilesContainer">
       <div class="empty-state">Cargando...</div>
@@ -568,6 +624,7 @@
 
     const perfiles = ['Maria', 'Andres'];
 
+    // ===== CATEGORÍAS Y SUBCATEGORÍAS ACTUALIZADAS =====
     const categorias = {
       'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
       'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
