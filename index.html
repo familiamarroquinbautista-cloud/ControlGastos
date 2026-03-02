@@ -2,189 +2,136 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>App Marsol</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Marsol</title>
 
 <style>
+
+/* RESET */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
 body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#0f172a;
+  color:white;
   height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:#f8fafc;
   overflow:hidden;
 }
 
-/* ===== SPLASH ===== */
+/* ================= SPLASH ================= */
 
 .splash-screen{
   position:fixed;
-  width:100%;
-  height:100%;
-  background:linear-gradient(-45deg,#0f172a,#1e293b,#111827,#0f172a);
-  background-size:400% 400%;
-  animation:gradientMove 10s ease infinite;
+  inset:0;
+  background:#020617;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
   z-index:1000;
-  transition:opacity .8s ease;
-}
-
-@keyframes gradientMove{
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
+  transition:opacity .6s ease, visibility .6s ease;
 }
 
 .splash-screen.fade-out{
   opacity:0;
-  pointer-events:none;
+  visibility:hidden;
 }
 
 .splash-title{
-  font-size:3rem;
+  font-size:2.6rem;
   font-weight:300;
-  letter-spacing:4px;
-  color:white;
-  text-shadow:0 0 10px rgba(255,255,255,.25);
+  letter-spacing:3px;
+  animation:fadeUp 1.5s ease forwards;
+  text-shadow:0 0 12px rgba(255,255,255,.08);
 }
 
 .splash-subtitle{
   margin-top:1rem;
-  letter-spacing:3px;
+  font-size:.95rem;
+  letter-spacing:2px;
   color:#94a3b8;
+  opacity:0;
+  animation:fadeUp 1.5s ease forwards;
+  animation-delay:.4s;
 }
 
-/* ===== MAIN ===== */
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= MAIN ================= */
 
 .main-content{
   text-align:center;
-  max-width:650px;
-  padding:2rem;
   opacity:0;
-  transition:opacity .8s ease;
+  transition:opacity .6s ease;
 }
 
 .main-content.visible{
   opacity:1;
 }
 
-.main-content.fade-out{
-  opacity:0;
-  transform:translateY(10px);
-  transition:all .4s ease;
+.main-content h2{
+  font-weight:400;
+  margin-bottom:2.5rem;
+  color:#cbd5e1;
+  letter-spacing:1px;
 }
 
-.main-content h1{
-  font-size:2.2rem;
-  font-weight:300;
-  margin-bottom:.5rem;
-  color:#0f172a;
-}
-
-.subtitle{
-  font-size:.95rem;
-  color:#64748b;
-  margin-bottom:3rem;
-  border-bottom:1px solid #e2e8f0;
-  padding-bottom:1.5rem;
-}
-
-/* ===== TARJETAS ===== */
+/* ================= PERFILES ================= */
 
 .perfiles{
   display:flex;
-  gap:2rem;
-  justify-content:center;
+  gap:25px;
   flex-wrap:wrap;
+  justify-content:center;
 }
 
 .perfil-card{
   width:190px;
-  height:130px;
-  border-radius:22px;
+  height:120px;
+  border-radius:20px;
   background:linear-gradient(135deg,#1e293b,#0f172a);
   color:white;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:1.2rem;
+  font-size:1.1rem;
   font-weight:500;
   cursor:pointer;
-  transition:all .3s ease;
-  box-shadow:0 12px 30px rgba(15,23,42,.25);
-  position:relative;
-  overflow:hidden;
+  box-shadow:0 10px 25px rgba(15,23,42,.25);
+  transition:background .2s ease, box-shadow .2s ease;
 }
 
 .perfil-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 18px 40px rgba(15,23,42,.3);
+  background:linear-gradient(135deg,#1f2937,#111827);
+  box-shadow:0 12px 30px rgba(15,23,42,.35);
 }
 
 .perfil-card:active{
-  transform:scale(.98);
+  background:linear-gradient(135deg,#111827,#0f172a);
 }
 
-/* Ripple tipo banco */
-
-.ripple{
-  position:absolute;
-  border-radius:50%;
-  background:rgba(255,255,255,.4);
-  transform:scale(0);
-  animation:rippleEffect .6s ease-out;
-  pointer-events:none;
+.familia{
+  background:linear-gradient(135deg,#1e3a8a,#1e293b);
 }
 
-@keyframes rippleEffect{
-  to{
-    transform:scale(4);
-    opacity:0;
-  }
-}
-
-/* Onda verde tipo aprobado */
-
-.wave{
-  position:fixed;
-  top:50%;
-  left:50%;
-  width:80px;
-  height:80px;
-  background:radial-gradient(circle, rgba(34,197,94,0.6) 0%, transparent 70%);
-  border-radius:50%;
-  transform:translate(-50%,-50%) scale(1);
-  animation:waveExpand .8s ease-out forwards;
-  z-index:1500;
-}
-
-@keyframes waveExpand{
-  to{
-    transform:translate(-50%,-50%) scale(18);
-    opacity:0;
-  }
-}
-
-.footer{
-  margin-top:3rem;
-  font-size:.8rem;
-  color:#94a3b8;
-}
-
-@media(max-width:480px){
-  .perfil-card{
-    width:100%;
-  }
+.familia:hover{
+  background:linear-gradient(135deg,#1d4ed8,#1e293b);
 }
 
 </style>
@@ -194,64 +141,52 @@ body{
 
 <!-- SPLASH -->
 <div id="splash" class="splash-screen">
-  <h1 class="splash-title">App Marsol</h1>
-  <div class="splash-subtitle">Control de gastos</div>
+  <div class="splash-title">App Marsol</div>
+  <div class="splash-subtitle">Control financiero familiar</div>
 </div>
 
 <!-- MAIN -->
 <div id="mainContent" class="main-content">
-  <h1>CONTROL GASTOS</h1>
-  <div class="subtitle">FAMILIA • seleccionar perfil</div>
+  <h2>Selecciona tu perfil</h2>
 
   <div class="perfiles">
-    <div class="perfil-card" onclick="seleccionarPerfil(event,'Maria')">Maria</div>
-    <div class="perfil-card" onclick="seleccionarPerfil(event,'Andres')">Andres</div>
-    <div class="perfil-card" onclick="seleccionarPerfil(event,'Familia')">Conjunto Familia</div>
-  </div>
+    <div class="perfil-card" onclick="seleccionarPerfil('Maria')">
+      Maria
+    </div>
 
-  <div class="footer">— control familiar —</div>
+    <div class="perfil-card" onclick="seleccionarPerfil('Andres')">
+      Andres
+    </div>
+
+    <div class="perfil-card familia" onclick="seleccionarPerfil('Familia')">
+      Conjunto Familia
+    </div>
+  </div>
 </div>
 
 <script>
 
-function seleccionarPerfil(e,nombre){
-
-  const card = e.currentTarget;
-
-  /* Ripple interno */
-  const ripple = document.createElement('span');
-  ripple.classList.add('ripple');
-  ripple.style.width = ripple.style.height = Math.max(card.offsetWidth, card.offsetHeight) + 'px';
-  ripple.style.left = e.offsetX - (ripple.offsetWidth / 2) + 'px';
-  ripple.style.top = e.offsetY - (ripple.offsetHeight / 2) + 'px';
-  card.appendChild(ripple);
-
-  setTimeout(()=> ripple.remove(),600);
-
-  /* Onda verde tipo pago aprobado */
-  const wave=document.createElement('div');
-  wave.classList.add('wave');
-  document.body.appendChild(wave);
-
-  sessionStorage.setItem('perfil',nombre);
+/* SPLASH */
+document.addEventListener('DOMContentLoaded', function(){
+  const splash = document.getElementById('splash');
+  const main = document.getElementById('mainContent');
 
   setTimeout(()=>{
-    document.getElementById('mainContent').classList.add('fade-out');
-  },500);
-
-  setTimeout(()=>{
-    window.location.href = nombre === 'Familia'
-      ? 'resumen.html'
-      : 'app.html';
-  },900);
-}
-
-document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(()=>{
-    document.getElementById('splash').classList.add('fade-out');
-    document.getElementById('mainContent').classList.add('visible');
-  },3000);
+    splash.classList.add('fade-out');
+    main.classList.add('visible');
+  }, 3000);
 });
+
+/* SELECCIÓN PERFIL */
+function seleccionarPerfil(nombre){
+  sessionStorage.setItem('perfil', nombre);
+
+  if(nombre === 'Familia'){
+    window.location.href = 'resumen.html';
+  } else {
+    window.location.href = 'app.html';
+  }
+}
 
 </script>
 
