@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>App Marsol</title>
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <style>
 *{
@@ -22,16 +27,17 @@ body{
   transition:background 0.4s ease;
 }
 
-/* Fondo dinámico por perfil */
+/* Fondo María - Rosa palo MUY sutil */
 body.maria{
   background:
-    linear-gradient(rgba(233, 30, 99, 0.04), rgba(233, 30, 99, 0.04)),
+    linear-gradient(rgba(219, 112, 147, 0.06), rgba(219, 112, 147, 0.06)),
     #f4f6f8;
 }
 
+/* Fondo Andrés - Azul militar oscuro sutil */
 body.andres{
   background:
-    linear-gradient(rgba(22, 42, 56, 0.08), rgba(22, 42, 56, 0.08)),
+    linear-gradient(rgba(17, 34, 51, 0.10), rgba(17, 34, 51, 0.10)),
     #f4f6f8;
 }
 
@@ -61,9 +67,9 @@ body.andres{
   background:linear-gradient(135deg,#1e2a38,#2c3e50);
   color:white;
   padding:28px;
-  border-radius:20px;
+  border-radius:22px;
   margin-bottom:25px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  box-shadow:0 12px 30px rgba(0,0,0,0.18);
   animation:fadeIn 0.6s ease;
 }
 
@@ -84,25 +90,31 @@ body.andres{
 .form{
   background:white;
   padding:20px;
-  border-radius:16px;
+  border-radius:18px;
   margin-bottom:25px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
 }
 
 .form input, .form select{
   width:100%;
-  padding:12px;
+  padding:13px;
   margin-bottom:12px;
-  border-radius:10px;
+  border-radius:12px;
   border:1px solid #e0e0e0;
   font-size:14px;
+  outline:none;
+  transition:0.2s;
+}
+
+.form input:focus, .form select:focus{
+  border-color:#2c3e50;
 }
 
 .form button{
   width:100%;
   padding:14px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   background:#2c3e50;
   color:white;
   font-size:15px;
@@ -118,14 +130,14 @@ body.andres{
 .historial{
   background:white;
   padding:20px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
 }
 
 .movimiento{
   display:flex;
   justify-content:space-between;
-  padding:12px 0;
+  padding:14px 0;
   border-bottom:1px solid #f0f0f0;
   font-size:14px;
 }
@@ -177,21 +189,42 @@ body.andres{
 </div>
 
 <script>
-const perfil = sessionStorage.getItem("perfil");
+
+/* =========================
+   OBTENER PERFIL DESDE URL
+   ========================= */
+
+const params = new URLSearchParams(window.location.search);
+let perfil = params.get("perfil");
 
 if(!perfil){
-  window.location.href="index.html";
+  perfil = "Invitado";
 }
 
 document.getElementById("tituloPerfil").innerText = perfil;
 
-/* Fondo dinámico */
-if(perfil === "Maria"){
+/* Normalizar texto (quita tildes y mayúsculas) */
+function normalizar(texto){
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+const perfilNormalizado = normalizar(perfil);
+
+/* Aplicar fondo dinámico */
+if(perfilNormalizado === "maria"){
   document.body.classList.add("maria");
 }
-if(perfil === "Andres"){
+
+if(perfilNormalizado === "andres"){
   document.body.classList.add("andres");
 }
+
+/* =========================
+   LOGICA FINANCIERA
+   ========================= */
 
 let movimientos = JSON.parse(localStorage.getItem(perfil)) || [];
 
@@ -243,6 +276,7 @@ function agregarMovimiento(){
 }
 
 actualizarVista();
+
 </script>
 
 </body>
