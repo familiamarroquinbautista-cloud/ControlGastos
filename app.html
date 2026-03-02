@@ -1,5 +1,5 @@
-amore mío <! DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -16,6 +16,7 @@ amore mío <! DOCTYPE html>
       background: #f5f5f5;
       color: #1e1e1e;
       line-height: 1.5;
+      transition: background-color 0.4s ease, color 0.3s ease;
     }
 
     .container {
@@ -32,16 +33,17 @@ amore mío <! DOCTYPE html>
       align-items: center;
       margin-bottom: 1.5rem;
       padding-bottom: 0.8rem;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid rgba(224, 224, 224, 0.3);
       flex-wrap: wrap;
       gap: 0.5rem;
+      transition: border-color 0.3s ease;
     }
 
     .header h1 {
       font-size: 1.3rem;
       font-weight: 400;
       letter-spacing: 1px;
-      color: #2c3e50;
+      color: inherit;
     }
 
     .perfil-info {
@@ -55,53 +57,53 @@ amore mío <! DOCTYPE html>
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: #f0f0f0;
+      background: rgba(255,255,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.1rem;
-      border: 1px solid #d0d0d0;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(2px);
     }
 
     .perfil-nombre {
       font-weight: 500;
-      color: #2c3e50;
       font-size: 0.95rem;
     }
 
     .btn-outline {
       padding: 0.4rem 0.8rem;
-      background: white;
-      border: 1px solid #d0d0d0;
+      background: transparent;
+      border: 1px solid;
       border-radius: 6px;
-      color: #2c3e50;
       font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
       display: inline-block;
+      backdrop-filter: blur(2px);
     }
 
     .btn-outline:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     /* Navegación módulos */
     .nav-modulos {
-      background: white;
-      border: 1px solid #e0e0e0;
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .nav-modulos h2 {
       font-size: 0.9rem;
       font-weight: 400;
-      color: #7f8c8d;
       margin-bottom: 0.8rem;
       letter-spacing: 0.5px;
+      opacity: 0.8;
     }
 
     .nav-botones {
@@ -112,10 +114,9 @@ amore mío <! DOCTYPE html>
 
     .btn-modulo {
       padding: 0.7rem 0.5rem;
-      background: white;
-      border: 1px solid #e0e0e0;
+      background: transparent;
+      border: 1px solid;
       border-radius: 6px;
-      color: #2c3e50;
       font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
@@ -123,20 +124,21 @@ amore mío <! DOCTYPE html>
       flex: 1 1 auto;
       text-align: center;
       min-width: 100px;
+      backdrop-filter: blur(2px);
     }
 
     .btn-modulo:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     /* Saldo disponible */
     .saldo-card {
-      background: white;
-      border: 1px solid #e0e0e0;
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .saldo-principal {
@@ -145,7 +147,7 @@ amore mío <! DOCTYPE html>
       align-items: center;
       margin-bottom: 1rem;
       padding-bottom: 0.8rem;
-      border-bottom: 1px solid #eaeaea;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
     .saldo-info {
@@ -155,16 +157,16 @@ amore mío <! DOCTYPE html>
 
     .saldo-label {
       font-size: 0.75rem;
-      color: #7f8c8d;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      opacity: 0.7;
     }
 
     .saldo-valor {
       font-size: 1.6rem;
       font-weight: 300;
-      color: #2c3e50;
       word-break: break-word;
+      transition: color 0.3s ease;
     }
 
     .saldo-positivo {
@@ -172,14 +174,6 @@ amore mío <! DOCTYPE html>
     }
 
     .saldo-negativo {
-      color: #8b3a3a;
-    }
-
-    .saldo-valor.saldo-positivo {
-      color: #2c5a2c;
-    }
-
-    .saldo-valor.saldo-negativo {
       color: #8b3a3a;
     }
 
@@ -192,14 +186,13 @@ amore mío <! DOCTYPE html>
     }
 
     .detalle-item .label {
-      color: #95a5a6;
       font-size: 0.7rem;
       text-transform: uppercase;
+      opacity: 0.6;
     }
 
     .detalle-item .valor {
       font-weight: 500;
-      color: #2c3e50;
     }
 
     .detalle-item .valor.tarjeta {
@@ -208,11 +201,11 @@ amore mío <! DOCTYPE html>
 
     /* Switch Ingreso/Gasto */
     .switch-container {
-      background: white;
-      border: 1px solid #e0e0e0;
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .switch-label {
@@ -220,13 +213,13 @@ amore mío <! DOCTYPE html>
       justify-content: center;
       margin-bottom: 0.8rem;
       font-size: 0.85rem;
-      color: #7f8c8d;
+      opacity: 0.7;
     }
 
     .switch-buttons {
       display: flex;
       gap: 0.4rem;
-      background: #f0f0f0;
+      background: rgba(0,0,0,0.1);
       padding: 0.25rem;
       border-radius: 50px;
     }
@@ -240,26 +233,24 @@ amore mío <! DOCTYPE html>
       font-weight: 500;
       cursor: pointer;
       background: transparent;
-      color: #5a6a7a;
+      transition: all 0.2s;
     }
 
     .switch-btn.ingreso.active {
-      background: #2c5a2c;
       color: white;
     }
 
     .switch-btn.gasto.active {
-      background: #8b3a3a;
       color: white;
     }
 
     /* Cards */
     .card {
-      background: white;
-      border: 1px solid #e0e0e0;
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .card h2 {
@@ -267,16 +258,16 @@ amore mío <! DOCTYPE html>
       font-weight: 400;
       margin-bottom: 1rem;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid #eaeaea;
-      color: #2c3e50;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
     /* Campos de registro */
     .campos-registro {
-      background: #fafafa;
-      border: 1px solid #eaeaea;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 8px;
       padding: 1rem;
+      backdrop-filter: blur(2px);
     }
 
     .campo {
@@ -286,19 +277,24 @@ amore mío <! DOCTYPE html>
     .campo label {
       display: block;
       font-size: 0.8rem;
-      color: #5a6a7a;
       margin-bottom: 0.2rem;
+      opacity: 0.7;
     }
 
     .campo input, .campo select {
       width: 100%;
       padding: 0.7rem;
-      border: 1px solid #e0e0e0;
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 6px;
       font-size: 1rem;
-      background: white;
+      background: rgba(255,255,255,0.1);
+      color: inherit;
       -webkit-appearance: none;
       appearance: none;
+    }
+
+    .campo input::placeholder {
+      color: rgba(255,255,255,0.3);
     }
 
     .campo input[type="text"] {
@@ -320,14 +316,14 @@ amore mío <! DOCTYPE html>
     .metodo-pago-label {
       display: block;
       font-size: 0.8rem;
-      color: #5a6a7a;
       margin-bottom: 0.3rem;
+      opacity: 0.7;
     }
 
     .metodo-pago-opciones {
       display: flex;
       gap: 0.4rem;
-      background: #f0f0f0;
+      background: rgba(0,0,0,0.1);
       padding: 0.25rem;
       border-radius: 6px;
       flex-wrap: wrap;
@@ -342,24 +338,12 @@ amore mío <! DOCTYPE html>
       font-weight: 500;
       cursor: pointer;
       background: transparent;
-      color: #5a6a7a;
       text-align: center;
       min-width: 80px;
+      transition: all 0.2s;
     }
 
     .metodo-pago-opcion.seleccionado {
-      background: white;
-      color: #2c3e50;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .metodo-pago-opcion.debito.seleccionado {
-      background: #2c5a2c;
-      color: white;
-    }
-
-    .metodo-pago-opcion.credito.seleccionado {
-      background: #8b3a3a;
       color: white;
     }
 
@@ -377,38 +361,21 @@ amore mío <! DOCTYPE html>
 
     .btn-registro {
       padding: 0.7rem 1rem;
-      background: white;
-      border: 1px solid #d0d0d0;
+      background: transparent;
+      border: 1px solid;
       border-radius: 6px;
-      color: #2c3e50;
       font-size: 0.9rem;
       cursor: pointer;
       white-space: nowrap;
       flex: 1 1 auto;
       min-width: 120px;
+      transition: all 0.2s;
+      backdrop-filter: blur(2px);
     }
 
     .btn-registro:hover {
-      background: #f5f5f5;
-      border-color: #909090;
-    }
-
-    .btn-registro.ingreso {
-      border-color: #2c5a2c;
-      color: #2c5a2c;
-    }
-
-    .btn-registro.ingreso:hover {
-      background: #f0f7f0;
-    }
-
-    .btn-registro.gasto {
-      border-color: #8b3a3a;
-      color: #8b3a3a;
-    }
-
-    .btn-registro.gasto:hover {
-      background: #fcf0f0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     /* Mensajes */
@@ -420,24 +387,25 @@ amore mío <! DOCTYPE html>
       border: 1px solid;
       display: none;
       word-break: break-word;
+      backdrop-filter: blur(4px);
     }
 
     .mensaje.exito {
-      background: #f8f9fa;
-      border-color: #c0c0c0;
-      color: #2c3e50;
+      background: rgba(44, 90, 44, 0.2);
+      border-color: rgba(44, 90, 44, 0.3);
+      color: inherit;
     }
 
     .mensaje.error {
-      background: #fef5f5;
-      border-color: #e0c0c0;
-      color: #8b3a3a;
+      background: rgba(139, 58, 58, 0.2);
+      border-color: rgba(139, 58, 58, 0.3);
+      color: inherit;
     }
 
     /* Empty state */
     .empty-state {
       text-align: center;
-      color: #95a5a6;
+      opacity: 0.6;
       padding: 2rem 0;
       font-size: 0.9rem;
     }
@@ -456,15 +424,60 @@ amore mío <! DOCTYPE html>
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       font-size: 0.7rem;
-      background: #f0f0f0;
+      transition: all 0.3s ease;
+    }
+    
+    .historial-container {
+      max-height: 400px;
+      overflow-y: auto;
     }
     
     .item-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      flex-wrap: wrap;
+      position: relative;
       transition: background-color 0.2s;
     }
     
     .item-row:hover {
-      background-color: #fafafa;
+      background-color: rgba(255,255,255,0.05);
+    }
+    
+    .item-fecha {
+      min-width: 80px;
+      font-size: 0.75rem;
+      opacity: 0.6;
+    }
+    
+    .item-usuario {
+      min-width: 60px;
+      font-size: 0.8rem;
+    }
+    
+    .item-descripcion {
+      flex: 1;
+      min-width: 150px;
+    }
+    
+    .item-titulo {
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+    
+    .item-categoria {
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+    
+    .item-monto {
+      min-width: 100px;
+      text-align: right;
+      font-weight: 500;
+      font-size: 0.9rem;
     }
     
     .btn-eliminar {
@@ -523,7 +536,6 @@ amore mío <! DOCTYPE html>
       }
       
       .item-row {
-        position: relative;
         padding-right: 2rem;
       }
       
@@ -680,7 +692,7 @@ amore mío <! DOCTYPE html>
     <!-- HISTORIAL DE MOVIMIENTOS -->
     <div class="card">
       <h2>📋 HISTORIAL DE MOVIMIENTOS</h2>
-      <div id="historialContainer" style="max-height: 400px; overflow-y: auto;">
+      <div id="historialContainer" class="historial-container">
         <div class="empty-state">Cargando historial...</div>
       </div>
     </div>
@@ -716,6 +728,64 @@ amore mío <! DOCTYPE html>
     
     nombrePerfil.innerText = perfil;
     avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
+
+    // ===== PERSONALIZACIÓN DE COLORES SEGÚN PERFIL =====
+    const coloresPorPerfil = {
+      'Maria': {
+        fondo: '#fcf4f0',  // Palo rosa clarito
+        texto: '#5a4a4a',
+        cards: 'rgba(252, 240, 235, 0.9)',  // Palo rosa con transparencia
+        acentoDebito: '#c97c5d',  // Terracota suave
+        acentoCredito: '#b55a5a',  // Rosa quemado
+        acentoGeneral: '#d6a58b'
+      },
+      'Andres': {
+        fondo: '#1a2639',  // Azul militar oscuro
+        texto: '#e8eef2',
+        cards: 'rgba(26, 38, 57, 0.92)',  // Azul con transparencia
+        acentoDebito: '#4f7a9e',  // Azul acero
+        acentoCredito: '#8b4a6a',  // Malbec
+        acentoGeneral: '#3f5569'
+      }
+    };
+
+    // Aplicar colores según el perfil
+    if (coloresPorPerfil[perfil]) {
+      const colores = coloresPorPerfil[perfil];
+      
+      // Fondo del body
+      document.body.style.background = colores.fondo;
+      document.body.style.color = colores.texto;
+      
+      // Elementos con fondo de cards (todos los elementos principales)
+      const elementosConFondo = document.querySelectorAll('.card, .saldo-card, .nav-modulos, .switch-container, .campos-registro');
+      elementosConFondo.forEach(el => {
+        el.style.backgroundColor = colores.cards;
+        el.style.border = '1px solid rgba(255,255,255,0.1)';
+      });
+      
+      // Header
+      const header = document.querySelector('.header');
+      if (header) {
+        header.style.borderBottomColor = 'rgba(255,255,255,0.15)';
+      }
+      
+      // Botones outline
+      const btnOutline = document.querySelectorAll('.btn-outline, .btn-modulo, .btn-registro');
+      btnOutline.forEach(btn => {
+        btn.style.backgroundColor = 'transparent';
+        btn.style.borderColor = perfil === 'Maria' ? '#d6a58b' : '#3f5569';
+        btn.style.color = 'inherit';
+      });
+      
+      // Badges en historial
+      const style = document.createElement('style');
+      style.textContent = `
+        .badge-maria { background: #f0d8d0; color: #5a4a4a; }
+        .badge-andres { background: #2a374a; color: #d0e0f0; }
+      `;
+      document.head.appendChild(style);
+    }
 
     let tipoMovimientoActual = 'gasto';
     let metodoPagoActual = 'debito';
@@ -753,13 +823,18 @@ amore mío <! DOCTYPE html>
       
       const debitoOption = document.getElementById('metodoDebito');
       const creditoOption = document.getElementById('metodoCredito');
+      const colores = coloresPorPerfil[perfil] || coloresPorPerfil['Andres'];
       
       if (metodo === 'debito') {
         debitoOption.classList.add('seleccionado');
         creditoOption.classList.remove('seleccionado');
+        debitoOption.style.background = colores.acentoDebito;
+        creditoOption.style.background = 'transparent';
       } else {
         debitoOption.classList.remove('seleccionado');
         creditoOption.classList.add('seleccionado');
+        debitoOption.style.background = 'transparent';
+        creditoOption.style.background = colores.acentoCredito;
       }
     };
 
@@ -770,17 +845,24 @@ amore mío <! DOCTYPE html>
       const btnGasto = document.getElementById('btnGasto');
       const formIngreso = document.getElementById('formIngreso');
       const formGasto = document.getElementById('formGasto');
+      const colores = coloresPorPerfil[perfil] || coloresPorPerfil['Andres'];
       
       if (tipo === 'ingreso') {
         btnIngreso.classList.add('active');
         btnGasto.classList.remove('active');
         formIngreso.style.display = 'block';
         formGasto.style.display = 'none';
+        
+        btnIngreso.style.background = colores.acentoDebito;
+        btnGasto.style.background = 'transparent';
       } else {
         btnIngreso.classList.remove('active');
         btnGasto.classList.add('active');
         formIngreso.style.display = 'none';
         formGasto.style.display = 'block';
+        
+        btnIngreso.style.background = 'transparent';
+        btnGasto.style.background = colores.acentoCredito;
       }
     };
 
@@ -823,7 +905,6 @@ amore mío <! DOCTYPE html>
         document.getElementById('descripcionGasto').value = '';
         document.getElementById('montoGasto').value = '';
         
-        // Actualizar saldo e historial
         await Promise.all([
           calcularSaldo(),
           cargarHistorial()
@@ -862,7 +943,6 @@ amore mío <! DOCTYPE html>
         document.getElementById('descripcionIngreso').value = '';
         document.getElementById('montoIngreso').value = '';
         
-        // Actualizar saldo e historial
         await Promise.all([
           calcularSaldo(),
           cargarHistorial()
@@ -936,15 +1016,12 @@ amore mío <! DOCTYPE html>
         console.error("Error al calcular saldo:", error);
       }
     }
-
-    // ===== NUEVAS FUNCIONES PARA HISTORIAL =====
     
     async function cargarHistorial() {
       try {
         const mesActual = new Date().getMonth() + 1;
         const añoActual = new Date().getFullYear();
         
-        // Obtener ingresos del mes
         const ingresosQuery = query(
           collection(db, "ingresos"),
           where("usuario", "==", perfil),
@@ -953,7 +1030,6 @@ amore mío <! DOCTYPE html>
         );
         const ingresosSnap = await getDocs(ingresosQuery);
         
-        // Obtener gastos del mes
         const gastosQuery = query(
           collection(db, "gastos"),
           where("usuario", "==", perfil),
@@ -962,7 +1038,6 @@ amore mío <! DOCTYPE html>
         );
         const gastosSnap = await getDocs(gastosQuery);
         
-        // Combinar y ordenar por fecha
         let movimientos = [];
         
         ingresosSnap.forEach(doc => {
@@ -991,7 +1066,6 @@ amore mío <! DOCTYPE html>
           });
         });
         
-        // Ordenar por fecha descendente (más reciente primero)
         movimientos.sort((a, b) => b.fecha - a.fecha);
         
         mostrarHistorial(movimientos);
@@ -1012,6 +1086,7 @@ amore mío <! DOCTYPE html>
       }
 
       let html = '';
+      const colores = coloresPorPerfil[perfil] || coloresPorPerfil['Andres'];
       
       movimientos.forEach(mov => {
         const fechaStr = mov.fecha.toLocaleDateString('es-ES', {
@@ -1023,20 +1098,21 @@ amore mío <! DOCTYPE html>
         
         const montoClass = mov.tipo === 'ingreso' ? 'monto-positivo' : 'monto-negativo';
         const signo = mov.tipo === 'ingreso' ? '+' : '-';
+        const badgeClass = mov.usuario === 'Maria' ? 'badge-maria' : 'badge-andres';
         
         html += `
-          <div class="item-row" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap;">
-            <div style="min-width: 80px; font-size: 0.75rem; color: #95a5a6;">${fechaStr}</div>
-            <div style="min-width: 60px; font-size: 0.8rem;">
-              <span class="badge" style="background: ${mov.tipo === 'ingreso' ? '#e8f0e8' : '#f0e8e8'}; padding: 0.2rem 0.5rem; border-radius: 4px;">
+          <div class="item-row">
+            <div class="item-fecha">${fechaStr}</div>
+            <div class="item-usuario">
+              <span class="badge ${badgeClass}" style="background: ${mov.usuario === 'Maria' ? '#f0d8d0' : '#2a374a'}; color: ${mov.usuario === 'Maria' ? '#5a4a4a' : '#d0e0f0'}">
                 ${mov.usuario}
               </span>
             </div>
-            <div style="flex: 1; min-width: 150px;">
-              <div style="font-weight: 500; font-size: 0.85rem;">${mov.descripcion}</div>
-              <div style="font-size: 0.7rem; color: #95a5a6;">${mov.categoria}</div>
+            <div class="item-descripcion">
+              <div class="item-titulo">${mov.descripcion}</div>
+              <div class="item-categoria">${mov.categoria}</div>
             </div>
-            <div style="min-width: 100px; text-align: right; font-weight: 500; font-size: 0.9rem;" class="${montoClass}">
+            <div class="item-monto ${montoClass}">
               ${signo}$${mov.monto}
             </div>
             <button class="btn-eliminar" onclick="eliminarMovimiento('${mov.id}', '${mov.tipo}')" title="Eliminar movimiento">×</button>
@@ -1058,7 +1134,6 @@ amore mío <! DOCTYPE html>
         
         mostrarMensaje("Movimiento eliminado correctamente", "exito");
         
-        // Actualizar todo
         await Promise.all([
           calcularSaldo(),
           cargarHistorial()
@@ -1074,6 +1149,12 @@ amore mío <! DOCTYPE html>
     actualizarSubcategoriasGasto();
     calcularSaldo();
     cargarHistorial();
+    
+    // Aplicar colores iniciales a los botones de método de pago
+    setTimeout(() => {
+      window.seleccionarMetodoPago('debito');
+      window.cambiarTipoMovimiento('gasto');
+    }, 100);
   </script>
 </body>
 </html>
