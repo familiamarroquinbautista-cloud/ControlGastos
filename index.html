@@ -1,227 +1,251 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>App Marsol - Control de Gastos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>App Marsol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #f5f5f5;
-      overflow: hidden;
-    }
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#f8fafc;
+  overflow:hidden;
+}
 
-    /* ================= SPLASH PREMIUM ================= */
+/* ================= SPLASH ================= */
 
-    .splash-screen {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(-45deg, #0f172a, #1e293b, #111827, #0f172a);
-      background-size: 400% 400%;
-      animation: gradientMove 10s ease infinite;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 1000;
-      transition: opacity 0.8s ease;
-    }
+.splash-screen{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:linear-gradient(-45deg,#0f172a,#1e293b,#111827,#0f172a);
+  background-size:400% 400%;
+  animation:gradientMove 10s ease infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:1000;
+  transition:opacity .8s ease;
+}
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
 
-    .splash-screen.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
+.splash-screen.fade-out{
+  opacity:0;
+  pointer-events:none;
+}
 
-    .splash-content {
-      text-align: center;
-      color: white;
-    }
+.splash-title{
+  font-size:3rem;
+  font-weight:300;
+  letter-spacing:4px;
+  color:white;
+  text-shadow:0 0 10px rgba(255,255,255,.3),
+              0 0 30px rgba(255,255,255,.15);
+}
 
-    .splash-title {
-      font-size: 3rem;
-      font-weight: 300;
-      letter-spacing: 4px;
-      opacity: 0;
-      animation: slideUp 1.6s ease forwards;
-      text-shadow:
-        0 0 6px rgba(255,255,255,0.3),
-        0 0 18px rgba(255,255,255,0.15);
-    }
+.splash-subtitle{
+  margin-top:1rem;
+  letter-spacing:3px;
+  color:#94a3b8;
+}
 
-    .splash-subtitle {
-      font-size: 1rem;
-      margin-top: 1rem;
-      letter-spacing: 3px;
-      color: #94a3b8;
-      opacity: 0;
-      animation: slideUp 1.6s ease forwards;
-      animation-delay: 0.4s;
-    }
+/* ================= MAIN ================= */
 
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(35px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+.main-content{
+  text-align:center;
+  max-width:650px;
+  padding:2rem;
+  opacity:0;
+  transition:opacity .8s ease;
+}
 
-    .skip-splash {
-      position: absolute;
-      bottom: 30px;
-      right: 30px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      padding: 0.5rem 1.5rem;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: all 0.2s ease;
-    }
+.main-content.visible{
+  opacity:1;
+}
 
-    .skip-splash:hover {
-      background: rgba(255,255,255,0.15);
-    }
+.main-content h1{
+  font-size:2.2rem;
+  font-weight:300;
+  margin-bottom:.5rem;
+  color:#0f172a;
+}
 
-    /* ================= MAIN CONTENT ================= */
+.subtitle{
+  font-size:.95rem;
+  color:#64748b;
+  margin-bottom:3rem;
+  border-bottom:1px solid #e2e8f0;
+  padding-bottom:1.5rem;
+}
 
-    .main-content {
-      text-align: center;
-      max-width: 500px;
-      padding: 2rem;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-    }
+/* ================= TARJETAS ================= */
 
-    .main-content.visible {
-      opacity: 1;
-    }
+.perfiles{
+  display:flex;
+  gap:2rem;
+  justify-content:center;
+  flex-wrap:wrap;
+}
 
-    .main-content h1 {
-      font-size: 2.4rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 0.5rem;
-      color: #1e293b;
-    }
+.perfil-card{
+  width:190px;
+  height:130px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#1e293b,#0f172a);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:1.2rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .4s cubic-bezier(.4,.2,.2,1);
+  box-shadow:0 12px 30px rgba(15,23,42,.25);
+  position:relative;
+  overflow:hidden;
+}
 
-    .subtitle {
-      font-size: 1rem;
-      color: #64748b;
-      margin-bottom: 3rem;
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 1.5rem;
-    }
+.perfil-card:hover{
+  transform:translateY(-8px) scale(1.05);
+  box-shadow:0 20px 50px rgba(15,23,42,.35);
+}
 
-    .perfiles {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+/* Expansión bancaria */
 
-    .btn-perfil {
-      background: white;
-      border: 1px solid #e2e8f0;
-      padding: 1.5rem 2.5rem;
-      border-radius: 14px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      color: #1e293b;
-      min-width: 160px;
-    }
+.perfil-card.expand{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(6);
+  width:200px;
+  height:140px;
+  border-radius:40px;
+  z-index:2000;
+  transition:all .7s cubic-bezier(.4,.2,.2,1);
+}
 
-    .btn-perfil:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 24px rgba(0,0,0,0.08);
-    }
+/* Onda expansiva */
 
-    .btn-perfil.admin {
-      background: #f1f5f9;
-    }
+.wave{
+  position:fixed;
+  top:50%;
+  left:50%;
+  width:50px;
+  height:50px;
+  background:radial-gradient(circle, rgba(34,197,94,0.6) 0%, rgba(34,197,94,0.4) 40%, transparent 70%);
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(1);
+  animation:waveExpand 0.8s ease-out forwards;
+  z-index:1500;
+}
 
-    .footer {
-      margin-top: 3rem;
-      font-size: 0.8rem;
-      color: #94a3b8;
-    }
+@keyframes waveExpand{
+  from{
+    transform:translate(-50%,-50%) scale(1);
+    opacity:1;
+  }
+  to{
+    transform:translate(-50%,-50%) scale(25);
+    opacity:0;
+  }
+}
 
-    @media (max-width: 480px) {
-      .btn-perfil {
-        min-width: 100%;
-      }
-    }
+.blur-background{
+  filter:blur(8px);
+  transition:filter .5s ease;
+}
 
-  </style>
+.fade-out-page{
+  opacity:0;
+  transition:opacity .5s ease;
+}
+
+.footer{
+  margin-top:3rem;
+  font-size:.8rem;
+  color:#94a3b8;
+}
+
+@media(max-width:480px){
+  .perfil-card{
+    width:100%;
+  }
+}
+
+</style>
 </head>
 
 <body>
 
-  <!-- SPLASH -->
-  <div id="splash" class="splash-screen">
-    <div class="splash-content">
-      <h1 class="splash-title">App Marsol</h1>
-      <div class="splash-subtitle">Control de gastos</div>
-    </div>
-    <button class="skip-splash" onclick="skipSplash()">Saltar</button>
+<!-- SPLASH -->
+<div id="splash" class="splash-screen">
+  <h1 class="splash-title">App Marsol</h1>
+  <div class="splash-subtitle">Control de gastos</div>
+</div>
+
+<!-- MAIN -->
+<div id="mainContent" class="main-content">
+  <h1>CONTROL GASTOS</h1>
+  <div class="subtitle">FAMILIA • seleccionar perfil</div>
+
+  <div class="perfiles">
+    <div class="perfil-card" onclick="seleccionarPerfil(this,'Maria')">Maria</div>
+    <div class="perfil-card" onclick="seleccionarPerfil(this,'Andres')">Andres</div>
+    <div class="perfil-card" onclick="seleccionarPerfil(this,'Familia')">Conjunto Familia</div>
   </div>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <div id="mainContent" class="main-content">
-    <h1>CONTROL GASTOS</h1>
-    <div class="subtitle">FAMILIA • seleccionar perfil</div>
-    
-    <div class="perfiles">
-      <button class="btn-perfil" onclick="seleccionarPerfil('Maria')">MARIA</button>
-      <button class="btn-perfil" onclick="seleccionarPerfil('Andres')">ANDRES</button>
-      <button class="btn-perfil admin" onclick="seleccionarPerfil('Admin')">ADMIN</button>
-    </div>
-    
-    <div class="footer">
-      — control familiar —
-    </div>
-  </div>
+  <div class="footer">— control familiar —</div>
+</div>
 
 <script>
-function seleccionarPerfil(nombre) {
-  sessionStorage.setItem('perfil', nombre);
-  window.location.href = nombre === 'Admin' ? 'resumen.html' : 'app.html';
+
+function seleccionarPerfil(card,nombre){
+
+  document.getElementById('mainContent').classList.add('blur-background');
+
+  card.classList.add('expand');
+
+  // Crear onda expansiva
+  const wave=document.createElement('div');
+  wave.classList.add('wave');
+  document.body.appendChild(wave);
+
+  sessionStorage.setItem('perfil',nombre);
+
+  setTimeout(()=>{
+    document.body.classList.add('fade-out-page');
+  },700);
+
+  setTimeout(()=>{
+    window.location.href = nombre === 'Familia'
+      ? 'resumen.html'
+      : 'app.html';
+  },1200);
 }
 
-function skipSplash() {
-  document.getElementById('splash').classList.add('fade-out');
-  document.getElementById('mainContent').classList.add('visible');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(() => {
-    skipSplash();
-  }, 4000);
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('fade-out');
+    document.getElementById('mainContent').classList.add('visible');
+  },3500);
 });
+
 </script>
 
 </body>
