@@ -23,7 +23,6 @@ body{
   justify-content:center;
   align-items:center;
   overflow:hidden;
-  transition:opacity .5s ease, background .5s ease;
 }
 
 /* ================= SPLASH ================= */
@@ -123,10 +122,6 @@ body{
   box-shadow:0 12px 30px rgba(15,23,42,.35);
 }
 
-.perfil-card:active{
-  background:linear-gradient(135deg,#111827,#0f172a);
-}
-
 .familia{
   background:linear-gradient(135deg,#1e3a8a,#1e293b);
 }
@@ -135,11 +130,26 @@ body{
   background:linear-gradient(135deg,#1d4ed8,#1e293b);
 }
 
-/* ================= TRANSICIÓN ================= */
+/* ================= APPLE WALLET TRANSITION ================= */
 
-.page-transition{
-  opacity:0;
+.wallet-transition{
+  position:fixed;
+  left:0;
+  bottom:-100%;
+  width:100%;
+  height:100%;
   background:#020617;
+  z-index:2000;
+  transition:bottom .6s cubic-bezier(.4,.0,.2,1);
+}
+
+.wallet-transition.active{
+  bottom:0;
+}
+
+.fade-out-content{
+  opacity:0;
+  transition:opacity .3s ease;
 }
 
 </style>
@@ -172,6 +182,9 @@ body{
   </div>
 </div>
 
+<!-- CAPA TRANSICIÓN -->
+<div id="walletTransition" class="wallet-transition"></div>
+
 <script>
 
 /* SPLASH */
@@ -185,11 +198,18 @@ document.addEventListener('DOMContentLoaded', function(){
   }, 2500);
 });
 
-/* TRANSICIÓN ELEGANTE */
+/* TRANSICIÓN TIPO APPLE WALLET */
 function seleccionarPerfil(nombre){
   sessionStorage.setItem('perfil', nombre);
 
-  document.body.classList.add('page-transition');
+  const transition = document.getElementById('walletTransition');
+  const content = document.getElementById('mainContent');
+
+  content.classList.add('fade-out-content');
+
+  setTimeout(()=>{
+    transition.classList.add('active');
+  },100);
 
   setTimeout(()=>{
     if(nombre === 'Familia'){
@@ -197,7 +217,7 @@ function seleccionarPerfil(nombre){
     } else {
       window.location.href = 'app.html';
     }
-  }, 450);
+  },650);
 }
 
 </script>
