@@ -1,1079 +1,249 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Registro de Gastos</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Marsol</title>
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
-      color: #1e1e1e;
-      line-height: 1.5;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
 
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 1rem;
-      width: 100%;
-    }
+body{
+  min-height:100vh;
+  background:#f4f6f8;
+  display:flex;
+  justify-content:center;
+  padding:40px 15px;
+  transition:background 0.4s ease;
+}
 
-    /* Header */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid #e0e0e0;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+/* Fondo dinámico por perfil */
+body.maria{
+  background:
+    linear-gradient(rgba(233, 30, 99, 0.04), rgba(233, 30, 99, 0.04)),
+    #f4f6f8;
+}
 
-    .header h1 {
-      font-size: 1.3rem;
-      font-weight: 400;
-      letter-spacing: 1px;
-      color: #2c3e50;
-    }
+body.andres{
+  background:
+    linear-gradient(rgba(22, 42, 56, 0.08), rgba(22, 42, 56, 0.08)),
+    #f4f6f8;
+}
 
-    .perfil-info {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-    }
+.container{
+  width:100%;
+  max-width:480px;
+}
 
-    .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #f0f0f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      border: 1px solid #d0d0d0;
-    }
+/* HEADER */
+.header{
+  margin-bottom:25px;
+}
 
-    .perfil-nombre {
-      font-weight: 500;
-      color: #2c3e50;
-      font-size: 0.95rem;
-    }
+.header h2{
+  font-weight:500;
+  font-size:22px;
+  color:#1e1e1e;
+}
 
-    .btn-outline {
-      padding: 0.4rem 0.8rem;
-      background: white;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      color: #2c3e50;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
+.header span{
+  font-size:14px;
+  color:#7f8c8d;
+}
 
-    .btn-outline:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
-    }
+/* CARD SALDO */
+.card{
+  background:linear-gradient(135deg,#1e2a38,#2c3e50);
+  color:white;
+  padding:28px;
+  border-radius:20px;
+  margin-bottom:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  animation:fadeIn 0.6s ease;
+}
 
-    /* Navegación módulos */
-    .nav-modulos {
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
+.card h3{
+  font-size:14px;
+  font-weight:400;
+  opacity:0.7;
+  margin-bottom:8px;
+}
 
-    .nav-modulos h2 {
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: #7f8c8d;
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.5px;
-    }
+.card .saldo{
+  font-size:34px;
+  font-weight:600;
+  letter-spacing:1px;
+}
 
-    .nav-botones {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
+/* FORM */
+.form{
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  margin-bottom:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
 
-    .btn-modulo {
-      padding: 0.7rem 0.5rem;
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      color: #2c3e50;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      flex: 1 1 auto;
-      text-align: center;
-      min-width: 100px;
-    }
+.form input, .form select{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:10px;
+  border:1px solid #e0e0e0;
+  font-size:14px;
+}
 
-    .btn-modulo:hover {
-      background: #f5f5f5;
-      border-color: #a0a0a0;
-    }
+.form button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#2c3e50;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  transition:all 0.2s ease;
+}
 
-    /* Saldo disponible */
-    .saldo-card {
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
+.form button:hover{
+  opacity:0.9;
+}
 
-    .saldo-principal {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid #eaeaea;
-    }
+/* HISTORIAL */
+.historial{
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
 
-    .saldo-info {
-      display: flex;
-      flex-direction: column;
-    }
+.movimiento{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid #f0f0f0;
+  font-size:14px;
+}
 
-    .saldo-label {
-      font-size: 0.75rem;
-      color: #7f8c8d;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+.movimiento:last-child{
+  border-bottom:none;
+}
 
-    .saldo-valor {
-      font-size: 1.6rem;
-      font-weight: 300;
-      color: #2c3e50;
-      word-break: break-word;
-    }
+.movimiento span{
+  font-weight:500;
+}
 
-    .saldo-positivo {
-      color: #2c5a2c;
-    }
+.ingreso{ color:#27ae60; }
+.gasto{ color:#c0392b; }
 
-    .saldo-negativo {
-      color: #8b3a3a;
-    }
-
-    .saldo-valor.saldo-positivo {
-      color: #2c5a2c;
-    }
-
-    .saldo-valor.saldo-negativo {
-      color: #8b3a3a;
-    }
-
-    .saldo-detalle {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.3rem;
-      text-align: center;
-      font-size: 0.8rem;
-    }
-
-    .detalle-item .label {
-      color: #95a5a6;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-    }
-
-    .detalle-item .valor {
-      font-weight: 500;
-      color: #2c3e50;
-    }
-
-    .detalle-item .valor.tarjeta {
-      color: #8b4a4a;
-    }
-
-    /* Switch Ingreso/Gasto */
-    .switch-container {
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .switch-label {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 0.8rem;
-      font-size: 0.85rem;
-      color: #7f8c8d;
-    }
-
-    .switch-buttons {
-      display: flex;
-      gap: 0.4rem;
-      background: #f0f0f0;
-      padding: 0.25rem;
-      border-radius: 50px;
-    }
-
-    .switch-btn {
-      flex: 1;
-      padding: 0.7rem 0.3rem;
-      border: none;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-      background: transparent;
-      color: #5a6a7a;
-    }
-
-    .switch-btn.ingreso.active {
-      background: #2c5a2c;
-      color: white;
-    }
-
-    .switch-btn.gasto.active {
-      background: #8b3a3a;
-      color: white;
-    }
-
-    /* Cards */
-    .card {
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .card h2 {
-      font-size: 1rem;
-      font-weight: 400;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid #eaeaea;
-      color: #2c3e50;
-    }
-
-    /* Campos de registro */
-    .campos-registro {
-      background: #fafafa;
-      border: 1px solid #eaeaea;
-      border-radius: 8px;
-      padding: 1rem;
-    }
-
-    .campo {
-      margin-bottom: 0.8rem;
-    }
-
-    .campo label {
-      display: block;
-      font-size: 0.8rem;
-      color: #5a6a7a;
-      margin-bottom: 0.2rem;
-    }
-
-    .campo input, .campo select {
-      width: 100%;
-      padding: 0.7rem;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      font-size: 1rem;
-      background: white;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .campo input[type="text"] {
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-    
-    .campo input[type="text"]::-webkit-outer-spin-button,
-    .campo input[type="text"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    /* Método de pago */
-    .metodo-pago-container {
-      margin-bottom: 0.8rem;
-    }
-
-    .metodo-pago-label {
-      display: block;
-      font-size: 0.8rem;
-      color: #5a6a7a;
-      margin-bottom: 0.3rem;
-    }
-
-    .metodo-pago-opciones {
-      display: flex;
-      gap: 0.4rem;
-      background: #f0f0f0;
-      padding: 0.25rem;
-      border-radius: 6px;
-      flex-wrap: wrap;
-    }
-
-    .metodo-pago-opcion {
-      flex: 1 1 auto;
-      padding: 0.6rem 0.3rem;
-      border: none;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      background: transparent;
-      color: #5a6a7a;
-      text-align: center;
-      min-width: 80px;
-    }
-
-    .metodo-pago-opcion.seleccionado {
-      background: white;
-      color: #2c3e50;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .metodo-pago-opcion.debito.seleccionado {
-      background: #2c5a2c;
-      color: white;
-    }
-
-    .metodo-pago-opcion.credito.seleccionado {
-      background: #8b3a3a;
-      color: white;
-    }
-
-    .campo-row {
-      display: flex;
-      gap: 0.8rem;
-      align-items: flex-end;
-      flex-wrap: wrap;
-    }
-
-    .campo-row .campo {
-      flex: 1 1 150px;
-      margin-bottom: 0;
-    }
-
-    .btn-registro {
-      padding: 0.7rem 1rem;
-      background: white;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      color: #2c3e50;
-      font-size: 0.9rem;
-      cursor: pointer;
-      white-space: nowrap;
-      flex: 1 1 auto;
-      min-width: 120px;
-    }
-
-    .btn-registro:hover {
-      background: #f5f5f5;
-      border-color: #909090;
-    }
-
-    .btn-registro.ingreso {
-      border-color: #2c5a2c;
-      color: #2c5a2c;
-    }
-
-    .btn-registro.ingreso:hover {
-      background: #f0f7f0;
-    }
-
-    .btn-registro.gasto {
-      border-color: #8b3a3a;
-      color: #8b3a3a;
-    }
-
-    .btn-registro.gasto:hover {
-      background: #fcf0f0;
-    }
-
-    /* Mensajes */
-    .mensaje {
-      margin: 1rem 0;
-      padding: 0.8rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      border: 1px solid;
-      display: none;
-      word-break: break-word;
-    }
-
-    .mensaje.exito {
-      background: #f8f9fa;
-      border-color: #c0c0c0;
-      color: #2c3e50;
-    }
-
-    .mensaje.error {
-      background: #fef5f5;
-      border-color: #e0c0c0;
-      color: #8b3a3a;
-    }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      color: #95a5a6;
-      padding: 2rem 0;
-      font-size: 0.9rem;
-    }
-
-    /* Estilos para el historial */
-    .monto-positivo {
-      color: #2c5a2c;
-    }
-    
-    .monto-negativo {
-      color: #8b3a3a;
-    }
-    
-    .badge {
-      display: inline-block;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      background: #f0f0f0;
-    }
-    
-    .item-row {
-      transition: background-color 0.2s;
-    }
-    
-    .item-row:hover {
-      background-color: #fafafa;
-    }
-    
-    .btn-eliminar {
-      transition: opacity 0.2s;
-      background: none;
-      border: none;
-      color: #8b3a3a;
-      font-size: 1.4rem;
-      cursor: pointer;
-      padding: 0 0.2rem;
-      opacity: 0.5;
-    }
-    
-    .btn-eliminar:hover {
-      opacity: 1;
-    }
-
-    /* Ajustes para móvil pequeño */
-    @media (max-width: 480px) {
-      .container {
-        padding: 0.8rem;
-      }
-      
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .perfil-info {
-        width: 100%;
-        justify-content: space-between;
-      }
-      
-      .btn-modulo {
-        min-width: 100%;
-      }
-      
-      .metodo-pago-opciones {
-        flex-direction: column;
-      }
-      
-      .campo-row {
-        flex-direction: column;
-      }
-      
-      .campo-row .campo {
-        width: 100%;
-      }
-      
-      .btn-registro {
-        width: 100%;
-      }
-      
-      .saldo-valor {
-        font-size: 1.4rem;
-      }
-      
-      .item-row {
-        position: relative;
-        padding-right: 2rem;
-      }
-      
-      .btn-eliminar {
-        position: absolute;
-        right: 0.5rem;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-  </style>
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <!-- Header con perfil -->
-    <div class="header">
-      <h1>REGISTRO</h1>
-      <div class="perfil-info">
-        <div class="avatar" id="avatar">👤</div>
-        <span class="perfil-nombre" id="nombrePerfil">Cargando...</span>
-        <button class="btn-outline" onclick="window.location.href='index.html'">Cambiar</button>
-      </div>
-    </div>
 
-    <!-- Navegación módulos -->
-    <div class="nav-modulos">
-      <h2>MÓDULOS</h2>
-      <div class="nav-botones">
-        <button class="btn-modulo" onclick="window.location.href='presupuesto.html'">Presupuesto</button>
-        <button class="btn-modulo" onclick="window.location.href='comparar.html'">Comparar</button>
-        <button class="btn-modulo" onclick="window.location.href='checklist.html'">Checklist</button>
-      </div>
-    </div>
+<div class="container">
 
-    <!-- Saldo disponible -->
-    <div class="saldo-card">
-      <div class="saldo-principal">
-        <div class="saldo-info">
-          <span class="saldo-label">SALDO DISPONIBLE</span>
-          <span class="saldo-valor" id="saldoDisponible">$0</span>
-        </div>
-      </div>
-      <div class="saldo-detalle">
-        <div class="detalle-item">
-          <div class="label">Ingresos</div>
-          <div class="valor" id="totalIngresos">$0</div>
-        </div>
-        <div class="detalle-item">
-          <div class="label">Gastos (E/D)</div>
-          <div class="valor" id="totalGastosDebito">$0</div>
-        </div>
-        <div class="detalle-item">
-          <div class="label">Gastos Tarjeta</div>
-          <div class="valor tarjeta" id="totalGastosTarjeta">$0</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Switch Ingreso/Gasto -->
-    <div class="switch-container">
-      <div class="switch-label">SELECCIONA TIPO DE MOVIMIENTO</div>
-      <div class="switch-buttons">
-        <button class="switch-btn ingreso" id="btnIngreso" onclick="cambiarTipoMovimiento('ingreso')">Ingreso</button>
-        <button class="switch-btn gasto active" id="btnGasto" onclick="cambiarTipoMovimiento('gasto')">Gasto</button>
-      </div>
-    </div>
-
-    <!-- Formulario de GASTOS -->
-    <div id="formGasto" class="card">
-      <h2>NUEVO GASTO</h2>
-      
-      <div class="campos-registro">
-        <div class="campo">
-          <label>Categoría</label>
-          <select id="categoriaGasto" onchange="cambiarCategoriaGasto()">
-            <option value="Mercado">Mercado</option>
-            <option value="Servicios">Servicios</option>
-            <option value="Hogar">Hogar</option>
-            <option value="Finanzas">Finanzas</option>
-            <option value="Transporte">Transporte</option>
-            <option value="Ocio">Ocio</option>
-            <option value="Otros">Otros</option>
-          </select>
-        </div>
-
-        <div id="subcategoriaGastoContainer">
-          <div class="campo">
-            <label>Subcategoría</label>
-            <select id="subcategoriaGasto"></select>
-          </div>
-        </div>
-
-        <div class="metodo-pago-container">
-          <div class="metodo-pago-label">Método de pago</div>
-          <div class="metodo-pago-opciones">
-            <button class="metodo-pago-opcion debito seleccionado" id="metodoDebito" onclick="seleccionarMetodoPago('debito')">
-              Débito/Efectivo
-            </button>
-            <button class="metodo-pago-opcion credito" id="metodoCredito" onclick="seleccionarMetodoPago('credito')">
-              Crédito
-            </button>
-          </div>
-        </div>
-        
-        <div class="campo">
-          <label>Descripción (opcional)</label>
-          <input type="text" id="descripcionGasto" placeholder="Ej: Compra semanal" inputmode="text">
-        </div>
-        
-        <div class="campo-row">
-          <div class="campo">
-            <label>Monto ($)</label>
-            <input type="text" id="montoGasto" placeholder="0" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          </div>
-          <button class="btn-registro gasto" onclick="registrarMovimiento('gasto')">Registrar Gasto</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Formulario de INGRESOS -->
-    <div id="formIngreso" class="card" style="display: none;">
-      <h2>NUEVO INGRESO</h2>
-      
-      <div class="campos-registro">
-        <div class="campo">
-          <label>Tipo de ingreso</label>
-          <select id="tipoIngreso">
-            <option value="Nomina">Nómina</option>
-            <option value="Prima">Prima</option>
-            <option value="Prestamo">Préstamo</option>
-            <option value="Subsidio">Subsidio</option>
-            <option value="Otros">Otros</option>
-          </select>
-        </div>
-        
-        <div class="campo">
-          <label>Descripción (opcional)</label>
-          <input type="text" id="descripcionIngreso" placeholder="Ej: Salario mensual" inputmode="text">
-        </div>
-        
-        <div class="campo-row">
-          <div class="campo">
-            <label>Monto ($)</label>
-            <input type="text" id="montoIngreso" placeholder="0" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          </div>
-          <button class="btn-registro ingreso" onclick="registrarMovimiento('ingreso')">Registrar Ingreso</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mensajes -->
-    <div id="mensaje" class="mensaje"></div>
-
-    <!-- HISTORIAL DE MOVIMIENTOS -->
-    <div class="card">
-      <h2>📋 HISTORIAL DE MOVIMIENTOS</h2>
-      <div id="historialContainer" style="max-height: 400px; overflow-y: auto;">
-        <div class="empty-state">Cargando historial...</div>
-      </div>
-    </div>
-
-    <!-- Espacio adicional al final -->
-    <div style="height: 1rem;"></div>
+  <div class="header">
+    <h2 id="tituloPerfil"></h2>
+    <span>Control financiero personal</span>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <div class="card">
+    <h3>Saldo disponible</h3>
+    <div class="saldo" id="saldo">$0</div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDewpV6vxTMevSNzU4jCP7XYTZj_jlx4-Y",
-      authDomain: "controlgastosprueba.firebaseapp.com",
-      projectId: "controlgastosprueba",
-      storageBucket: "controlgastosprueba.firebasestorage.app",
-      messagingSenderId: "679682152121",
-      appId: "1:679682152121:web:d3981591d952df1333ed68"
-    };
+  <div class="form">
+    <input type="text" id="descripcion" placeholder="Descripción">
+    <input type="number" id="monto" placeholder="Monto">
+    <select id="tipo">
+      <option value="ingreso">Ingreso</option>
+      <option value="gasto">Gasto</option>
+    </select>
+    <button onclick="agregarMovimiento()">Registrar movimiento</button>
+  </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  <div class="historial" id="historial"></div>
 
-    const perfil = sessionStorage.getItem('perfil');
-    
-    if (!perfil || perfil === 'Admin') {
-      window.location.href = "index.html";
+</div>
+
+<script>
+const perfil = sessionStorage.getItem("perfil");
+
+if(!perfil){
+  window.location.href="index.html";
+}
+
+document.getElementById("tituloPerfil").innerText = perfil;
+
+/* Fondo dinámico */
+if(perfil === "Maria"){
+  document.body.classList.add("maria");
+}
+if(perfil === "Andres"){
+  document.body.classList.add("andres");
+}
+
+let movimientos = JSON.parse(localStorage.getItem(perfil)) || [];
+
+function formatearMoneda(valor){
+  return "$" + valor.toLocaleString("es-CO");
+}
+
+function actualizarVista(){
+  const historial = document.getElementById("historial");
+  historial.innerHTML="";
+  let saldo=0;
+
+  movimientos.forEach(m=>{
+    if(m.tipo==="ingreso"){
+      saldo+=m.monto;
+    }else{
+      saldo-=m.monto;
     }
 
-    const avatar = document.getElementById('avatar');
-    const nombrePerfil = document.getElementById('nombrePerfil');
-    
-    nombrePerfil.innerText = perfil;
-    avatar.innerText = perfil === 'Maria' ? '👩' : '👨';
+    historial.innerHTML += `
+      <div class="movimiento">
+        <div>${m.descripcion}</div>
+        <span class="${m.tipo==='ingreso'?'ingreso':'gasto'}">
+          ${m.tipo==='ingreso'?'+':'-'}${formatearMoneda(m.monto)}
+        </span>
+      </div>
+    `;
+  });
 
-    let tipoMovimientoActual = 'gasto';
-    let metodoPagoActual = 'debito';
+  document.getElementById("saldo").innerText=formatearMoneda(saldo);
+}
 
-    // ===== CATEGORÍAS Y SUBCATEGORÍAS =====
-    const subcategoriasGasto = {
-      'Mercado': ['Onces', 'Carnes', 'Aseo', 'Otros'],
-      'Servicios': ['Agua', 'Energía', 'Gas', 'Internet', 'Celular', 'Parqueadero'],
-      'Hogar': ['Arriendo', 'Couta inicial apto'],
-      'Finanzas': ['Couta FNA', 'Couta Coasmedas'],
-      'Transporte': ['Gasolina', 'Transporte Publico', 'Apps', 'Mantenimientos'],
-      'Ocio': ['Plataformas', 'Cine', 'Viajes', 'Restaurantes'],
-      'Otros': ['Otros']
-    };
+function agregarMovimiento(){
+  const descripcion=document.getElementById("descripcion").value.trim();
+  const monto=parseFloat(document.getElementById("monto").value);
+  const tipo=document.getElementById("tipo").value;
 
-    function actualizarSubcategoriasGasto() {
-      const categoria = document.getElementById('categoriaGasto').value;
-      const select = document.getElementById('subcategoriaGasto');
-      select.innerHTML = '';
-      
-      subcategoriasGasto[categoria].forEach(sub => {
-        const option = document.createElement('option');
-        option.value = sub;
-        option.textContent = sub;
-        select.appendChild(option);
-      });
-    }
+  if(!descripcion || isNaN(monto) || monto<=0){
+    return;
+  }
 
-    window.cambiarCategoriaGasto = function() {
-      actualizarSubcategoriasGasto();
-    };
+  movimientos.push({descripcion,monto,tipo});
+  localStorage.setItem(perfil,JSON.stringify(movimientos));
 
-    window.seleccionarMetodoPago = function(metodo) {
-      metodoPagoActual = metodo;
-      
-      const debitoOption = document.getElementById('metodoDebito');
-      const creditoOption = document.getElementById('metodoCredito');
-      
-      if (metodo === 'debito') {
-        debitoOption.classList.add('seleccionado');
-        creditoOption.classList.remove('seleccionado');
-      } else {
-        debitoOption.classList.remove('seleccionado');
-        creditoOption.classList.add('seleccionado');
-      }
-    };
+  document.getElementById("descripcion").value="";
+  document.getElementById("monto").value="";
 
-    window.cambiarTipoMovimiento = function(tipo) {
-      tipoMovimientoActual = tipo;
-      
-      const btnIngreso = document.getElementById('btnIngreso');
-      const btnGasto = document.getElementById('btnGasto');
-      const formIngreso = document.getElementById('formIngreso');
-      const formGasto = document.getElementById('formGasto');
-      
-      if (tipo === 'ingreso') {
-        btnIngreso.classList.add('active');
-        btnGasto.classList.remove('active');
-        formIngreso.style.display = 'block';
-        formGasto.style.display = 'none';
-      } else {
-        btnIngreso.classList.remove('active');
-        btnGasto.classList.add('active');
-        formIngreso.style.display = 'none';
-        formGasto.style.display = 'block';
-      }
-    };
+  actualizarVista();
+}
 
-    window.registrarMovimiento = async function(tipo) {
-      if (tipo === 'gasto') {
-        await registrarGasto();
-      } else {
-        await registrarIngreso();
-      }
-    };
+actualizarVista();
+</script>
 
-    async function registrarGasto() {
-      const categoria = document.getElementById('categoriaGasto').value;
-      const subcategoria = document.getElementById('subcategoriaGasto').value;
-      const descripcion = document.getElementById('descripcionGasto').value.trim();
-      const monto = parseFloat(document.getElementById('montoGasto').value);
-      
-      if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje("Ingresa un monto válido", "error");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "gastos"), { 
-          usuario: perfil,
-          categoria: categoria,
-          subcategoria: subcategoria,
-          descripcion: descripcion || "Sin descripción",
-          monto: monto,
-          metodoPago: metodoPagoActual,
-          fecha: new Date(),
-          mes: new Date().getMonth() + 1,
-          año: new Date().getFullYear(),
-          tipoMov: 'gasto'
-        });
-        
-        const metodoTexto = metodoPagoActual === 'debito' ? 'Débito/Efectivo' : 'Crédito';
-        mostrarMensaje(`Gasto registrado: $${monto} en ${categoria} - ${subcategoria} (${metodoTexto})`, "exito");
-        
-        document.getElementById('descripcionGasto').value = '';
-        document.getElementById('montoGasto').value = '';
-        
-        // Actualizar saldo e historial
-        await Promise.all([
-          calcularSaldo(),
-          cargarHistorial()
-        ]);
-        
-      } catch (error) {
-        console.error("Error al registrar gasto:", error);
-        mostrarMensaje("Error al guardar", "error");
-      }
-    }
-
-    async function registrarIngreso() {
-      const tipo = document.getElementById('tipoIngreso').value;
-      const descripcion = document.getElementById('descripcionIngreso').value.trim();
-      const monto = parseFloat(document.getElementById('montoIngreso').value);
-      
-      if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje("Ingresa un monto válido", "error");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "ingresos"), { 
-          usuario: perfil,
-          tipoIngreso: tipo,
-          descripcion: descripcion || "Sin descripción",
-          monto: monto,
-          fecha: new Date(),
-          mes: new Date().getMonth() + 1,
-          año: new Date().getFullYear(),
-          tipoMov: 'ingreso'
-        });
-        
-        mostrarMensaje(`Ingreso registrado: $${monto} (${tipo})`, "exito");
-        
-        document.getElementById('descripcionIngreso').value = '';
-        document.getElementById('montoIngreso').value = '';
-        
-        // Actualizar saldo e historial
-        await Promise.all([
-          calcularSaldo(),
-          cargarHistorial()
-        ]);
-        
-      } catch (error) {
-        console.error("Error al registrar ingreso:", error);
-        mostrarMensaje("Error al guardar", "error");
-      }
-    }
-
-    function mostrarMensaje(texto, tipo) {
-      const mensaje = document.getElementById('mensaje');
-      mensaje.style.display = 'block';
-      mensaje.innerText = texto;
-      mensaje.className = `mensaje ${tipo}`;
-      setTimeout(() => {
-        mensaje.style.display = 'none';
-      }, 3000);
-    }
-
-    async function calcularSaldo() {
-      try {
-        const mesActual = new Date().getMonth() + 1;
-        const añoActual = new Date().getFullYear();
-        
-        const ingresosQuery = query(
-          collection(db, "ingresos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual)
-        );
-        const ingresosSnap = await getDocs(ingresosQuery);
-        
-        let totalIngresos = 0;
-        ingresosSnap.forEach(doc => {
-          totalIngresos += doc.data().monto;
-        });
-
-        const gastosQuery = query(
-          collection(db, "gastos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual)
-        );
-        const gastosSnap = await getDocs(gastosQuery);
-        
-        let totalGastosDebito = 0;
-        let totalGastosTarjeta = 0;
-        
-        gastosSnap.forEach(doc => {
-          const data = doc.data();
-          if (data.metodoPago === 'credito') {
-            totalGastosTarjeta += data.monto;
-          } else {
-            totalGastosDebito += data.monto;
-          }
-        });
-
-        const saldo = totalIngresos - totalGastosDebito;
-        
-        document.getElementById('totalIngresos').innerText = `$${totalIngresos}`;
-        document.getElementById('totalGastosDebito').innerText = `$${totalGastosDebito}`;
-        document.getElementById('totalGastosTarjeta').innerText = `$${totalGastosTarjeta}`;
-        
-        const saldoElement = document.getElementById('saldoDisponible');
-        saldoElement.innerText = `$${saldo}`;
-        saldoElement.className = `saldo-valor ${saldo >= 0 ? 'saldo-positivo' : 'saldo-negativo'}`;
-
-      } catch (error) {
-        console.error("Error al calcular saldo:", error);
-      }
-    }
-
-    // ===== NUEVAS FUNCIONES PARA HISTORIAL =====
-    
-    async function cargarHistorial() {
-      try {
-        const mesActual = new Date().getMonth() + 1;
-        const añoActual = new Date().getFullYear();
-        
-        // Obtener ingresos del mes
-        const ingresosQuery = query(
-          collection(db, "ingresos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual)
-        );
-        const ingresosSnap = await getDocs(ingresosQuery);
-        
-        // Obtener gastos del mes
-        const gastosQuery = query(
-          collection(db, "gastos"),
-          where("usuario", "==", perfil),
-          where("mes", "==", mesActual),
-          where("año", "==", añoActual)
-        );
-        const gastosSnap = await getDocs(gastosQuery);
-        
-        // Combinar y ordenar por fecha
-        let movimientos = [];
-        
-        ingresosSnap.forEach(doc => {
-          const data = doc.data();
-          movimientos.push({
-            id: doc.id,
-            tipo: 'ingreso',
-            fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
-            descripcion: data.descripcion || data.tipoIngreso,
-            categoria: data.tipoIngreso,
-            monto: data.monto,
-            usuario: data.usuario
-          });
-        });
-        
-        gastosSnap.forEach(doc => {
-          const data = doc.data();
-          movimientos.push({
-            id: doc.id,
-            tipo: 'gasto',
-            fecha: data.fecha?.toDate ? data.fecha.toDate() : new Date(),
-            descripcion: data.descripcion || `${data.categoria} - ${data.subcategoria}`,
-            categoria: `${data.categoria} (${data.metodoPago === 'credito' ? 'Crédito' : 'Débito'})`,
-            monto: data.monto,
-            usuario: data.usuario
-          });
-        });
-        
-        // Ordenar por fecha descendente (más reciente primero)
-        movimientos.sort((a, b) => b.fecha - a.fecha);
-        
-        mostrarHistorial(movimientos);
-        
-      } catch (error) {
-        console.error("Error al cargar historial:", error);
-        document.getElementById('historialContainer').innerHTML = 
-          '<div class="empty-state">Error al cargar historial</div>';
-      }
-    }
-
-    function mostrarHistorial(movimientos) {
-      const container = document.getElementById('historialContainer');
-      
-      if (movimientos.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay movimientos este mes</div>';
-        return;
-      }
-
-      let html = '';
-      
-      movimientos.forEach(mov => {
-        const fechaStr = mov.fecha.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        
-        const montoClass = mov.tipo === 'ingreso' ? 'monto-positivo' : 'monto-negativo';
-        const signo = mov.tipo === 'ingreso' ? '+' : '-';
-        
-        html += `
-          <div class="item-row" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap;">
-            <div style="min-width: 80px; font-size: 0.75rem; color: #95a5a6;">${fechaStr}</div>
-            <div style="min-width: 60px; font-size: 0.8rem;">
-              <span class="badge" style="background: ${mov.tipo === 'ingreso' ? '#e8f0e8' : '#f0e8e8'}; padding: 0.2rem 0.5rem; border-radius: 4px;">
-                ${mov.usuario}
-              </span>
-            </div>
-            <div style="flex: 1; min-width: 150px;">
-              <div style="font-weight: 500; font-size: 0.85rem;">${mov.descripcion}</div>
-              <div style="font-size: 0.7rem; color: #95a5a6;">${mov.categoria}</div>
-            </div>
-            <div style="min-width: 100px; text-align: right; font-weight: 500; font-size: 0.9rem;" class="${montoClass}">
-              ${signo}$${mov.monto}
-            </div>
-            <button class="btn-eliminar" onclick="eliminarMovimiento('${mov.id}', '${mov.tipo}')" title="Eliminar movimiento">×</button>
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-    }
-
-    window.eliminarMovimiento = async function(id, tipo) {
-      if (!confirm('¿Eliminar este movimiento permanentemente?')) {
-        return;
-      }
-
-      try {
-        const collectionName = tipo === 'ingreso' ? 'ingresos' : 'gastos';
-        await deleteDoc(doc(db, collectionName, id));
-        
-        mostrarMensaje("Movimiento eliminado correctamente", "exito");
-        
-        // Actualizar todo
-        await Promise.all([
-          calcularSaldo(),
-          cargarHistorial()
-        ]);
-        
-      } catch (error) {
-        console.error("Error al eliminar:", error);
-        mostrarMensaje("Error al eliminar el movimiento", "error");
-      }
-    };
-
-    // Inicializar
-    actualizarSubcategoriasGasto();
-    calcularSaldo();
-    cargarHistorial();
-  </script>
 </body>
 </html>
