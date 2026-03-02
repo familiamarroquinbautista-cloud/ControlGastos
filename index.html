@@ -23,6 +23,7 @@ body{
   justify-content:center;
   align-items:center;
   overflow:hidden;
+  transition:opacity .5s ease, background .5s ease;
 }
 
 /* ================= SPLASH ================= */
@@ -134,6 +135,13 @@ body{
   background:linear-gradient(135deg,#1d4ed8,#1e293b);
 }
 
+/* ================= TRANSICIÓN ================= */
+
+.page-transition{
+  opacity:0;
+  background:#020617;
+}
+
 </style>
 </head>
 
@@ -174,18 +182,22 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(()=>{
     splash.classList.add('fade-out');
     main.classList.add('visible');
-  }, 3000);
+  }, 2500);
 });
 
-/* SELECCIÓN PERFIL */
+/* TRANSICIÓN ELEGANTE */
 function seleccionarPerfil(nombre){
   sessionStorage.setItem('perfil', nombre);
 
-  if(nombre === 'Familia'){
-    window.location.href = 'resumen.html';
-  } else {
-    window.location.href = 'app.html';
-  }
+  document.body.classList.add('page-transition');
+
+  setTimeout(()=>{
+    if(nombre === 'Familia'){
+      window.location.href = 'resumen.html';
+    } else {
+      window.location.href = 'app.html';
+    }
+  }, 450);
 }
 
 </script>
