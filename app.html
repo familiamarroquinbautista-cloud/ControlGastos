@@ -199,6 +199,133 @@
       color: #8b4a4a;
     }
 
+    /* Botón de abono a tarjeta */
+    .btn-abono-tarjeta {
+      background: transparent;
+      border: 1px solid currentColor;
+      border-radius: 16px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.65rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: inherit;
+      white-space: nowrap;
+      opacity: 0.7;
+    }
+
+    .btn-abono-tarjeta:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Modal de abono */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-contenido {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      max-width: 400px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      color: #1e1e1e;
+    }
+
+    .modal-contenido h3 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .modal-campo {
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-campo label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+      opacity: 0.7;
+    }
+
+    .modal-campo input, .modal-campo select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+      color: #1e1e1e;
+    }
+
+    .modal-campo input[type="text"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    .modal-campo input[type="text"]::-webkit-outer-spin-button,
+    .modal-campo input[type="text"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .modal-botones {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 2rem;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 0.8rem;
+      border: 1px solid;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.2s;
+    }
+
+    .modal-btn.primario {
+      background: #2c5a2c;
+      border-color: #2c5a2c;
+      color: white;
+    }
+
+    .modal-btn.primario:hover {
+      background: #1e3f1e;
+    }
+
+    .modal-btn.secundario {
+      border-color: #8b3a3a;
+      color: #8b3a3a;
+    }
+
+    .modal-btn.secundario:hover {
+      background: #fcf0f0;
+    }
+
     /* Switch Ingreso/Gasto */
     .switch-container {
       border-radius: 12px;
@@ -545,6 +672,16 @@
         top: 50%;
         transform: translateY(-50%);
       }
+      
+      .btn-abono-tarjeta {
+        font-size: 0.6rem;
+        padding: 0.15rem 0.4rem;
+      }
+      
+      .modal-contenido {
+        padding: 1.2rem;
+        width: 95%;
+      }
     }
   </style>
 </head>
@@ -587,8 +724,11 @@
           <div class="label">Gastos (E/D)</div>
           <div class="valor" id="totalGastosDebito">$0</div>
         </div>
-        <div class="detalle-item">
-          <div class="label">Gastos Tarjeta</div>
+        <div class="detalle-item" style="position: relative;">
+          <div class="label" style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+            Gastos Tarjeta
+            <button class="btn-abono-tarjeta" onclick="mostrarModalAbono()" title="Abonar a tarjeta">💳 Abonar</button>
+          </div>
           <div class="valor tarjeta" id="totalGastosTarjeta">$0</div>
         </div>
       </div>
@@ -699,6 +839,28 @@
 
     <!-- Espacio adicional al final -->
     <div style="height: 1rem;"></div>
+  </div>
+
+  <!-- Modal de abono a tarjeta -->
+  <div id="modalAbono" class="modal-overlay">
+    <div class="modal-contenido">
+      <h3>ABONAR A TARJETA DE CRÉDITO</h3>
+      
+      <div class="modal-campo">
+        <label>Monto del abono ($)</label>
+        <input type="text" id="montoAbono" placeholder="0" inputmode="numeric" pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      </div>
+      
+      <div class="modal-campo">
+        <label>Descripción (opcional)</label>
+        <input type="text" id="descripcionAbono" placeholder="Ej: Pago de tarjeta" inputmode="text">
+      </div>
+      
+      <div class="modal-botones">
+        <button class="modal-btn secundario" onclick="cerrarModalAbono()">Cancelar</button>
+        <button class="modal-btn primario" onclick="registrarAbonoTarjeta()">Registrar Abono</button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -1062,7 +1224,8 @@
             descripcion: data.descripcion || `${data.categoria} - ${data.subcategoria}`,
             categoria: `${data.categoria} (${data.metodoPago === 'credito' ? 'Crédito' : 'Débito'})`,
             monto: data.monto,
-            usuario: data.usuario
+            usuario: data.usuario,
+            tipoAbono: data.tipoAbono // Para identificar abonos
           });
         });
         
@@ -1100,6 +1263,12 @@
         const signo = mov.tipo === 'ingreso' ? '+' : '-';
         const badgeClass = mov.usuario === 'Maria' ? 'badge-maria' : 'badge-andres';
         
+        // Personalizar visualización para abonos
+        let categoriaDisplay = mov.categoria;
+        if (mov.tipoAbono === 'tarjeta') {
+          categoriaDisplay = '💳 ' + categoriaDisplay;
+        }
+        
         html += `
           <div class="item-row">
             <div class="item-fecha">${fechaStr}</div>
@@ -1110,7 +1279,7 @@
             </div>
             <div class="item-descripcion">
               <div class="item-titulo">${mov.descripcion}</div>
-              <div class="item-categoria">${mov.categoria}</div>
+              <div class="item-categoria">${categoriaDisplay}</div>
             </div>
             <div class="item-monto ${montoClass}">
               ${signo}$${mov.monto}
@@ -1142,6 +1311,73 @@
       } catch (error) {
         console.error("Error al eliminar:", error);
         mostrarMensaje("Error al eliminar el movimiento", "error");
+      }
+    };
+
+    // ===== FUNCIONES PARA ABONOS A TARJETA =====
+    window.mostrarModalAbono = function() {
+      const modal = document.getElementById('modalAbono');
+      modal.classList.add('active');
+      
+      // Aplicar colores del perfil al modal
+      if (coloresPorPerfil[perfil]) {
+        const colores = coloresPorPerfil[perfil];
+        const modalContenido = document.querySelector('.modal-contenido');
+        modalContenido.style.backgroundColor = perfil === 'Maria' ? '#fff9f7' : '#1f2b3a';
+        modalContenido.style.color = perfil === 'Maria' ? '#5a4a4a' : '#e8eef2';
+        modalContenido.style.border = `1px solid ${perfil === 'Maria' ? '#d6a58b' : '#3f5569'}`;
+      }
+    };
+
+    window.cerrarModalAbono = function() {
+      const modal = document.getElementById('modalAbono');
+      modal.classList.remove('active');
+      document.getElementById('montoAbono').value = '';
+      document.getElementById('descripcionAbono').value = '';
+    };
+
+    window.registrarAbonoTarjeta = async function() {
+      const monto = parseFloat(document.getElementById('montoAbono').value);
+      const descripcion = document.getElementById('descripcionAbono').value.trim();
+      
+      if (isNaN(monto) || monto <= 0) {
+        mostrarMensaje("Ingresa un monto válido", "error");
+        return;
+      }
+
+      if (monto > 5000000) { // Validación opcional para montos muy altos
+        if (!confirm('El monto es muy alto. ¿Estás seguro de continuar?')) {
+          return;
+        }
+      }
+
+      try {
+        await addDoc(collection(db, "gastos"), { 
+          usuario: perfil,
+          categoria: "Pago Tarjeta",
+          subcategoria: "Abono",
+          descripcion: descripcion || "Pago de tarjeta de crédito",
+          monto: monto,
+          metodoPago: 'debito', // Se registra como débito porque es un pago real
+          fecha: new Date(),
+          mes: new Date().getMonth() + 1,
+          año: new Date().getFullYear(),
+          tipoMov: 'gasto',
+          tipoAbono: 'tarjeta' // Indicador para identificar abonos
+        });
+        
+        mostrarMensaje(`✅ Abono registrado: $${monto} a tarjeta de crédito`, "exito");
+        
+        cerrarModalAbono();
+        
+        await Promise.all([
+          calcularSaldo(),
+          cargarHistorial()
+        ]);
+        
+      } catch (error) {
+        console.error("Error al registrar abono:", error);
+        mostrarMensaje("Error al guardar el abono", "error");
       }
     };
 
